@@ -52,7 +52,7 @@ export default function Footer({bgColor = 'white'}: FooterProps) {
 									<TooltipTrigger asChild>
 										<>
 											<Link
-												className="text-sm transition-colors duration-200 text-secondary flex items-center gap-1 bg-[#fafafa] py-1 px-2 rounded-full"
+												className="text-sm transition-colors duration-200 text-secondary flex items-center gap-1 bg-[#f5f5f5] py-1 px-2 rounded-full"
 												href={`https://github.com/nicholasadamou/youbuildit.dev/commit/${commitHash}`}
 												target="_blank"
 												rel="noopener noreferrer"
