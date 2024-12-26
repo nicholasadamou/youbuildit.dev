@@ -50,17 +50,17 @@ export default function Footer({bgColor = 'white'}: FooterProps) {
 							{commitHash && (<TooltipProvider>
 								<Tooltip>
 									<TooltipTrigger asChild>
-										<div>
+										<>
 											<Link
-												className="text-sm transition-colors duration-200 text-secondary flex items-center gap-1 bg-secondary-foreground py-1 px-2 rounded-full"
+												className="text-sm transition-colors duration-200 text-secondary flex items-center gap-1 bg-[#fafafa] py-1 px-2 rounded-full"
 												href={`https://github.com/nicholasadamou/youbuildit.dev/commit/${commitHash}`}
 												target="_blank"
 												rel="noopener noreferrer"
 											>
-												<GitCommit className="w-4 h-4"/>
-												<span className="font-mono">{commitHash.slice(0, 7)}</span>
+												<GitCommit className="text-muted-foreground w-4 h-4"/>
+												<span className="font-mono text-muted-foreground">{commitHash.slice(0, 7)}</span>
 											</Link>
-										</div>
+										</>
 									</TooltipTrigger>
 									<TooltipContent>
 										<p>View latest commit</p>

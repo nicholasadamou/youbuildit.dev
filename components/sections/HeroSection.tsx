@@ -32,7 +32,7 @@ export default function HeroSection() {
 	const [hoveredChallenge, setHoveredChallenge] = useState<string | null>(null)
 
 	return (
-		<div className="relative bg-gradient-to-t from-[#2fbc77]/20 to-transparent mt-16 pb-6 flex flex-col">
+		<div className="relative bg-gradient-to-t from-[#2fbc77]/20 to-transparent mt-0 md:mt-16 pb-6 flex flex-col">
 			<div className="relative z-10 flex flex-col">
 				<div className="flex flex-col">
 					{/* Hero Section */}
