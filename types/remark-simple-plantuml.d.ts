@@ -1,4 +1,11 @@
 declare module '@akebifiky/remark-simple-plantuml' {
-  const remarkSimplePlantUML: any;
+  import type { Plugin } from 'unified';
+
+  interface PlantUMLOptions {
+    baseUrl?: string;
+    format?: string;
+  }
+
+  const remarkSimplePlantUML: Plugin<[PlantUMLOptions?]>;
   export default remarkSimplePlantUML;
 }
