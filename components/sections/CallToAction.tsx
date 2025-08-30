@@ -2,7 +2,7 @@
 
 import {motion} from 'framer-motion'
 import Link from 'next/link'
-import {Zap, Code, Users, Trophy, ArrowRight, Star, Shuffle} from 'lucide-react'
+import {Zap, Code, Trophy, ArrowRight, Star, Shuffle} from 'lucide-react'
 import {Button} from "@/components/ui/button"
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
@@ -148,24 +148,6 @@ export default function CallToAction() {
 		}
 	}
 
-	const zapVariants = {
-		hidden: { scale: 0, rotate: -180 },
-		visible: {
-			scale: 1,
-			rotate: 0,
-			transition: {
-				duration: 0.6,
-				delay: 0.2
-			}
-		},
-		hover: {
-			rotate: [0, -10, 10, -10, 0],
-			scale: 1.1,
-			transition: {
-				duration: 0.6
-			}
-		}
-	}
 
 	const statsVariants = {
 		hidden: { opacity: 0, y: 30 },

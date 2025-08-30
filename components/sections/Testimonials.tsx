@@ -170,49 +170,6 @@ const funnyQuotes = {
 	]
 };
 
-// Industry-specific contexts for better personalization
-const industryContexts = {
-	space: 'aerospace innovation',
-	ecommerce: 'digital commerce',
-	conglomerate: 'business strategy',
-	social: 'social platforms',
-	hardware: 'consumer technology',
-	cloud: 'enterprise solutions',
-	search: 'information systems',
-	streaming: 'content delivery',
-	marketplace: 'platform economics',
-	video: 'media technology',
-	investment: 'technology investment',
-	enterprise: 'enterprise software',
-	database: 'data management',
-	semiconductors: 'hardware architecture',
-	ai: 'artificial intelligence',
-	crm: 'customer solutions',
-	rideshare: 'mobility solutions',
-	fintech: 'financial technology',
-	storage: 'data infrastructure',
-	design: 'creative technology',
-	delivery: 'logistics technology',
-	messaging: 'communication platforms',
-	vr: 'immersive technology',
-	gaming: 'interactive entertainment',
-	communication: 'collaboration tools',
-	professional: 'professional networking',
-	developer: 'developer tools',
-	data: 'data analytics',
-	analytics: 'business intelligence',
-	cdn: 'web infrastructure',
-	deployment: 'development platforms',
-	trading: 'financial markets',
-	crypto: 'blockchain technology',
-	nft: 'digital assets',
-	dating: 'social connections',
-	events: 'event technology',
-	fashion: 'fashion technology',
-	biotech: 'biotechnology',
-	fitness: 'health technology',
-	nocode: 'visual development'
-};
 
 // Function to create unique combinations without repetition
 function createUniqueTestimonialCombinations(challenges: ClientChallenge[]) {
@@ -249,7 +206,6 @@ function createUniqueTestimonialCombinations(challenges: ClientChallenge[]) {
 		
 		const quotesToUse = challengeQuotes || fallbackQuotes;
 		const quoteIndex = index % quotesToUse.length;
-		const selectedQuote = quotesToUse[quoteIndex];
 		
 		// Create unique combination key
 		const combinationKey = `${ceo.name}-${challenge.slug}-${quoteIndex}`;

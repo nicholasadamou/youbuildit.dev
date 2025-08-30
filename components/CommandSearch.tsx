@@ -78,16 +78,36 @@ export default function CommandSearch({ isOpen, onClose }: CommandSearchProps) {
         left: document.body.style.left,
         right: document.body.style.right,
         overflow: document.body.style.overflow,
-        width: document.body.style.width
+        width: document.body.style.width,
+        height: document.body.style.height
       }
       
-      // Lock body scroll with position fixed
+      const originalHtmlStyle = {
+        overflow: document.documentElement.style.overflow,
+        height: document.documentElement.style.height
+      }
+      
+      // Enhanced scroll locking for mobile devices
       document.body.style.position = 'fixed'
       document.body.style.top = `-${scrollY}px`
       document.body.style.left = '0'
       document.body.style.right = '0'
       document.body.style.overflow = 'hidden'
       document.body.style.width = '100%'
+      document.body.style.height = '100%'
+      
+      // Also lock html element for better mobile support
+      document.documentElement.style.overflow = 'hidden'
+      document.documentElement.style.height = '100%'
+      
+      // Prevent touchmove events on the body to stop elastic scrolling
+      const preventTouchMove = (e: TouchEvent) => {
+        e.preventDefault()
+      }
+      
+      // Add passive: false to ensure preventDefault works
+      document.body.addEventListener('touchmove', preventTouchMove, { passive: false })
+      document.documentElement.addEventListener('touchmove', preventTouchMove, { passive: false })
       
       // Focus the input after the modal animation
       setTimeout(() => {
@@ -96,8 +116,13 @@ export default function CommandSearch({ isOpen, onClose }: CommandSearchProps) {
       
       // Cleanup function to restore scroll when modal closes
       return () => {
+        // Remove touch event listeners
+        document.body.removeEventListener('touchmove', preventTouchMove)
+        document.documentElement.removeEventListener('touchmove', preventTouchMove)
+        
         // Restore original styles
         Object.assign(document.body.style, originalBodyStyle)
+        Object.assign(document.documentElement.style, originalHtmlStyle)
         
         // Restore scroll position
         window.scrollTo(0, scrollY)
@@ -151,12 +176,21 @@ export default function CommandSearch({ isOpen, onClose }: CommandSearchProps) {
     }
   }
 
+  // Prevent touch scrolling on the backdrop while allowing modal content to scroll
+  const handleBackdropTouchMove = (e: React.TouchEvent) => {
+    // Prevent scrolling on the backdrop
+    if (e.target === e.currentTarget) {
+      e.preventDefault()
+    }
+  }
+
   if (!isOpen) return null
 
   return (
     <div 
       className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-start justify-center pt-[20vh]"
       onClick={handleBackdropClick}
+      onTouchMove={handleBackdropTouchMove}
     >
       <div className="w-full max-w-2xl mx-4 bg-white rounded-lg shadow-2xl border border-gray-200 overflow-hidden">
         {/* Search Input */}
@@ -178,7 +212,10 @@ export default function CommandSearch({ isOpen, onClose }: CommandSearchProps) {
         </div>
 
         {/* Results */}
-        <div className="max-h-96 overflow-y-auto">
+        <div 
+          className="max-h-96 overflow-y-auto overscroll-contain"
+          style={{ WebkitOverflowScrolling: 'touch' }}
+        >
           {query === '' ? (
             <div className="p-6 text-center">
               <Search className="h-8 w-8 text-gray-300 mx-auto mb-3" />
