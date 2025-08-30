@@ -128,7 +128,7 @@ const featureVariants = {
 
 	return (
 	<motion.section
-		className="bg-white mt-16 sm:mt-24 py-12 sm:py-16 md:py-24 relative overflow-hidden"
+		className="bg-white mt-16 sm:mt-24 py-12 sm:py-16 md:py-24 relative overflow-hidden w-full max-w-full"
 		initial="hidden"
 		whileInView="visible"
 		viewport={{ once: true, amount: 0.2 }}

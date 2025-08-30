@@ -11,9 +11,9 @@ const companies = ['1password', 'airbnb', 'amazon', 'facebook', 'google', 'insta
 
 export default function TrustedCompanies() {
 	return (
-		<section className="bg-[#fafafa] py-16 sm:py-24">
+		<section className="bg-[#fafafa] py-16 sm:py-24 w-full max-w-full overflow-x-hidden">
 			<motion.div
-				className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center"
+				className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center w-full"
 				initial={{opacity: 0, y: 20}}
 				animate={{opacity: 1, y: 0}}
 				transition={{duration: 0.5}}
@@ -26,27 +26,23 @@ export default function TrustedCompanies() {
 			</motion.div>
 			<div className="relative overflow-hidden mt-6 sm:mt-8">
 				<div className="h-16 flex items-center">
-					<InfiniteCarousel pauseOnHover gap={64}>
+					<InfiniteCarousel pauseOnHover gap={48}>
 						{companies.map((company) => (
-						<FadeIn
-							key={company}
-							className="flex-shrink-0 items-center justify-center carousel-item"
-						>
-								<Link
-									href={`https://www.${company}.com`}
-									target="_blank"
-									rel="noopener noreferrer"
-									className="flex-shrink-0"
-								>
-									<Image
-										src={`/logos/${company}.svg`}
-										alt={`${company} logo`}
-										width={120}
-										height={20}
-										className="transition-all duration-300 ease-in-out filter grayscale-[0.85] hover:grayscale-0"
-									/>
-								</Link>
-							</FadeIn>
+							<Link
+								key={company}
+								href={`https://www.${company}.com`}
+								target="_blank"
+								rel="noopener noreferrer"
+								className="flex-shrink-0 flex items-center justify-center"
+							>
+								<Image
+									src={`/logos/${company}.svg`}
+									alt={`${company} logo`}
+									width={120}
+									height={20}
+									className="transition-all duration-300 ease-in-out filter grayscale-[0.85] hover:grayscale-0"
+								/>
+							</Link>
 						))}
 				</InfiniteCarousel>
 				</div>

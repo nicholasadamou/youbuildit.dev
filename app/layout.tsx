@@ -33,12 +33,12 @@ export default function RootLayout({
 	return (
 		<html lang="en">
 		<body
-			className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+			className={`${geistSans.variable} ${geistMono.variable} antialiased overflow-x-hidden`}
 		>
-		<div className="bg-white text-white">
-			<Navbar/>
+		<Navbar/>
+		<main className="bg-white text-white min-h-screen">
 			{children}
-		</div>
+		</main>
 		</body>
 		</html>
 	);

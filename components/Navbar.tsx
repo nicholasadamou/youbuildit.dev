@@ -7,29 +7,59 @@ import { Button } from "@/components/ui/button"
 import Logo from "@/components/Logo"
 import CommandSearch, { useCommandSearch } from '@/components/CommandSearch'
 import { motion, useScroll, useTransform } from 'framer-motion'
+import { useState, useEffect, useRef } from 'react'
 
 export default function Navbar() {
 	const { scrollY } = useScroll()
 	const { isOpen, openSearch, closeSearch } = useCommandSearch()
+	const [isFixed, setIsFixed] = useState(false)
+	const navRef = useRef<HTMLElement>(null)
 
 	const backgroundColor = useTransform(
 		scrollY,
 		[0, 50],
-		['rgba(255, 255, 255, 0)', 'rgba(255, 255, 255, 0.8)']
+		['rgba(255, 255, 255, 0)', 'rgba(255, 255, 255, 0.9)']
 	)
 
 	const boxShadow = useTransform(
 		scrollY,
 		[0, 50],
-		['none', '0 1px 2px 0 rgba(0, 0, 0, 0.05)']
+		['none', '0 1px 3px 0 rgba(0, 0, 0, 0.1)']
 	)
+
+	useEffect(() => {
+		const handleScroll = () => {
+			if (navRef.current) {
+				const navTop = navRef.current.offsetTop
+				const scrollTop = window.scrollY
+
+				// Make navbar fixed when we scroll past its initial position
+				setIsFixed(scrollTop > navTop)
+			}
+		}
+
+		window.addEventListener('scroll', handleScroll)
+		return () => window.removeEventListener('scroll', handleScroll)
+	}, [])
 
 	return (
 		<>
 			<motion.nav
-				style={{ backgroundColor, boxShadow }}
-				className="sticky top-0 z-50 transition-all duration-300 backdrop-blur-md"
+				ref={navRef}
+				className={`transition-all duration-300 z-50 ${
+					isFixed
+						? 'fixed top-0 left-0 right-0 bg-white/95 backdrop-blur-sm border-b border-gray-200 shadow-lg'
+						: 'relative bg-transparent'
+				}`}
+				style={{
+					backgroundColor: isFixed ? undefined : backgroundColor.get(),
+					boxShadow: isFixed ? undefined : boxShadow.get()
+				}}
+				initial={{ y: 0 }}
+				animate={{ y: isFixed ? 0 : 0 }}
+				transition={{ type: "spring", stiffness: 300, damping: 30 }}
 			>
+				<div className="w-full">
 				<div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 					<div className="flex items-center justify-between h-16">
 						<motion.div
@@ -49,8 +79,8 @@ export default function Navbar() {
 								animate={{opacity: 1, y: 0}}
 								transition={{duration: 0.5, delay: 0.1}}
 							>
-								<Button 
-									variant="outline" 
+								<Button
+									variant="outline"
 									size="sm"
 									onClick={openSearch}
 								className="flex items-center gap-2 px-3 py-2 text-sm text-gray-600 border-gray-300 hover:bg-gray-50 hover:text-gray-600 transition-colors"
@@ -65,7 +95,7 @@ export default function Navbar() {
 									</div>
 								</Button>
 							</motion.div>
-							
+
 							{/* Explore Challenges Button */}
 							<motion.div
 								initial={{opacity: 0, y: -20}}
@@ -82,8 +112,8 @@ export default function Navbar() {
 						</div>
 					<div className="md:hidden flex items-center space-x-2">
 						{/* Mobile Search Button */}
-						<Button 
-							variant="ghost" 
+						<Button
+							variant="ghost"
 							size="icon"
 							onClick={openSearch}
 							className="text-gray-600 hover:text-gray-900 hover:bg-gray-100"
@@ -91,7 +121,7 @@ export default function Navbar() {
 						>
 							<Search className="h-5 w-5" />
 						</Button>
-						
+
 						{/* Mobile Menu */}
 						<Sheet>
 							<SheetTrigger asChild>
@@ -99,9 +129,9 @@ export default function Navbar() {
 									whileHover={{ scale: 1.1 }}
 									whileTap={{ scale: 0.9 }}
 								>
-									<Button 
-										variant="ghost" 
-										size="icon" 
+									<Button
+										variant="ghost"
+										size="icon"
 										aria-label="Open main menu"
 										className="text-gray-600 hover:text-gray-900 hover:bg-gray-100"
 									>
@@ -114,21 +144,21 @@ export default function Navbar() {
 								<SheetDescription className="sr-only">
 									Access search functionality and navigate to different sections of the website.
 								</SheetDescription>
-								
+
 								{/* Header */}
 								<div className="flex items-center space-x-3 mb-8 mt-6">
 									<Logo />
 									<span className="text-xl font-bold text-primary">You Build It</span>
 								</div>
-								
+
 								{/* Search Section */}
 								<div className="mb-6">
 									<h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">
 										Search
 									</h3>
 									<SheetClose asChild>
-										<Button 
-											variant="outline" 
+										<Button
+											variant="outline"
 											size="sm"
 											onClick={openSearch}
 								className="w-full flex items-center gap-3 justify-start px-3 py-2 text-sm text-gray-600 border-gray-300 hover:bg-gray-50 hover:text-gray-600"
@@ -144,7 +174,7 @@ export default function Navbar() {
 										</Button>
 									</SheetClose>
 								</div>
-								
+
 								{/* Navigation */}
 								<nav className="flex-grow">
 									<h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">
@@ -156,8 +186,8 @@ export default function Navbar() {
 											whileTap={{ scale: 0.98 }}
 										>
 											<SheetClose asChild>
-												<Link 
-													href="/" 
+												<Link
+													href="/"
 													className="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-100 transition-colors group"
 												>
 													<div className="w-8 h-8 bg-gray-100 rounded-lg flex items-center justify-center group-hover:bg-gray-200 transition-colors">
@@ -170,14 +200,14 @@ export default function Navbar() {
 												</Link>
 											</SheetClose>
 										</motion.div>
-										
+
 										<motion.div
 											whileHover={{ scale: 1.02 }}
 											whileTap={{ scale: 0.98 }}
 										>
 											<SheetClose asChild>
-												<Link 
-													href="/challenges" 
+												<Link
+													href="/challenges"
 													className="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-100 transition-colors group"
 												>
 													<div className="w-8 h-8 bg-[--brand]/10 rounded-lg flex items-center justify-center group-hover:bg-[--brand]/20 transition-colors">
@@ -192,7 +222,7 @@ export default function Navbar() {
 										</motion.div>
 									</div>
 								</nav>
-								
+
 								{/* Footer */}
 								<div className="mt-8 pb-6 border-t border-gray-200 pt-6">
 									<h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-4">
@@ -220,8 +250,9 @@ export default function Navbar() {
 					</div>
 					</div>
 				</div>
+				</div>
 			</motion.nav>
-			
+
 			{/* Command Search Modal */}
 			<CommandSearch isOpen={isOpen} onClose={closeSearch} />
 		</>

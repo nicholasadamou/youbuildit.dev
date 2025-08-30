@@ -459,7 +459,7 @@ const cardVariants = {
 
 	return (
 		<motion.section 
-			className="bg-background py-12 sm:py-16 md:py-24 relative overflow-hidden"
+			className="bg-background py-12 sm:py-16 md:py-24 relative overflow-hidden w-full max-w-full"
 			initial="hidden"
 			whileInView="visible"
 			viewport={{ once: true, amount: 0.1, margin: "0px 0px -100px 0px" }}

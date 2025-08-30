@@ -109,7 +109,7 @@ export default function CallToAction() {
 
 	return (
 	<motion.section 
-		className="bg-secondary py-16 sm:py-20 md:py-32 relative overflow-hidden"
+		className="bg-secondary py-16 sm:py-20 md:py-32 relative overflow-hidden w-full max-w-full"
 		initial="hidden"
 		whileInView="visible"
 		viewport={{ once: true, amount: 0.3 }}

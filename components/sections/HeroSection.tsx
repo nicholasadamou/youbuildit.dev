@@ -181,7 +181,7 @@ export default function HeroSection() {
 	return (
 		<div
 			ref={sectionRef}
-			className="relative mt-0 md:mt-16 pb-20 flex flex-col"
+			className="relative mt-0 md:mt-16 pb-20 flex flex-col w-full max-w-full overflow-hidden"
 		>
 			{/* Static Background Layer */}
 			<div className="absolute inset-0 bg-gradient-to-t from-[#2fbc77]/15 to-transparent" />
@@ -214,7 +214,7 @@ export default function HeroSection() {
 						initial={{ opacity: 0 }}
 						animate={{ opacity: 1 }}
 						transition={{ delay: 1, duration: 0.5 }}
-							className="py-4 sm:py-6 -mb-32 sm:-mb-64"
+							className="py-4 sm:py-6 overflow-hidden"
 						>
 						<div className="max-w-full mx-auto">
 							<div className="relative">
@@ -253,7 +253,7 @@ export default function HeroSection() {
 										initial="hidden"
 										animate="visible"
 									>
-										<InfiniteCarousel pauseOnHover reverseDirection>
+										<InfiniteCarousel pauseOnHover reverseDirection gap={32}>
 											{allChallenges.map((challenge: ClientChallenge, index: number) => (
 										<FadeIn
 											key={challenge.slug}

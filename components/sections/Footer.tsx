@@ -82,7 +82,7 @@ export default function Footer({bgColor = 'white'}: FooterProps) {
 
 	return (
 		<motion.footer 
-			className={bgColor ? bgColor : 'bg-white'}
+			className={`${bgColor ? bgColor : 'bg-white'} w-full max-w-full overflow-x-hidden`}
 			initial="hidden"
 			whileInView="visible"
 			viewport={{ once: true, amount: 0.2 }}
