@@ -19,7 +19,7 @@ export interface HeadingData {
 export function extractHeadings(content: string): HeadingData[] {
   const headings: HeadingData[] = [];
   const lines = content.split('\n');
-  
+
   for (const line of lines) {
     // Match markdown headings (## Header, ### Header, etc.)
     const headingMatch = line.match(/^(#{1,6})\s+(.+)$/);
@@ -27,14 +27,14 @@ export function extractHeadings(content: string): HeadingData[] {
       const level = headingMatch[1].length;
       const text = headingMatch[2].trim();
       const id = slugify(text);
-      
+
       // Skip the Table of Contents heading itself
       if (!text.toLowerCase().includes('table of contents')) {
         headings.push({ level, text, id });
       }
     }
   }
-  
+
   return headings;
 }
 

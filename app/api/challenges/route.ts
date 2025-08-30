@@ -4,7 +4,7 @@ import { getAllChallenges } from '@/lib/mdx';
 export async function GET() {
   try {
     const challenges = await getAllChallenges();
-    
+
     // Return simplified challenge data for client-side use
     const simplifiedChallenges = challenges.map(challenge => ({
       slug: challenge.slug,

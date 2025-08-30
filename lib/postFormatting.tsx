@@ -1,8 +1,8 @@
-import ReactDOMServer from "react-dom/server";
-import Link from "@/components/Link";
+import ReactDOMServer from 'react-dom/server';
+import Link from '@/components/Link';
 
-import LinkifyIt from "linkify-it";
-import tlds from "tlds";
+import LinkifyIt from 'linkify-it';
+import tlds from 'tlds';
 
 const linkify = new LinkifyIt();
 linkify.tlds(tlds);
@@ -14,17 +14,17 @@ export function getContentWithLinks(content: string) {
       const match = linkify.match(word);
 
       if (match) {
-        const {url} = match[0];
-        const displayUrl = url.replace(/(^\w+:|^)\/\//, ""); // remove http:// or https:// from the url
+        const { url } = match[0];
+        const displayUrl = url.replace(/(^\w+:|^)\/\//, ''); // remove http:// or https:// from the url
         const link = ReactDOMServer.renderToStaticMarkup(
           <Link key={index} href={url} className="break-words text-link">
             {displayUrl}
-          </Link>,
+          </Link>
         );
-        return link + " "; // add a space only if the word is a URL
+        return link + ' '; // add a space only if the word is a URL
       }
 
       return word; // don't add a space if the word is not a URL
     })
-    .join(" "); // join with a space
+    .join(' '); // join with a space
 }

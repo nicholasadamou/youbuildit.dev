@@ -1,11 +1,11 @@
-"use client";
+'use client';
 
-import { ReactNode } from "react";
-import clsx from "clsx";
+import { ReactNode } from 'react';
+import clsx from 'clsx';
 
 type SectionProps = {
   heading: string;
-  headingAlignment?: "right" | "left";
+  headingAlignment?: 'right' | 'left';
   children: ReactNode;
 };
 
@@ -17,12 +17,12 @@ export default function Section({
   return (
     <section
       className="col-reverse flex flex-col gap-2 md:flex-row md:gap-9"
-      id={heading.toLowerCase().replace(/\s/g, "-")}
+      id={heading.toLowerCase().replace(/\s/g, '-')}
     >
       <h2
         className={clsx(
-          "shrink-0 md:w-32 text-black",
-          headingAlignment === "right" && "md:text-right",
+          'shrink-0 md:w-32 text-black',
+          headingAlignment === 'right' && 'md:text-right'
         )}
       >
         {heading}

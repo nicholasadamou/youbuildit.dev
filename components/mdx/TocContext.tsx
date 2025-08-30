@@ -16,7 +16,11 @@ interface TocProviderProps {
   hasTableOfContents: boolean;
 }
 
-export function TocProvider({ children, headings, hasTableOfContents }: TocProviderProps) {
+export function TocProvider({
+  children,
+  headings,
+  hasTableOfContents,
+}: TocProviderProps) {
   return (
     <TocContext.Provider value={{ headings, hasTableOfContents }}>
       {children}

@@ -3,7 +3,11 @@
 import ReactMarkdown from 'react-markdown';
 import MDXComponents from './MDXComponents';
 import { TocProvider } from './TocContext';
-import { extractHeadings, hasTableOfContents, filterTocHeadings } from '@/lib/toc-utils';
+import {
+  extractHeadings,
+  hasTableOfContents,
+  filterTocHeadings,
+} from '@/lib/toc-utils';
 
 interface MDXContentProps {
   content: string;
@@ -18,9 +22,7 @@ export default function MDXContent({ content }: MDXContentProps) {
   return (
     <TocProvider headings={tocHeadings} hasTableOfContents={hasToc}>
       <div className="prose prose-lg max-w-none">
-        <ReactMarkdown components={MDXComponents}>
-          {content}
-        </ReactMarkdown>
+        <ReactMarkdown components={MDXComponents}>{content}</ReactMarkdown>
       </div>
     </TocProvider>
   );

@@ -25,10 +25,10 @@ export default function TableOfContents({ headings }: TableOfContentsProps) {
         {headings.map((heading, index) => {
           // Calculate indentation based on heading level
           const indentClass = getIndentClass(heading.level);
-          
+
           return (
             <div key={index} className={`${indentClass}`}>
-              <Link 
+              <Link
                 href={`#${heading.id}`}
                 className="text-[--brand] hover:text-green-600 transition-colors hover:underline text-sm block py-1"
               >

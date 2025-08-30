@@ -25,63 +25,104 @@ function getTextContent(children: ReactNode): string {
     return children.map(getTextContent).join('');
   }
   if (children && typeof children === 'object' && 'props' in children) {
-    return getTextContent((children as { props: { children: ReactNode } }).props.children);
+    return getTextContent(
+      (children as { props: { children: ReactNode } }).props.children
+    );
   }
   return '';
 }
 
-
 // React components for headings
-function H1Component({ children, ...props }: React.HTMLAttributes<HTMLHeadingElement>) {
+function H1Component({
+  children,
+  ...props
+}: React.HTMLAttributes<HTMLHeadingElement>) {
   const textContent = getTextContent(children);
   const id = slugify(textContent);
   return (
-    <h1 id={id} className="text-3xl font-bold text-gray-900 mb-6 mt-8 scroll-mt-8" {...props}>
-      <Link href={`#${id}`} className="no-underline hover:underline text-gray-900">
+    <h1
+      id={id}
+      className="text-3xl font-bold text-gray-900 mb-6 mt-8 scroll-mt-8"
+      {...props}
+    >
+      <Link
+        href={`#${id}`}
+        className="no-underline hover:underline text-gray-900"
+      >
         {children}
       </Link>
     </h1>
   );
 }
 
-function H2Component({ children, ...props }: React.HTMLAttributes<HTMLHeadingElement>) {
+function H2Component({
+  children,
+  ...props
+}: React.HTMLAttributes<HTMLHeadingElement>) {
   const textContent = getTextContent(children);
   const id = slugify(textContent);
-  const isTableOfContents = textContent.toLowerCase().includes('table of contents');
+  const isTableOfContents = textContent
+    .toLowerCase()
+    .includes('table of contents');
   const { headings } = useToc();
 
   return (
     <>
-      <h2 id={id} className="text-2xl font-semibold text-gray-900 mb-4 mt-8 scroll-mt-8" {...props}>
-        <Link href={`#${id}`} className="no-underline hover:underline text-gray-900">
+      <h2
+        id={id}
+        className="text-2xl font-semibold text-gray-900 mb-4 mt-8 scroll-mt-8"
+        {...props}
+      >
+        <Link
+          href={`#${id}`}
+          className="no-underline hover:underline text-gray-900"
+        >
           {children}
         </Link>
       </h2>
-      {isTableOfContents && (
-        <TableOfContents headings={headings} />
-      )}
+      {isTableOfContents && <TableOfContents headings={headings} />}
     </>
   );
 }
 
-function H3Component({ children, ...props }: React.HTMLAttributes<HTMLHeadingElement>) {
+function H3Component({
+  children,
+  ...props
+}: React.HTMLAttributes<HTMLHeadingElement>) {
   const textContent = getTextContent(children);
   const id = slugify(textContent);
   return (
-    <h3 id={id} className="text-xl font-semibold text-gray-900 mb-3 mt-6 scroll-mt-8" {...props}>
-      <Link href={`#${id}`} className="no-underline hover:underline text-gray-900">
+    <h3
+      id={id}
+      className="text-xl font-semibold text-gray-900 mb-3 mt-6 scroll-mt-8"
+      {...props}
+    >
+      <Link
+        href={`#${id}`}
+        className="no-underline hover:underline text-gray-900"
+      >
         {children}
       </Link>
     </h3>
   );
 }
 
-function H4Component({ children, ...props }: React.HTMLAttributes<HTMLHeadingElement>) {
+function H4Component({
+  children,
+  ...props
+}: React.HTMLAttributes<HTMLHeadingElement>) {
   const textContent = getTextContent(children);
   const id = slugify(textContent);
   return (
-    <h4 id={id} className="text-lg font-semibold text-gray-900 mb-2 mt-4 scroll-mt-8" {...props}>
-      <Link href={`#${id}`} className="no-underline hover:underline text-gray-900">
+    <h4
+      id={id}
+      className="text-lg font-semibold text-gray-900 mb-2 mt-4 scroll-mt-8"
+      {...props}
+    >
+      <Link
+        href={`#${id}`}
+        className="no-underline hover:underline text-gray-900"
+      >
         {children}
       </Link>
     </h4>
@@ -104,13 +145,19 @@ const MDXComponents: Components = {
 
   // Lists - with proper styling
   ul: ({ children, ...props }) => (
-    <ul className="list-disc list-outside ml-6 text-gray-700 mb-6 space-y-2" {...props}>
+    <ul
+      className="list-disc list-outside ml-6 text-gray-700 mb-6 space-y-2"
+      {...props}
+    >
       {children}
     </ul>
   ),
 
   ol: ({ children, ...props }) => (
-    <ol className="list-decimal list-outside ml-6 text-gray-700 mb-6 space-y-2" {...props}>
+    <ol
+      className="list-decimal list-outside ml-6 text-gray-700 mb-6 space-y-2"
+      {...props}
+    >
       {children}
     </ol>
   ),
@@ -177,7 +224,10 @@ const MDXComponents: Components = {
     }
 
     return (
-      <code className="bg-gray-100 px-2 py-1 rounded text-sm font-mono text-gray-800 border" {...props}>
+      <code
+        className="bg-gray-100 px-2 py-1 rounded text-sm font-mono text-gray-800 border"
+        {...props}
+      >
         {children}
       </code>
     );
@@ -185,14 +235,20 @@ const MDXComponents: Components = {
 
   // Pre (for code blocks without language)
   pre: ({ children, ...props }) => (
-    <pre className="bg-gray-50 text-gray-800 p-4 rounded-lg mb-6 overflow-x-auto text-sm border" {...props}>
+    <pre
+      className="bg-gray-50 text-gray-800 p-4 rounded-lg mb-6 overflow-x-auto text-sm border"
+      {...props}
+    >
       {children}
     </pre>
   ),
 
   // Blockquote
   blockquote: ({ children, ...props }) => (
-    <blockquote className="border-l-4 border-[--brand] pl-6 py-2 my-6 italic text-gray-600 bg-gray-50" {...props}>
+    <blockquote
+      className="border-l-4 border-[--brand] pl-6 py-2 my-6 italic text-gray-600 bg-gray-50"
+      {...props}
+    >
       {children}
     </blockquote>
   ),
@@ -200,7 +256,10 @@ const MDXComponents: Components = {
   // Tables
   table: ({ children, ...props }) => (
     <div className="overflow-x-auto mb-6">
-      <table className="min-w-full divide-y divide-gray-200 border border-gray-200 rounded-lg" {...props}>
+      <table
+        className="min-w-full divide-y divide-gray-200 border border-gray-200 rounded-lg"
+        {...props}
+      >
         {children}
       </table>
     </div>
@@ -218,20 +277,22 @@ const MDXComponents: Components = {
     </tbody>
   ),
 
-  tr: ({ children, ...props }) => (
-    <tr {...props}>
-      {children}
-    </tr>
-  ),
+  tr: ({ children, ...props }) => <tr {...props}>{children}</tr>,
 
   th: ({ children, ...props }) => (
-    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider" {...props}>
+    <th
+      className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+      {...props}
+    >
       {children}
     </th>
   ),
 
   td: ({ children, ...props }) => (
-    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700" {...props}>
+    <td
+      className="px-6 py-4 whitespace-nowrap text-sm text-gray-700"
+      {...props}
+    >
       {children}
     </td>
   ),
@@ -251,9 +312,7 @@ const MDXComponents: Components = {
   ),
 
   // Horizontal rule
-  hr: ({ ...props }) => (
-    <hr className="my-8 border-gray-200" {...props} />
-  ),
+  hr: ({ ...props }) => <hr className="my-8 border-gray-200" {...props} />,
 
   // Images
   img: ({ src, alt, ...props }) => {
@@ -263,7 +322,8 @@ const MDXComponents: Components = {
 
     // For external images or images that might not work with Next.js Image,
     // fall back to regular img tag
-    const isExternalImage = src.startsWith('http://') || src.startsWith('https://');
+    const isExternalImage =
+      src.startsWith('http://') || src.startsWith('https://');
 
     if (isExternalImage) {
       return (

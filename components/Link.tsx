@@ -1,6 +1,6 @@
-import NextLink, { LinkProps as NextLinkProps } from "next/link";
-import clsx from "clsx";
-import { ReactNode } from "react";
+import NextLink, { LinkProps as NextLinkProps } from 'next/link';
+import clsx from 'clsx';
+import { ReactNode } from 'react';
 
 type LinkProps = {
   children: ReactNode;
@@ -9,17 +9,19 @@ type LinkProps = {
 } & NextLinkProps;
 
 export default function Link(props: LinkProps) {
-  const isExternal = !props.href.toString().startsWith("/") && !props.href.toString().startsWith("#");
+  const isExternal =
+    !props.href.toString().startsWith('/') &&
+    !props.href.toString().startsWith('#');
   const { underline, ...rest } = props;
   return (
     <NextLink
       {...rest}
       className={clsx(
-        "underline-offset-4",
-        (isExternal || underline) && "underline",
+        'underline-offset-4',
+        (isExternal || underline) && 'underline',
         props.className
       )}
-      target={isExternal ? "_blank" : undefined}
+      target={isExternal ? '_blank' : undefined}
     >
       {props.children}
     </NextLink>

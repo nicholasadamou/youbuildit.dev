@@ -1,7 +1,11 @@
-import { notFound } from "next/navigation";
-import type { Metadata } from "next";
-import { getChallengeBySlug, getChallengesSlugs, getRelatedChallenges } from "@/lib/mdx";
-import ChallengePageContent from "./ChallengePageContent";
+import { notFound } from 'next/navigation';
+import type { Metadata } from 'next';
+import {
+  getChallengeBySlug,
+  getChallengesSlugs,
+  getRelatedChallenges,
+} from '@/lib/mdx';
+import ChallengePageContent from './ChallengePageContent';
 
 interface ChallengePageProps {
   params: Promise<{
@@ -11,19 +15,21 @@ interface ChallengePageProps {
 
 export async function generateStaticParams() {
   const slugs = getChallengesSlugs();
-  return slugs.map((slug) => ({
+  return slugs.map(slug => ({
     challenge: slug,
   }));
 }
 
-export async function generateMetadata({ params }: ChallengePageProps): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+}: ChallengePageProps): Promise<Metadata> {
   const resolvedParams = await params;
   const challenge = await getChallengeBySlug(resolvedParams.challenge);
-  
+
   if (!challenge) {
     return {
-      title: "Challenge Not Found",
-      description: "The requested challenge could not be found.",
+      title: 'Challenge Not Found',
+      description: 'The requested challenge could not be found.',
     };
   }
 
@@ -49,9 +55,9 @@ export default async function ChallengePage({ params }: ChallengePageProps) {
   const relatedChallenges = await getRelatedChallenges(challenge, 2);
 
   return (
-    <ChallengePageContent 
-      challenge={challenge} 
-      relatedChallenges={relatedChallenges} 
+    <ChallengePageContent
+      challenge={challenge}
+      relatedChallenges={relatedChallenges}
     />
   );
 }

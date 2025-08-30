@@ -1,14 +1,14 @@
-import { ImageResponse } from 'next/og'
+import { ImageResponse } from 'next/og';
 
 // Route segment config
-export const runtime = 'edge'
+export const runtime = 'edge';
 
 // Image metadata
 export const size = {
   width: 32,
   height: 32,
-}
-export const contentType = 'image/svg+xml'
+};
+export const contentType = 'image/svg+xml';
 
 // Image generation
 export default function Icon() {
@@ -24,7 +24,7 @@ export default function Icon() {
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          borderRadius: '8px'
+          borderRadius: '8px',
         }}
       >
         YBI
@@ -33,5 +33,5 @@ export default function Icon() {
     {
       ...size,
     }
-  )
+  );
 }

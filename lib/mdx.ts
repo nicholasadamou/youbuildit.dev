@@ -22,9 +22,9 @@ export async function getAllChallenges(): Promise<Challenge[]> {
   if (!isServer) {
     throw new Error('getAllChallenges can only be called on the server');
   }
-  
+
   const challengesDirectory = path.join(contentDirectory, 'challenges');
-  
+
   if (!fs.existsSync(challengesDirectory)) {
     return [];
   }
@@ -33,7 +33,7 @@ export async function getAllChallenges(): Promise<Challenge[]> {
   const challenges = await Promise.all(
     fileNames
       .filter(name => name.endsWith('.mdx'))
-      .map(async (fileName) => {
+      .map(async fileName => {
         const slug = fileName.replace(/\.mdx$/, '');
         return await getChallengeBySlug(slug);
       })
@@ -42,15 +42,17 @@ export async function getAllChallenges(): Promise<Challenge[]> {
   return challenges.filter(Boolean) as Challenge[];
 }
 
-export async function getChallengeBySlug(slug: string): Promise<Challenge | null> {
+export async function getChallengeBySlug(
+  slug: string
+): Promise<Challenge | null> {
   if (!isServer) {
     throw new Error('getChallengeBySlug can only be called on the server');
   }
-  
+
   try {
     const challengesDirectory = path.join(contentDirectory, 'challenges');
     const fullPath = path.join(challengesDirectory, `${slug}.mdx`);
-    
+
     if (!fs.existsSync(fullPath)) {
       return null;
     }
@@ -59,7 +61,14 @@ export async function getChallengeBySlug(slug: string): Promise<Challenge | null
     const { data, content } = matter(fileContents);
 
     // Validate required fields
-    if (!data.title || !data.summary || !data.difficulty || !data.category || !data.skills || !data.estimatedTime) {
+    if (
+      !data.title ||
+      !data.summary ||
+      !data.difficulty ||
+      !data.category ||
+      !data.skills ||
+      !data.estimatedTime
+    ) {
       console.warn(`Invalid frontmatter in ${slug}.mdx`);
       return null;
     }
@@ -84,9 +93,9 @@ export function getChallengesSlugs(): string[] {
   if (!isServer) {
     throw new Error('getChallengesSlugs can only be called on the server');
   }
-  
+
   const challengesDirectory = path.join(contentDirectory, 'challenges');
-  
+
   if (!fs.existsSync(challengesDirectory)) {
     return [];
   }
@@ -97,39 +106,44 @@ export function getChallengesSlugs(): string[] {
     .map(name => name.replace(/\.mdx$/, ''));
 }
 
-export async function getRelatedChallenges(currentChallenge: Challenge, limit: number = 3): Promise<Challenge[]> {
+export async function getRelatedChallenges(
+  currentChallenge: Challenge,
+  limit: number = 3
+): Promise<Challenge[]> {
   if (!isServer) {
     throw new Error('getRelatedChallenges can only be called on the server');
   }
-  
+
   const allChallenges = await getAllChallenges();
-  
+
   // Filter out the current challenge and find related ones based on category or skills
-  const otherChallenges = allChallenges.filter(challenge => challenge.slug !== currentChallenge.slug);
-  
+  const otherChallenges = allChallenges.filter(
+    challenge => challenge.slug !== currentChallenge.slug
+  );
+
   // Score challenges based on similarity
   const scored = otherChallenges.map(challenge => {
     let score = 0;
-    
+
     // Same category gets higher score
     if (challenge.category === currentChallenge.category) {
       score += 10;
     }
-    
+
     // Same difficulty gets some points
     if (challenge.difficulty === currentChallenge.difficulty) {
       score += 5;
     }
-    
+
     // Shared skills get points
-    const sharedSkills = challenge.skills.filter(skill => 
+    const sharedSkills = challenge.skills.filter(skill =>
       currentChallenge.skills.includes(skill)
     ).length;
     score += sharedSkills * 3;
-    
+
     return { challenge, score };
   });
-  
+
   // Sort by score and return top matches
   return scored
     .sort((a, b) => b.score - a.score)

@@ -34,25 +34,29 @@ You Build It is an interactive coding challenges platform designed to help devel
 ### Installation
 
 1. **Clone the repository:**
+
    ```bash
    git clone https://github.com/youbuildit/youbuildit.dev.git
    cd youbuildit.dev
    ```
 
 2. **Install dependencies:**
+
    ```bash
    pnpm install
    ```
 
 3. **Configure environment variables:**
+
    ```bash
    # Copy the example environment file
    cp .env.example .env
    ```
-   
+
    Edit the `.env` file and add your environment variables (see [Environment Variables](#-environment-variables) section below).
 
 4. **Run the development server:**
+
    ```bash
    pnpm dev
    ```
@@ -86,12 +90,14 @@ You Build It is an interactive coding challenges platform designed to help devel
 ## 🔧 Technology Stack
 
 ### Core Technologies
+
 - **[Next.js 15](https://nextjs.org/)** - React framework with App Router
 - **[TypeScript](https://www.typescriptlang.org/)** - Type-safe JavaScript
 - **[React 19](https://react.dev/)** - UI library
 - **[Tailwind CSS](https://tailwindcss.com/)** - Utility-first CSS framework
 
 ### Key Libraries
+
 - **[Framer Motion](https://www.framer.com/motion/)** - Animations and transitions
 - **[MDX](https://mdxjs.com/)** - Markdown with React components
 - **[React Markdown](https://github.com/remarkjs/react-markdown)** - Markdown rendering
@@ -101,6 +107,7 @@ You Build It is an interactive coding challenges platform designed to help devel
 - **[Radix UI](https://www.radix-ui.com/)** - Headless UI primitives
 
 ### Development Tools
+
 - **[ESLint](https://eslint.org/)** - Code linting
 - **[PostCSS](https://postcss.org/)** - CSS processing
 - **[Autoprefixer](https://github.com/postcss/autoprefixer)** - CSS vendor prefixing
@@ -111,16 +118,16 @@ The application uses environment variables for configuration. Copy `.env.example
 
 ### Required Variables
 
-| Variable | Description | Required | Default |
-|----------|-------------|----------|----------|
-| `GITHUB_TOKEN` | GitHub personal access token for commit tracking API | Optional* | - |
+| Variable       | Description                                          | Required   | Default |
+| -------------- | ---------------------------------------------------- | ---------- | ------- |
+| `GITHUB_TOKEN` | GitHub personal access token for commit tracking API | Optional\* | -       |
 
 ### Optional Variables
 
-| Variable | Description | Required | Default |
-|----------|-------------|----------|----------|
-| `NODE_ENV` | Node environment | No | `development` |
-| `NEXT_PUBLIC_BASE_URL` | Base URL for the application | No | Auto-detected |
+| Variable               | Description                  | Required | Default       |
+| ---------------------- | ---------------------------- | -------- | ------------- |
+| `NODE_ENV`             | Node environment             | No       | `development` |
+| `NEXT_PUBLIC_BASE_URL` | Base URL for the application | No       | Auto-detected |
 
 ### Setting up GitHub Token
 
@@ -148,22 +155,26 @@ NODE_ENV=development
 ## ⚡ Features & Architecture
 
 ### Challenge System
+
 - **Dynamic Challenge Loading**: Challenges are dynamically loaded from MDX files in the `content/challenges/` directory
 - **Rich Metadata**: Each challenge includes difficulty, category, skills, estimated time, and more
 - **Interactive Content**: MDX allows for interactive code examples and embedded components
 - **Search & Filtering**: Advanced filtering by difficulty, category, and skills
 
 ### API Endpoints
+
 - `GET /api/challenges` - Fetch all available challenges with metadata
 - `POST /api/commit` - Track challenge completion and progress
 
 ### UI Components
+
 - **Responsive Design**: Mobile-first approach with Tailwind CSS
 - **Animation System**: Smooth page transitions and micro-interactions with Framer Motion
 - **Accessibility**: Built with semantic HTML and ARIA attributes
 - **Dark Mode Ready**: Component architecture supports theme switching
 
 ### Content Management
+
 - **MDX Integration**: Challenges written in MDX for rich, interactive content
 - **Syntax Highlighting**: Automatic syntax highlighting for code blocks
 - **Table of Contents**: Auto-generated TOC for long-form content
@@ -179,6 +190,7 @@ NODE_ENV=development
 ## 🚀 Deployment
 
 ### Vercel (Recommended)
+
 The easiest way to deploy is using the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme):
 
 1. Push your code to GitHub
@@ -187,6 +199,7 @@ The easiest way to deploy is using the [Vercel Platform](https://vercel.com/new?
 4. Deploy with automatic builds on every push
 
 ### Other Platforms
+
 - **Netlify**: Use the `pnpm build` command and deploy the `.next` folder
 - **Docker**: Create a Dockerfile based on the [Next.js Docker example](https://github.com/vercel/next.js/tree/canary/examples/with-docker)
 - **Traditional Hosting**: Build static files with `pnpm build` and serve the output
@@ -196,20 +209,24 @@ Check out the [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 ## 🎓 Learning Resources
 
 ### Next.js & React
+
 - [Next.js Documentation](https://nextjs.org/docs) - Comprehensive Next.js guide
 - [Learn Next.js](https://nextjs.org/learn) - Interactive tutorial
 - [React Documentation](https://react.dev/) - Official React docs
 
 ### TypeScript
+
 - [TypeScript Handbook](https://www.typescriptlang.org/docs/) - Complete TypeScript guide
 - [Next.js with TypeScript](https://nextjs.org/docs/app/building-your-application/configuring/typescript) - TypeScript integration
 
 ### Styling & UI
+
 - [Tailwind CSS Documentation](https://tailwindcss.com/docs) - Utility-first CSS framework
 - [Framer Motion](https://www.framer.com/motion/) - Animation library
 - [Radix UI](https://www.radix-ui.com/) - Unstyled UI primitives
 
 ### Content & MDX
+
 - [MDX Documentation](https://mdxjs.com/) - Markdown with React components
 - [Gray Matter](https://github.com/jonschlinkert/gray-matter) - Front matter parsing
 
@@ -218,16 +235,19 @@ Check out the [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 ### Common Issues
 
 **Build fails with TypeScript errors:**
+
 ```bash
 pnpm lint
 pnpm build
 ```
 
 **Styling issues:**
+
 - Clear `.next` cache: `rm -rf .next`
 - Restart development server: `pnpm dev`
 
 **MDX content not loading:**
+
 - Check file paths in `content/challenges/`
 - Verify MDX frontmatter format
 - Check for syntax errors in MDX files
