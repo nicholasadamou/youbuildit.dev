@@ -2,7 +2,7 @@ import React from 'react';
 import { motion, useInView } from 'framer-motion';
 import { useRef } from 'react';
 
-interface FadeInProps extends Omit<React.HTMLProps<HTMLDivElement>, 'children'> {
+interface FadeInProps {
 	children: React.ReactNode;
 	delay?: number;
 	duration?: number;
@@ -12,6 +12,9 @@ interface FadeInProps extends Omit<React.HTMLProps<HTMLDivElement>, 'children'> 
 	threshold?: number;
 	scale?: boolean;
 	blur?: boolean;
+	className?: string;
+	style?: React.CSSProperties;
+	id?: string;
 }
 
 const FadeIn: React.FC<FadeInProps> = ({ 
@@ -29,7 +32,8 @@ const FadeIn: React.FC<FadeInProps> = ({
 	const ref = useRef(null)
 	const isInView = useInView(ref, { 
 		once, 
-		margin: `-${Math.round(threshold * 100)}%`,
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
+		margin: `0px 0px -${Math.round(threshold * 100)}% 0px` as any,
 		amount: threshold
 	})
 
@@ -58,7 +62,7 @@ const FadeIn: React.FC<FadeInProps> = ({
 	}
 
 	const transition = {
-		type: "spring",
+		type: "spring" as const,
 		damping: 25,
 		stiffness: 120,
 		delay,

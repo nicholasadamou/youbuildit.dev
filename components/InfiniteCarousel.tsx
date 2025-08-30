@@ -81,7 +81,7 @@ export const InfiniteCarousel = ({
 		...childrenArray.map((child, index) => {
 			if (React.isValidElement(child)) {
 				return React.cloneElement(child, {
-					...child.props,
+					...(child.props as Record<string, unknown>),
 					key: `${child.key || index}-duplicate`
 				})
 			}

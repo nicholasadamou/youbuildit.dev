@@ -31,7 +31,7 @@ const itemVariants = {
 		y: 0,
 		scale: 1,
 		transition: {
-			type: "spring",
+			type: "spring" as const,
 			damping: 20,
 			stiffness: 100,
 			duration: 0.8
@@ -48,7 +48,7 @@ const gradientVariants = {
 		opacity: 1,
 		backgroundPosition: "0% center",
 		transition: {
-			type: "spring",
+			type: "spring" as const,
 			damping: 15,
 			stiffness: 80,
 			delay: 0.4,
@@ -112,7 +112,7 @@ const loadingVariants = {
 		opacity: 1,
 		scale: 1,
 		transition: {
-			type: "spring",
+			type: "spring" as const,
 			damping: 15,
 			stiffness: 200
 		}
@@ -137,7 +137,7 @@ const carouselVariants = {
 		y: 0,
 		filter: "blur(0px)",
 		transition: {
-			type: "spring",
+			type: "spring" as const,
 			damping: 20,
 			stiffness: 100,
 			delay: 0.2,

@@ -26,7 +26,7 @@ export default function TrustedCompanies() {
 			</motion.div>
 			<div className="relative overflow-hidden mt-12">
 				<InfiniteCarousel pauseOnHover gap={64}>
-					{companies.map((company, index) => (
+					{companies.map((company) => (
 						<FadeIn
 							key={company}
 							className="flex-shrink-0 items-center justify-center"

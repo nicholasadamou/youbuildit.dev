@@ -1,7 +1,7 @@
 import type {ClientChallenge} from "@/types/challenge";
 import {ArrowRight, Clock, Code} from "lucide-react";
 import Link from "next/link";
-import {motion} from "framer-motion";
+import {motion, type Variants} from "framer-motion";
 
 const difficultyGradients = {
 	Beginner: 'bg-gradient-to-r from-green-400 to-green-600',
@@ -14,12 +14,12 @@ const isDifficulty = (difficulty: string): difficulty is keyof typeof difficulty
 };
 
 // Card animation variants - removed vertical movement and scaling
-const cardVariants = {
+const cardVariants: Variants = {
 	idle: {
 		rotateY: 0,
 		boxShadow: "0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)",
 		transition: {
-			type: "spring",
+			type: "spring" as const,
 			damping: 20,
 			stiffness: 300,
 			duration: 0.3
@@ -29,7 +29,7 @@ const cardVariants = {
 		rotateY: 1,
 		boxShadow: "0 8px 15px -3px rgba(0, 0, 0, 0.12), 0 4px 6px -2px rgba(0, 0, 0, 0.05)",
 		transition: {
-			type: "spring",
+			type: "spring" as const,
 			damping: 20,
 			stiffness: 300,
 			duration: 0.3
@@ -37,16 +37,6 @@ const cardVariants = {
 	}
 }
 
-const contentVariants = {
-	idle: {
-		scale: 1,
-		transition: { duration: 0.3 }
-	},
-	hover: {
-		scale: 1.02,
-		transition: { duration: 0.3 }
-	}
-}
 
 const ChallengeCard = ({
 						   challenge, isHovered, onHover,
