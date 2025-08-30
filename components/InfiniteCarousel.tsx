@@ -90,20 +90,41 @@ export const InfiniteCarousel = ({
 	]
 
 	return (
-		<div
-			ref={containerRef}
-			className={cn("w-full overflow-x-hidden", className)}
-			style={{
-				"--gap": `${gap}px`,
-			} as React.CSSProperties}
-		>
-			<div
-				ref={contentRef}
-				className="flex items-center"
-				style={{gap: 'var(--gap)'}}
-			>
-				{combinedChildren}
+		<>
+			{/* Global CSS to hide scrollbars for this specific carousel */}
+			<style dangerouslySetInnerHTML={{
+				__html: `
+					.carousel-container {
+						scrollbar-width: none; /* Firefox */
+						-ms-overflow-style: none; /* IE and Edge */
+					}
+					.carousel-container::-webkit-scrollbar {
+						display: none; /* Chrome, Safari, Opera */
+					}
+				`
+			}} />
+			
+			<div className="relative w-full" style={{ height: '320px' }}>
+				<div className="absolute inset-0">
+					<div
+						ref={containerRef}
+						className={cn("carousel-container w-full h-full overflow-x-auto overflow-y-visible", className)}
+						style={{
+							"--gap": `${gap}px`,
+						} as React.CSSProperties}
+					>
+						<div
+							ref={contentRef}
+							className="flex items-center h-full"
+							style={{
+								gap: 'var(--gap)'
+							}}
+						>
+							{combinedChildren}
+						</div>
+					</div>
+				</div>
 			</div>
-		</div>
+		</>
 	)
 }
