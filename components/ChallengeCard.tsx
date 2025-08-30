@@ -1,4 +1,4 @@
-import type {Challenge} from "contentlayer/generated";
+import type {ClientChallenge} from "@/types/challenge";
 import {ArrowRight, Clock, Code} from "lucide-react";
 import Link from "next/link";
 import {motion} from "framer-motion";
@@ -16,7 +16,7 @@ const isDifficulty = (difficulty: string): difficulty is keyof typeof difficulty
 const ChallengeCard = ({
 						   challenge, isHovered, onHover,
 					   }: {
-	challenge: Challenge; isHovered: boolean; onHover: (title: string | null) => void;
+	challenge: ClientChallenge; isHovered: boolean; onHover: (title: string | null) => void;
 }) => (<div
 		key={challenge.title}
 		className="flex-shrink-0 w-96 bg-[#fafafa] rounded-lg overflow-hidden border border-[#e4e4e7] flex flex-col"

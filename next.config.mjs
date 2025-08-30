@@ -1,6 +1,6 @@
-import { withContentlayer } from "next-contentlayer";
-
 /** @type {import('next').NextConfig} */
-const nextConfig = {};
+const nextConfig = {
+  // Configuration options
+};
 
-export default withContentlayer(nextConfig);
+export default nextConfig;

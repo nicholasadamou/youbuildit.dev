@@ -1,9 +1,8 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
-import { allChallenges } from "contentlayer/generated";
-import type { Challenge } from "contentlayer/generated";
+import type { ClientChallenge } from '@/types/challenge'
 import { InfiniteCarousel } from '@/components/InfiniteCarousel'
 import ChallengeCard from "@/components/ChallengeCard";
 import FadeIn from "@/components/FadeIn";
@@ -30,6 +29,26 @@ const HeroHeading = () => (
 
 export default function HeroSection() {
 	const [hoveredChallenge, setHoveredChallenge] = useState<string | null>(null)
+	const [allChallenges, setAllChallenges] = useState<ClientChallenge[]>([]);
+	const [loading, setLoading] = useState(true);
+
+	useEffect(() => {
+		async function loadChallenges() {
+			try {
+				const response = await fetch('/api/challenges');
+				if (!response.ok) {
+					throw new Error('Failed to fetch challenges');
+				}
+				const challenges = await response.json();
+				setAllChallenges(challenges);
+			} catch (error) {
+				console.error('Error loading challenges:', error);
+			} finally {
+				setLoading(false);
+			}
+		}
+		loadChallenges();
+	}, []);
 
 	return (
 		<div className="relative bg-gradient-to-t from-[#2fbc77]/20 to-transparent mt-0 md:mt-16 pb-6 flex flex-col">
@@ -46,21 +65,27 @@ export default function HeroSection() {
 					<div>
 						<div className="max-w-full mx-auto mt-0 md:mt-8 -mb-36">
 							<div className="relative">
-								<InfiniteCarousel pauseOnHover reverseDirection>
-									{allChallenges.map((challenge: Challenge, index: number) => (
-										<FadeIn
-											key={index}
-											className="flex-shrink-0 items-center justify-center"
-										>
-											<ChallengeCard
-												key={challenge.slug}
-												challenge={challenge}
-												isHovered={hoveredChallenge === challenge.slug}
-												onHover={setHoveredChallenge}
-											/>
-										</FadeIn>
-									))}
-								</InfiniteCarousel>
+								{loading ? (
+									<div className="flex justify-center items-center h-64">
+										<div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[--brand]"></div>
+									</div>
+								) : (
+									<InfiniteCarousel pauseOnHover reverseDirection>
+									{allChallenges.map((challenge: ClientChallenge, index: number) => (
+											<FadeIn
+												key={index}
+												className="flex-shrink-0 items-center justify-center"
+											>
+												<ChallengeCard
+													key={challenge.slug}
+													challenge={challenge}
+													isHovered={hoveredChallenge === challenge.slug}
+													onHover={setHoveredChallenge}
+												/>
+											</FadeIn>
+										))}
+									</InfiniteCarousel>
+								)}
 							</div>
 						</div>
 					</div>

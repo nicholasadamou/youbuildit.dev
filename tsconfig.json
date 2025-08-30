@@ -26,9 +26,6 @@
 		"paths": {
 			"@/*": [
 				"./*"
-			],
-			"contentlayer/generated": [
-				"./.contentlayer/generated"
 			]
 		}
 	},
@@ -38,8 +35,7 @@
 		"**/*.tsx",
 		".next/types/**/*.ts",
 		"app/utils/fetcher.js",
-		"types/**/*.d.ts",
-		".contentlayer/generated",
+		"types/**/*.d.ts"
 	],
 	"exclude": [
 		"node_modules"

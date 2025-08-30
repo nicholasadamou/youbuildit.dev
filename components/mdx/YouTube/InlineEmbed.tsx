@@ -71,7 +71,7 @@ const InlineEmbed: React.FC<InlineEmbedProps> = ({ id }) => {
 			href={videoUrl}
 			target="_blank"
 			rel="noopener noreferrer"
-			className="not-prose flex items-center gap-3 no-underline border border-zinc-200 dark:border-zinc-600 rounded-lg px-4 py-2.5 hover:bg-zinc-100/50 dark:hover:bg-zinc-800/50 transition-colors"
+			className="not-prose flex items-center gap-3 no-underline border border-zinc-200 rounded-lg px-4 py-2.5 hover:bg-zinc-100/50 transition-colors"
 		>
 			<YouTubeIcon />
 			<div className="leading-tight">

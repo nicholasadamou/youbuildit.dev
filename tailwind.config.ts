@@ -1,7 +1,6 @@
 import type { Config } from "tailwindcss";
 
 const config: Config = {
-	darkMode: ["class"],
 	content: [
 		"./pages/**/*.{js,ts,jsx,tsx,mdx}",
 		"./components/**/*.{js,ts,jsx,tsx,mdx}",
@@ -9,20 +8,8 @@ const config: Config = {
 	],
 	theme: {
 		extend: {
-			keyframes: {
-				'infinite-scroll': {
-					'from': {
-						'transform': 'translateX(0)',
-					},
-					'to': {
-						'transform': 'translateX(calc(-50% - var(--gap)/2))',
-					},
-				},
-			},
-			animation: {
-				'infinite-scroll': 'infinite-scroll var(--duration) linear infinite',
-			},
 			colors: {
+				// Map to original CSS variable names
 				background: 'hsl(var(--background))',
 				foreground: 'hsl(var(--foreground))',
 				card: {
@@ -63,15 +50,25 @@ const config: Config = {
 					'4': 'hsl(var(--chart-4))',
 					'5': 'hsl(var(--chart-5))',
 				},
-			},
-			brand: {
-				DEFAULT: 'rgb(var(--brand) / <alpha-value>)',
-				light: 'rgb(var(--brand-light) / <alpha-value>)',
+				// Brand colors
+				brand: {
+					DEFAULT: 'var(--brand)',
+					light: 'var(--brand-light)',
+				},
 			},
 			borderRadius: {
 				lg: 'var(--radius)',
 				md: 'calc(var(--radius) - 2px)',
 				sm: 'calc(var(--radius) - 4px)',
+			},
+			keyframes: {
+				'infinite-scroll': {
+					'from': { transform: 'translateX(0)' },
+					'to': { transform: 'translateX(calc(-50% - var(--gap)/2))' },
+				},
+			},
+			animation: {
+				'infinite-scroll': 'infinite-scroll var(--duration) linear infinite',
 			},
 		},
 	},

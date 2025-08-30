@@ -50,41 +50,19 @@ body {
 		--brand-light: #a4e6c5; /* Light version for light mode */
 	}
 
-	.dark {
-		--background: 0 0% 3.9%;
-		--foreground: 0 0% 98%;
-		--border: 0 0% 14.9%;
-		--input: var(--border);
-		--ring: 0 0% 83.1%;
-
-		--card: var(--background);
-		--card-foreground: var(--foreground);
-		--popover: var(--background);
-		--popover-foreground: var(--foreground);
-
-		--primary: var(--foreground);
-		--primary-foreground: var(--background);
-
-		--secondary: 0 0% 14.9%;
-		--secondary-foreground: var(--foreground);
-		--muted: var(--secondary);
-		--muted-foreground: 0 0% 63.9%;
-		--accent: var(--secondary);
-		--accent-foreground: var(--foreground);
-
-		--destructive: 0 62.8% 30.6%;
-		--destructive-foreground: var(--foreground);
-
-		--brand: #37d388; /* Remains consistent in dark mode */
-		--brand-light: #a4e6c5; /* Matches brand color in dark mode */
-	}
 
 	/* Default Styles */
-	* {
-		@apply border-border;
-	}
-
 	body {
 		@apply bg-background text-foreground;
+	}
+}
+
+/* Keyframes for animations */
+@keyframes infinite-scroll {
+	from {
+		transform: translateX(0);
+	}
+	to {
+		transform: translateX(calc(-50% - var(--gap)/2));
 	}
 }

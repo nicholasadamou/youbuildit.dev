@@ -1,6 +1,6 @@
 import React from 'react';
 import Image from 'next/image';
-import Link from '@/app/components/Link';
+import Link from '@/components/Link';
 
 type ImageAttributionProps = {
 	imageSrc: string;
