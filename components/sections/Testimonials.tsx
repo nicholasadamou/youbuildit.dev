@@ -8,8 +8,8 @@ import type { ClientChallenge } from '@/types/challenge';
 import {Card, CardContent, CardFooter, CardHeader} from "@/components/ui/card";
 import {Badge} from "@/components/ui/badge";
 
-// This will be populated in a React component
-let testimonials: Array<{
+// Type definition for testimonial data
+type TestimonialType = {
   name: string;
   role: string;
   company: string;
@@ -19,7 +19,7 @@ let testimonials: Array<{
   challenge_link: string;
   style?: string;
   industry?: string;
-}> = [];
+};
 
 // CEO data with their matching companies and industries
 const ceoData = [
@@ -282,9 +282,8 @@ function generateTestimonials(challenges: ClientChallenge[]) {
 }
 
 export default function Testimonials() {
-	const [testimonialData, setTestimonialData] = useState<typeof testimonials>([]);
+	const [testimonialData, setTestimonialData] = useState<TestimonialType[]>([]);
 	const [loading, setLoading] = useState(true);
-	const [error, setError] = useState<string | null>(null);
 
 	useEffect(() => {
 		async function loadChallenges() {
@@ -303,9 +302,8 @@ export default function Testimonials() {
 				const generatedTestimonials = generateTestimonials(allChallenges);
 				console.log('Generated testimonials:', generatedTestimonials.length);
 				setTestimonialData(generatedTestimonials);
-			} catch (error) {
-				console.error('Error loading challenges:', error);
-				setError(error instanceof Error ? error.message : 'Unknown error');
+			} catch (err) {
+				console.error('Error loading challenges:', err);
 				// Create fallback testimonials if API fails
 				const fallbackTestimonials = [
 					{
