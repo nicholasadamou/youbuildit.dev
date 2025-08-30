@@ -330,6 +330,7 @@ export default function CallToAction() {
                 className="inline-flex items-center group"
               >
                 <motion.span
+                  className="text-base sm:text-lg"
                   initial={{ opacity: 0, x: -10 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: 1.8, duration: 0.4 }}
@@ -377,6 +378,7 @@ export default function CallToAction() {
                   <Shuffle className="h-5 w-5 sm:h-6 sm:w-6" />
                 </motion.div>
                 <motion.span
+                  className="text-base sm:text-lg"
                   initial={{ opacity: 0, x: -10 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: 2.0, duration: 0.4 }}
