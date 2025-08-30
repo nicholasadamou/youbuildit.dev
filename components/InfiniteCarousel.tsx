@@ -75,9 +75,18 @@ export const InfiniteCarousel = ({
 	}, [reverseDirection, pauseOnHover])
 
 	// Duplicate the children for infinite scrolling
+	const childrenArray = Children.toArray(children)
 	const combinedChildren = [
-		...Children.toArray(children),
-		...Children.toArray(children),
+		...childrenArray,
+		...childrenArray.map((child, index) => {
+			if (React.isValidElement(child)) {
+				return React.cloneElement(child, {
+					...child.props,
+					key: `${child.key || index}-duplicate`
+				})
+			}
+			return child
+		}),
 	]
 
 	return (

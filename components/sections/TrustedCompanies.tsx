@@ -28,14 +28,13 @@ export default function TrustedCompanies() {
 				<InfiniteCarousel pauseOnHover gap={64}>
 					{companies.map((company, index) => (
 						<FadeIn
-							key={index}
+							key={company}
 							className="flex-shrink-0 items-center justify-center"
 						>
 							<Link
 								href={`https://www.${company}.com`}
 								target="_blank"
 								rel="noopener noreferrer"
-								key={`${company}-${index}`}
 								className="flex-shrink-0"
 							>
 								<Image
