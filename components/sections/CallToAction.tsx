@@ -192,63 +192,6 @@ export default function CallToAction() {
 				variants={backgroundVariants}
 			/>
 
-			{/* Multiple Floating Background Elements - more visible on light bg */}
-			<motion.div
-				className="absolute top-10 left-10 w-20 h-20 bg-[#2fbc77]/15 rounded-full blur-xl"
-				animate={{
-					y: [-10, 10, -10],
-					x: [-5, 5, -5],
-					scale: [1, 1.1, 1]
-				}}
-				transition={{
-					duration: 6,
-					repeat: Infinity,
-					ease: "easeInOut"
-				}}
-			/>
-			<motion.div
-				className="absolute bottom-16 right-16 w-32 h-32 bg-[#2fbc77]/8 rounded-full blur-2xl"
-				animate={{
-					y: [10, -10, 10],
-					x: [5, -5, 5],
-					scale: [1.1, 1, 1.1]
-				}}
-				transition={{
-					duration: 8,
-					repeat: Infinity,
-					ease: "easeInOut",
-					delay: 1
-				}}
-			/>
-			<motion.div
-				className="absolute top-1/2 right-1/4 w-16 h-16 bg-blue-500/15 rounded-full blur-lg"
-				animate={{
-					y: [15, -15, 15],
-					rotate: [0, 360],
-					scale: [0.8, 1.2, 0.8]
-				}}
-				transition={{
-					duration: 10,
-					repeat: Infinity,
-					ease: "easeInOut",
-					delay: 2
-				}}
-			/>
-			<motion.div
-				className="absolute top-1/4 left-1/3 w-24 h-24 bg-purple-500/15 rounded-full blur-xl"
-				animate={{
-					y: [-12, 12, -12],
-					x: [8, -8, 8],
-					scale: [1.2, 0.8, 1.2]
-				}}
-				transition={{
-					duration: 7,
-					repeat: Infinity,
-					ease: "easeInOut",
-					delay: 0.5
-				}}
-			/>
-
 			<div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
 				{/* Main Content */}
 				<motion.div
