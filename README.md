@@ -91,24 +91,32 @@ You Build It is an interactive coding challenges platform designed to help devel
 
 ### Core Technologies
 
-- **[Next.js 15](https://nextjs.org/)** - React framework with App Router
+- **[Next.js 15.5.2](https://nextjs.org/)** - React framework with App Router
 - **[TypeScript](https://www.typescriptlang.org/)** - Type-safe JavaScript
-- **[React 19](https://react.dev/)** - UI library
+- **[React 19.1.1](https://react.dev/)** - UI library
 - **[Tailwind CSS](https://tailwindcss.com/)** - Utility-first CSS framework
 
 ### Key Libraries
 
 - **[Framer Motion](https://www.framer.com/motion/)** - Animations and transitions
+- **[shadcn/ui](https://ui.shadcn.com/)** - Copy-paste React components built on Radix UI
+- **[Radix UI](https://www.radix-ui.com/)** - Headless UI primitives
 - **[MDX](https://mdxjs.com/)** - Markdown with React components
 - **[React Markdown](https://github.com/remarkjs/react-markdown)** - Markdown rendering
 - **[React Syntax Highlighter](https://github.com/react-syntax-highlighter/react-syntax-highlighter)** - Code syntax highlighting
 - **[Gray Matter](https://github.com/jonschlinkert/gray-matter)** - Front matter parsing
 - **[Lucide React](https://lucide.dev/)** - Icon library
-- **[Radix UI](https://www.radix-ui.com/)** - Headless UI primitives
+- **[Heroicons](https://heroicons.com/)** - Additional icon set
+- **[Axios](https://axios-http.com/)** - HTTP client for API requests
+- **[clsx](https://github.com/lukeed/clsx)** - Utility for constructing className strings
+- **[tailwind-merge](https://github.com/dcastil/tailwind-merge)** - Merge Tailwind CSS classes without conflicts
 
 ### Development Tools
 
-- **[ESLint](https://eslint.org/)** - Code linting
+- **[ESLint](https://eslint.org/)** - Code linting with Next.js and Prettier integration
+- **[Prettier](https://prettier.io/)** - Code formatting
+- **[Husky](https://typicode.github.io/husky/)** - Git hooks for pre-commit validation
+- **[lint-staged](https://github.com/okonet/lint-staged)** - Run linters on staged files
 - **[PostCSS](https://postcss.org/)** - CSS processing
 - **[Autoprefixer](https://github.com/postcss/autoprefixer)** - CSS vendor prefixing
 
@@ -186,6 +194,10 @@ NODE_ENV=development
 - `pnpm build` - Build for production
 - `pnpm start` - Start production server
 - `pnpm lint` - Run ESLint
+- `pnpm lint:fix` - Run ESLint with auto-fix
+- `pnpm format` - Format code with Prettier
+- `pnpm format:check` - Check code formatting with Prettier
+- `pnpm prepare` - Setup Husky git hooks (runs automatically after install)
 
 ## 🚀 Deployment
 
@@ -222,6 +234,7 @@ Check out the [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 ### Styling & UI
 
 - [Tailwind CSS Documentation](https://tailwindcss.com/docs) - Utility-first CSS framework
+- [shadcn/ui Documentation](https://ui.shadcn.com/) - Component library guide
 - [Framer Motion](https://www.framer.com/motion/) - Animation library
 - [Radix UI](https://www.radix-ui.com/) - Unstyled UI primitives
 
@@ -300,6 +313,15 @@ Challenges are managed in a separate repository:
 - **Performance**: Consider loading times and bundle size
 - **Accessibility**: Follow WCAG guidelines
 - **Responsive Design**: Ensure mobile compatibility
+
+### Development Workflow
+
+The project uses automated tools to maintain code quality:
+
+- **Pre-commit Hooks**: Husky automatically runs ESLint and Prettier on staged files before each commit
+- **Staged Files**: lint-staged ensures only modified files are processed, improving performance
+- **Automatic Formatting**: Code is automatically formatted with Prettier during the pre-commit process
+- **Lint Fixes**: ESLint auto-fixes are applied when possible during pre-commit
 
 ### Commit Convention
 
