@@ -28,7 +28,7 @@ You Build It is an interactive coding challenges platform designed to help devel
 ### Prerequisites
 
 - **Node.js** 18.0 or higher
-- **npm**, **yarn**, **pnpm**, or **bun** package manager
+- **pnpm** 9.0 or higher (package manager)
 - **Git** for version control
 
 ### Installation
@@ -41,33 +41,15 @@ You Build It is an interactive coding challenges platform designed to help devel
 
 2. **Install dependencies:**
    ```bash
-   npm install
-   # or
-   yarn install
-   # or
    pnpm install
-   # or
-   bun install
    ```
 
-3. **Set up environment variables:**
+3. **Run the development server:**
    ```bash
-   cp .env.example .env
-   # Edit .env and add your GitHub token for enhanced features
-   ```
-
-4. **Run the development server:**
-   ```bash
-   npm run dev
-   # or
-   yarn dev
-   # or
    pnpm dev
-   # or
-   bun dev
    ```
 
-5. **Open your browser:**
+4. **Open your browser:**
    Navigate to [http://localhost:3000](http://localhost:3000) to see the application.
 
 ## 🏗️ Project Structure
@@ -141,20 +123,10 @@ You Build It is an interactive coding challenges platform designed to help devel
 
 ## 📜 Available Scripts
 
-- `npm run dev` - Start development server
-- `npm run build` - Build for production
-- `npm run start` - Start production server
-- `npm run lint` - Run ESLint
-
-## 🌐 Environment Variables
-
-Create a `.env` file in the root directory:
-
-```env
-GITHUB_TOKEN=your_github_token_here
-```
-
-- **GITHUB_TOKEN**: Optional GitHub personal access token for enhanced GitHub integration features
+- `pnpm dev` - Start development server
+- `pnpm build` - Build for production
+- `pnpm start` - Start production server
+- `pnpm lint` - Run ESLint
 
 ## 🚀 Deployment
 
@@ -167,9 +139,9 @@ The easiest way to deploy is using the [Vercel Platform](https://vercel.com/new?
 4. Deploy with automatic builds on every push
 
 ### Other Platforms
-- **Netlify**: Use the `npm run build` command and deploy the `.next` folder
+- **Netlify**: Use the `pnpm build` command and deploy the `.next` folder
 - **Docker**: Create a Dockerfile based on the [Next.js Docker example](https://github.com/vercel/next.js/tree/canary/examples/with-docker)
-- **Traditional Hosting**: Build static files with `npm run build` and serve the output
+- **Traditional Hosting**: Build static files with `pnpm build` and serve the output
 
 Check out the [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
 
@@ -199,23 +171,18 @@ Check out the [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 
 **Build fails with TypeScript errors:**
 ```bash
-npm run lint
-npm run build
+pnpm lint
+pnpm build
 ```
 
 **Styling issues:**
 - Clear `.next` cache: `rm -rf .next`
-- Restart development server: `npm run dev`
+- Restart development server: `pnpm dev`
 
 **MDX content not loading:**
 - Check file paths in `content/challenges/`
 - Verify MDX frontmatter format
 - Check for syntax errors in MDX files
-
-**Environment variables not working:**
-- Ensure `.env` file is in root directory
-- Restart development server after changes
-- Check variable names match `.env.example`
 
 ### Getting Help
 
@@ -244,7 +211,7 @@ We welcome contributions! Here's how you can help:
 1. **Fork the repository**
 2. **Create a feature branch**: `git checkout -b feature/amazing-feature`
 3. **Make your changes** following the coding standards
-4. **Test your changes**: `npm run lint && npm run build`
+4. **Test your changes**: `pnpm lint && pnpm build`
 5. **Commit**: `git commit -m 'Add amazing feature'`
 6. **Push**: `git push origin feature/amazing-feature`
 7. **Open a Pull Request**
