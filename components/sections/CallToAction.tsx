@@ -321,8 +321,9 @@ export default function CallToAction() {
           >
             <Button
               asChild
+              variant="default"
               size="lg"
-              className="bg-gradient-to-r from-[#2fbc77] to-[#2fb676] text-white hover:from-[#28a869] hover:to-[#28a869] px-8 sm:px-10 py-4 sm:py-5 shadow-2xl hover:shadow-[0_25px_50px_rgba(47,188,119,0.3)] transition-all duration-300 text-lg sm:text-xl font-bold rounded-2xl border-2 border-[#2fbc77] hover:border-[#28a869]"
+              className="bg-[--brand] hover:bg-[#175535] text-white h-12 px-8 rounded-md"
             >
               <Link
                 href="/challenges"
@@ -362,7 +363,7 @@ export default function CallToAction() {
               disabled={isLoadingRandom}
               variant="outline"
               size="lg"
-              className="border-2 border-gray-300/60 text-primary hover:border-[#2fbc77] hover:bg-[#2fbc77]/10 hover:text-[#2fbc77] px-6 sm:px-8 py-4 sm:py-5 text-base sm:text-lg font-semibold rounded-2xl bg-white/95 backdrop-blur-md shadow-lg hover:shadow-[0_15px_30px_rgba(47,188,119,0.15)] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="h-12 px-8 rounded-md text-gray-700 hover:text-gray-800 border-gray-300"
             >
               <div className="inline-flex items-center group">
                 <motion.div
