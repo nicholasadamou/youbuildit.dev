@@ -5,7 +5,6 @@ import Link from "next/link";
 import {InfiniteCarousel} from "@/components/InfiniteCarousel";
 import { motion } from 'framer-motion';
 import React from "react";
-import FadeIn from "@/components/FadeIn";
 
 const companies = ['1password', 'airbnb', 'amazon', 'facebook', 'google', 'instagram', 'linkedin', 'meta', 'microsoft', 'netflix', 'twitch', 'youtube']
 
