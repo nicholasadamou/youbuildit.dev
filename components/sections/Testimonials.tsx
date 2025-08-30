@@ -282,21 +282,61 @@ function generateTestimonials(challenges: ClientChallenge[]) {
 }
 
 export default function Testimonials() {
-	const [, setChallenges] = useState<ClientChallenge[]>([]);
-	const [, setLoading] = useState(true);
+	const [testimonialData, setTestimonialData] = useState<typeof testimonials>([]);
+	const [loading, setLoading] = useState(true);
+	const [error, setError] = useState<string | null>(null);
 
 	useEffect(() => {
 		async function loadChallenges() {
 			try {
 				const response = await fetch('/api/challenges');
 				if (!response.ok) {
-					throw new Error('Failed to fetch challenges');
+					throw new Error(`Failed to fetch challenges: ${response.status}`);
 				}
 				const allChallenges = await response.json();
-				setChallenges(allChallenges);
-				testimonials = generateTestimonials(allChallenges);
+				console.log('Loaded challenges:', allChallenges.length);
+				
+				if (allChallenges.length === 0) {
+					throw new Error('No challenges found');
+				}
+				
+				const generatedTestimonials = generateTestimonials(allChallenges);
+				console.log('Generated testimonials:', generatedTestimonials.length);
+				setTestimonialData(generatedTestimonials);
 			} catch (error) {
 				console.error('Error loading challenges:', error);
+				setError(error instanceof Error ? error.message : 'Unknown error');
+				// Create fallback testimonials if API fails
+				const fallbackTestimonials = [
+					{
+						name: 'Sarah Chen',
+						role: 'Senior Developer',
+						company: 'TechCorp',
+						quote: 'The coding challenges helped me improve my problem-solving skills significantly. The real-world applications make learning much more engaging.',
+						rating: 5,
+						challenge: 'React Dashboard',
+						challenge_link: 'react-dashboard'
+					},
+					{
+						name: 'Michael Johnson',
+						role: 'Full Stack Engineer',
+						company: 'StartupXYZ',
+						quote: 'These challenges bridge the gap between theoretical knowledge and practical application. Perfect for skill development.',
+						rating: 5,
+						challenge: 'API Integration',
+						challenge_link: 'api-integration'
+					},
+					{
+						name: 'Emily Rodriguez',
+						role: 'Frontend Developer',
+						company: 'DesignHub',
+						quote: 'The step-by-step approach and detailed explanations make complex concepts easy to understand and implement.',
+						rating: 4,
+						challenge: 'Component Library',
+						challenge_link: 'component-library'
+					}
+				];
+				setTestimonialData(fallbackTestimonials);
 			} finally {
 				setLoading(false);
 			}
@@ -304,15 +344,15 @@ export default function Testimonials() {
 		loadChallenges();
 	}, []);
 
-	// Animation variants
+	// Simplified animation variants for better mobile performance
 	const containerVariants = {
 		hidden: { opacity: 0 },
 		visible: {
 			opacity: 1,
 			transition: {
-				staggerChildren: 0.1,
-				delayChildren: 0.2,
-				duration: 0.6
+				staggerChildren: 0.05,
+				delayChildren: 0.1,
+				duration: 0.4
 			}
 		}
 	}
@@ -329,36 +369,32 @@ export default function Testimonials() {
 		}
 	}
 
-	const cardVariants = {
-		hidden: { 
-			opacity: 0, 
-			y: 60, 
-			scale: 0.9,
-			rotateX: 15 
-		},
-		visible: {
-			opacity: 1,
-			y: 0,
-			scale: 1,
-			rotateX: 0,
-			transition: {
-				duration: 0.6
-			}
-		},
-		hover: {
-			scale: 1.03,
-			y: -10,
-			rotateX: -5,
-			boxShadow: "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)",
-			transition: {
-				duration: 0.3
-			}
-		},
-		tap: {
-			scale: 0.98,
-			y: -5
+const cardVariants = {
+	hidden: { 
+		opacity: 0, 
+		y: 40, 
+		scale: 0.95
+	},
+	visible: {
+		opacity: 1,
+		y: 0,
+		scale: 1,
+		transition: {
+			duration: 0.5
 		}
+	},
+	hover: {
+		scale: 1.02,
+		y: -5,
+		boxShadow: "0 10px 20px -5px rgba(0, 0, 0, 0.1), 0 5px 8px -3px rgba(0, 0, 0, 0.04)",
+		transition: {
+			duration: 0.2
+		}
+	},
+	tap: {
+		scale: 0.98
 	}
+}
 
 	const starVariants = {
 		hidden: { scale: 0, rotate: -180 },
@@ -425,10 +461,10 @@ export default function Testimonials() {
 
 	return (
 		<motion.section 
-			className="bg-background py-16 sm:py-24 relative overflow-hidden"
+			className="bg-background py-12 sm:py-16 md:py-24 relative overflow-hidden"
 			initial="hidden"
 			whileInView="visible"
-			viewport={{ once: true, amount: 0.2 }}
+			viewport={{ once: true, amount: 0.1, margin: "0px 0px -100px 0px" }}
 			variants={containerVariants}
 		>
 			{/* Floating background elements */}
@@ -461,33 +497,38 @@ export default function Testimonials() {
 			/>
 
 			<div className="container mx-auto px-4 sm:px-6 lg:px-8">
-				<motion.div
-					className="text-center mb-12"
-					variants={headerVariants}
+			<motion.div
+				className="text-center mb-8 sm:mb-12 px-4"
+				variants={headerVariants}
+			>
+				<motion.h2 
+					className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-foreground leading-tight"
+					initial={{ opacity: 0, y: 20 }}
+					animate={{ opacity: 1, y: 0 }}
+					transition={{ duration: 0.6, delay: 0.2 }}
 				>
-					<motion.h2 
-						className="text-3xl font-extrabold text-foreground sm:text-4xl"
-						initial={{ opacity: 0, y: 20 }}
-						animate={{ opacity: 1, y: 0 }}
-						transition={{ duration: 0.6, delay: 0.2 }}
-					>
 						What Our Users Say
 					</motion.h2>
-					<motion.p 
-						className="mt-4 text-xl text-muted-foreground"
-						initial={{ opacity: 0, y: 20 }}
-						animate={{ opacity: 1, y: 0 }}
-						transition={{ duration: 0.6, delay: 0.4 }}
-					>
+				<motion.p 
+					className="mt-4 text-lg sm:text-xl text-muted-foreground"
+					initial={{ opacity: 0, y: 20 }}
+					animate={{ opacity: 1, y: 0 }}
+					transition={{ duration: 0.6, delay: 0.4 }}
+				>
 						Hear from engineers who have improved their skills through our platform
 					</motion.p>
 				</motion.div>
 				
-				<motion.div 
-					className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
-					variants={containerVariants}
-				>
-					{testimonials.map((testimonial, index) => (
+			<motion.div 
+				className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6"
+				variants={containerVariants}
+			>
+					{loading ? (
+						<div className="col-span-full flex justify-center items-center py-12">
+							<div className="text-muted-foreground">Loading testimonials...</div>
+						</div>
+					) : (
+						testimonialData.map((testimonial, index) => (
 						<motion.div
 							key={`${testimonial.name}-${index}`}
 							variants={cardVariants}
@@ -496,28 +537,28 @@ export default function Testimonials() {
 							style={{ perspective: "1000px" }}
 						>
 							<Card className="h-full flex flex-col overflow-hidden bg-gradient-to-br from-white to-gray-50 border-2 hover:border-[--brand]/20 transition-colors duration-300">
-								<CardHeader className="relative">
-									<motion.div 
-										className="flex items-center space-x-4"
-										initial={{ opacity: 0, x: -20 }}
-										animate={{ opacity: 1, x: 0 }}
-										transition={{ delay: 0.3 + (index * 0.1), duration: 0.5 }}
-									>
-										<div>
-											<h3 className="text-lg font-semibold">{testimonial.name}</h3>
-											<p className="text-sm text-muted-foreground">
-												{testimonial.role}, {testimonial.company}
-											</p>
-										</div>
-									</motion.div>
-								</CardHeader>
+						<CardHeader className="relative p-4 sm:p-6">
+							<motion.div 
+								className="flex items-center space-x-4"
+								initial={{ opacity: 0, x: -20 }}
+								animate={{ opacity: 1, x: 0 }}
+								transition={{ delay: 0.3 + (index * 0.1), duration: 0.5 }}
+							>
+								<div>
+									<h3 className="text-base sm:text-lg font-semibold">{testimonial.name}</h3>
+									<p className="text-xs sm:text-sm text-muted-foreground">
+										{testimonial.role}, {testimonial.company}
+									</p>
+								</div>
+							</motion.div>
+						</CardHeader>
 								
-								<CardContent className="flex-grow">
-									<motion.div 
-										className="mb-4 flex"
-										initial="hidden"
-										animate="visible"
-									>
+						<CardContent className="flex-grow p-4 sm:p-6">
+							<motion.div 
+								className="mb-3 sm:mb-4 flex"
+								initial="hidden"
+								animate="visible"
+							>
 										{[...Array(5)].map((_, i) => (
 											<motion.div
 												key={i}
@@ -543,7 +584,7 @@ export default function Testimonials() {
 											<Quote className="absolute top-0 left-0 h-8 w-8 text-[--brand]"/>
 										</motion.div>
 										<motion.p 
-											className="italic pl-10 text-foreground"
+											className="italic pl-8 sm:pl-10 text-foreground text-sm sm:text-base leading-relaxed"
 											initial={{ opacity: 0, y: 20 }}
 											animate={{ opacity: 1, y: 0 }}
 											transition={{ delay: 0.7 + (index * 0.1), duration: 0.6 }}
@@ -553,13 +594,13 @@ export default function Testimonials() {
 									</div>
 								</CardContent>
 								
-								<CardFooter className="flex flex-col items-start space-y-2 border-t pt-4 bg-white/50">
-									<motion.p 
-										className="text-sm text-muted-foreground"
-										initial={{ opacity: 0 }}
-										animate={{ opacity: 1 }}
-										transition={{ delay: 0.9 + (index * 0.1), duration: 0.4 }}
-									>
+						<CardFooter className="flex flex-col items-start space-y-2 border-t pt-3 sm:pt-4 bg-white/50 p-4 sm:p-6">
+							<motion.p 
+								className="text-xs sm:text-sm text-muted-foreground"
+								initial={{ opacity: 0 }}
+								animate={{ opacity: 1 }}
+								transition={{ delay: 0.9 + (index * 0.1), duration: 0.4 }}
+							>
 										Challenge Completed:
 									</motion.p>
 									<Link href={`/challenge/${testimonial.challenge_link}`}>
@@ -579,7 +620,8 @@ export default function Testimonials() {
 								</CardFooter>
 							</Card>
 						</motion.div>
-					))}
+						))
+					)}
 				</motion.div>
 			</div>
 		</motion.section>

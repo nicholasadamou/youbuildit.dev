@@ -108,13 +108,13 @@ export default function CallToAction() {
 	}
 
 	return (
-		<motion.section 
-			className="bg-secondary py-20 md:py-32 relative overflow-hidden"
-			initial="hidden"
-			whileInView="visible"
-			viewport={{ once: true, amount: 0.3 }}
-			variants={containerVariants}
-		>
+	<motion.section 
+		className="bg-secondary py-16 sm:py-20 md:py-32 relative overflow-hidden"
+		initial="hidden"
+		whileInView="visible"
+		viewport={{ once: true, amount: 0.3 }}
+		variants={containerVariants}
+	>
 			{/* Animated Background Gradient */}
 			<motion.div 
 				className="absolute inset-0 bg-gradient-to-br from-[#2fbc77]/20 to-transparent"
@@ -155,11 +155,11 @@ export default function CallToAction() {
 				variants={itemVariants}
 			>
 				<div className="grid place-items-center items-center">
-					<div className="text-center">
-						<motion.h2 
-							className="text-4xl font-extrabold text-primary sm:text-5xl mb-6 leading-tight"
-							variants={titleVariants}
-						>
+				<div className="text-center px-4">
+					<motion.h2 
+						className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold text-primary mb-4 sm:mb-6 leading-tight"
+						variants={titleVariants}
+					>
 							Ready to Become a{' '}
 							<motion.span 
 								className="text-[--brand] inline-block"
@@ -173,11 +173,11 @@ export default function CallToAction() {
 								Better Engineer?
 							</motion.span>
 						</motion.h2>
-						
-						<motion.p 
-							className="text-xl text-primary mb-8"
-							variants={itemVariants}
-						>
+					
+					<motion.p 
+						className="text-lg sm:text-xl text-primary mb-6 sm:mb-8 max-w-3xl mx-auto"
+						variants={itemVariants}
+					>
 							Start your journey today with our practical coding challenges and take your skills to
 							the next level.
 						</motion.p>
@@ -187,24 +187,24 @@ export default function CallToAction() {
 							whileHover="hover"
 							whileTap="tap"
 						>
-							<Button asChild size="lg" className="bg-[--brand] text-white hover:bg-[--brand]/90 p-4 shadow-lg hover:shadow-xl transition-shadow duration-300">
-								<Link href="/challenges" className="inline-flex items-center">
-									<motion.span
-										initial={{ opacity: 0, x: -10 }}
-										animate={{ opacity: 1, x: 0 }}
-										transition={{ delay: 0.6, duration: 0.4 }}
-									>
-										Explore our Challenges
-									</motion.span>
-									<motion.div
-										variants={zapVariants}
-										whileHover="hover"
-										className="ml-2"
-									>
-										<Zap className="h-8 w-8"/>
-									</motion.div>
-								</Link>
-							</Button>
+					<Button asChild size="lg" className="bg-[--brand] text-white hover:bg-[--brand]/90 p-3 sm:p-4 shadow-lg hover:shadow-xl transition-shadow duration-300 text-sm sm:text-base">
+						<Link href="/challenges" className="inline-flex items-center">
+							<motion.span
+								initial={{ opacity: 0, x: -10 }}
+								animate={{ opacity: 1, x: 0 }}
+								transition={{ delay: 0.6, duration: 0.4 }}
+							>
+								Explore our Challenges
+							</motion.span>
+							<motion.div
+								variants={zapVariants}
+								whileHover="hover"
+								className="ml-2"
+							>
+								<Zap className="h-6 w-6 sm:h-8 sm:w-8"/>
+							</motion.div>
+						</Link>
+					</Button>
 						</motion.div>
 					</div>
 				</div>

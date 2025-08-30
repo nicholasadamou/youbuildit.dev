@@ -71,33 +71,33 @@ const HeroHeading = () => {
 		>
 			<motion.h1
 				variants={itemVariants}
-				className="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight mb-6 text-primary"
+				className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black tracking-tight mb-4 sm:mb-6 text-primary"
 				style={{ lineHeight: '1.2' }}
 			>
-				<motion.div className="flex flex-wrap justify-center items-center gap-x-3">
-					<motion.span
-						variants={itemVariants}
-						className="whitespace-nowrap"
-					>
-						Become a
-					</motion.span>
-					<motion.span
-						variants={gradientVariants}
-						className="text-transparent bg-clip-text bg-gradient-to-r from-[#2fbc77] to-[#2fb676] bg-[length:200%_100%] whitespace-nowrap"
-					>
-						Great Engineer
-					</motion.span>
-					<motion.span
-						variants={itemVariants}
-						className="whitespace-nowrap"
-					>
-						Through Real Challenges
-					</motion.span>
-				</motion.div>
+					<motion.div className="flex flex-wrap justify-center items-center gap-x-2 sm:gap-x-3 text-center">
+						<motion.span
+							variants={itemVariants}
+							className="sm:whitespace-nowrap"
+						>
+							Become a
+						</motion.span>
+						<motion.span
+							variants={gradientVariants}
+							className="text-transparent bg-clip-text bg-gradient-to-r from-[#2fbc77] to-[#2fb676] bg-[length:200%_100%] sm:whitespace-nowrap"
+						>
+							Great Engineer
+						</motion.span>
+						<motion.span
+							variants={itemVariants}
+							className="block sm:inline w-full sm:w-auto"
+						>
+							Through Real Challenges
+						</motion.span>
+					</motion.div>
 			</motion.h1>
 			<motion.p
 				variants={itemVariants}
-				className="mt-6 text-xl sm:text-2xl text-secondary-foreground"
+				className="mt-4 sm:mt-6 text-xl sm:text-xl md:text-2xl text-secondary-foreground px-4 sm:px-0"
 			>
 				Master software engineering by building real applications not toys.
 			</motion.p>
@@ -199,12 +199,12 @@ export default function HeroSection() {
 				<div className="flex flex-col">
 					{/* Hero Section */}
 					<motion.div
-						className="flex items-center justify-center p-8 pb-12"
+						className="flex items-center justify-center p-4 sm:p-8 pb-8 sm:pb-12"
 						initial={{ opacity: 0 }}
 						animate={{ opacity: 1 }}
 						transition={{ duration: 0.5 }}
 					>
-						<div className="max-w-3xl mx-auto">
+						<div className="max-w-3xl mx-auto w-full">
 							<HeroHeading />
 						</div>
 					</motion.div>
@@ -214,8 +214,8 @@ export default function HeroSection() {
 						initial={{ opacity: 0 }}
 						animate={{ opacity: 1 }}
 						transition={{ delay: 1, duration: 0.5 }}
-						className="py-6 -mb-64"
-					>
+							className="py-4 sm:py-6 -mb-32 sm:-mb-64"
+						>
 						<div className="max-w-full mx-auto">
 							<div className="relative">
 								{loading ? (
@@ -255,12 +255,12 @@ export default function HeroSection() {
 									>
 										<InfiniteCarousel pauseOnHover reverseDirection>
 											{allChallenges.map((challenge: ClientChallenge, index: number) => (
-												<FadeIn
-													key={challenge.slug}
-													delay={index * 0.1}
-													duration={0.6}
-													className="flex-shrink-0 items-center justify-center"
-												>
+										<FadeIn
+											key={challenge.slug}
+											delay={index * 0.1}
+											duration={0.6}
+											className="flex-shrink-0 items-center justify-center carousel-item"
+										>
 													<ChallengeCard
 														challenge={challenge}
 														isHovered={hoveredChallenge === challenge.slug}

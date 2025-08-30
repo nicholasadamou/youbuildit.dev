@@ -49,15 +49,15 @@ const ChallengeCard = ({
 		initial="idle"
 		animate={isHovered ? "hover" : "idle"}
 		whileHover="hover"
-		className="flex-shrink-0 w-96 bg-[#fafafa] rounded-lg overflow-hidden border border-[#e4e4e7] flex flex-col cursor-pointer"
+	className="flex-shrink-0 w-80 sm:w-96 bg-[#fafafa] rounded-lg overflow-hidden border border-[#e4e4e7] flex flex-col cursor-pointer"
 		onMouseEnter={() => onHover(challenge.slug)}
 		onMouseLeave={() => onHover(null)}
 		style={{ transformStyle: "preserve-3d" }}
 	>
-		<div className="p-4 flex flex-col h-full min-h-[250px]">
+		<div className="p-3 sm:p-4 flex flex-col h-full min-h-[230px] sm:min-h-[250px]">
 			<div className="flex justify-between items-start mb-2">
 				<motion.h3 
-					className="text-lg font-semibold text-primary"
+					className="text-base sm:text-lg font-semibold text-primary leading-tight"
 					initial={{ opacity: 0.8 }}
 					whileHover={{ opacity: 1 }}
 					transition={{ duration: 0.2 }}
@@ -76,14 +76,14 @@ const ChallengeCard = ({
         </motion.span>
 			</div>
 			<motion.p 
-				className="text-xs text-muted-foreground mb-2"
+				className="text-xs sm:text-sm text-muted-foreground mb-2 line-clamp-2"
 				initial={{ opacity: 0.7 }}
 				whileHover={{ opacity: 1 }}
 				transition={{ duration: 0.3 }}
 			>
 				{challenge.summary}
 			</motion.p>
-			<div className="flex flex-wrap gap-1 mb-2">
+			<div className="flex flex-wrap gap-1 mb-2 sm:mb-3">
 				{challenge.skills.slice(0, 2).map((skill, index) => (
 					<motion.span
 						key={index}
@@ -105,7 +105,7 @@ const ChallengeCard = ({
           </motion.span>
 				))}
 			</div>
-			<div className="flex justify-between text-xs text-muted-foreground mb-4">
+			<div className="flex justify-between text-xs text-muted-foreground mb-3 sm:mb-4">
         <span className="flex items-center">
           <Clock className="mr-1 h-3 w-3"/>
 			{challenge.estimatedTime}
@@ -114,7 +114,7 @@ const ChallengeCard = ({
 			<div className="mt-auto">
 				<Link href={`/challenge/${challenge.slug}`}>
 					<motion.div
-						className="inline-flex items-center justify-center w-full px-3 py-1 bg-[--brand] text-white text-sm font-medium rounded-md cursor-pointer overflow-hidden relative"
+						className="inline-flex items-center justify-center w-full px-3 py-2 sm:py-1 bg-[--brand] text-white text-sm font-medium rounded-md cursor-pointer overflow-hidden relative"
 						whileHover={{ 
 							scale: 1.05,
 							backgroundColor: "#175535"

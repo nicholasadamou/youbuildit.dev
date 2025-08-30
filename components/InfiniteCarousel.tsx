@@ -25,17 +25,21 @@ export const InfiniteCarousel = ({
 
 		if (!container || !content) return
 
+		// Reduced animation speed on mobile for better performance
+		const isMobile = window.innerWidth < 768
+		const speed = isMobile ? 0.5 : 1
+
 		const animate = () => {
 			if (reverseDirection) {
 				if (container.scrollLeft <= 0) {
 					container.scrollLeft = content.scrollWidth / 2
 				}
-				container.scrollLeft -= 1
+				container.scrollLeft -= speed
 			} else {
 				if (container.scrollLeft >= content.scrollWidth / 2) {
 					container.scrollLeft = 0
 				}
-				container.scrollLeft += 1
+				container.scrollLeft += speed
 			}
 		}
 
@@ -43,7 +47,7 @@ export const InfiniteCarousel = ({
 		let lastTime = performance.now()
 		const step = (currentTime: number) => {
 			const deltaTime = currentTime - lastTime
-			if (deltaTime >= 1000 / 60) {
+			if (deltaTime >= 1000 / (isMobile ? 30 : 60)) { // Reduced FPS on mobile
 				animate()
 				lastTime = currentTime
 			}
@@ -64,13 +68,30 @@ export const InfiniteCarousel = ({
 			}
 		}
 
+		// Add touch support for mobile
+		const handleTouchStart = () => {
+			if (pauseOnHover) {
+				cancelAnimationFrame(animationId)
+			}
+		}
+
+		const handleTouchEnd = () => {
+			if (pauseOnHover) {
+				animationId = requestAnimationFrame(step)
+			}
+		}
+
 		container.addEventListener('mouseenter', handleMouseEnter)
 		container.addEventListener('mouseleave', handleMouseLeave)
+		container.addEventListener('touchstart', handleTouchStart)
+		container.addEventListener('touchend', handleTouchEnd)
 
 		return () => {
 			cancelAnimationFrame(animationId)
 			container.removeEventListener('mouseenter', handleMouseEnter)
 			container.removeEventListener('mouseleave', handleMouseLeave)
+			container.removeEventListener('touchstart', handleTouchStart)
+			container.removeEventListener('touchend', handleTouchEnd)
 		}
 	}, [reverseDirection, pauseOnHover])
 
@@ -91,24 +112,30 @@ export const InfiniteCarousel = ({
 
 	return (
 		<>
-			{/* Global CSS to hide scrollbars for this specific carousel */}
+			{/* Global CSS to hide scrollbars and prevent manual scrolling */}
 			<style dangerouslySetInnerHTML={{
 				__html: `
 					.carousel-container {
 						scrollbar-width: none; /* Firefox */
 						-ms-overflow-style: none; /* IE and Edge */
+						pointer-events: none; /* Prevent manual scrolling */
+						touch-action: pan-y; /* Allow vertical scrolling but prevent horizontal */
 					}
 					.carousel-container::-webkit-scrollbar {
 						display: none; /* Chrome, Safari, Opera */
 					}
+					.carousel-item {
+						pointer-events: auto; /* Re-enable pointer events for individual items */
+						touch-action: auto; /* Allow normal touch interactions on items */
+					}
 				`
 			}} />
 			
-			<div className="relative w-full" style={{ height: '320px' }}>
+			<div className="relative w-full" style={{ height: 'clamp(280px, 80vw, 320px)' }}>
 				<div className="absolute inset-0">
 					<div
 						ref={containerRef}
-						className={cn("carousel-container w-full h-full overflow-x-auto overflow-y-visible", className)}
+						className={cn("carousel-container w-full h-full overflow-x-hidden overflow-y-visible", className)}
 						style={{
 							"--gap": `${gap}px`,
 						} as React.CSSProperties}

@@ -24,30 +24,32 @@ export default function TrustedCompanies() {
 					Our platform is used by software engineers from leading tech companies worldwide.
 				</p>
 			</motion.div>
-			<div className="relative overflow-hidden mt-12">
-				<InfiniteCarousel pauseOnHover gap={64}>
-					{companies.map((company) => (
+			<div className="relative overflow-hidden mt-6 sm:mt-8">
+				<div className="h-16 flex items-center">
+					<InfiniteCarousel pauseOnHover gap={64}>
+						{companies.map((company) => (
 						<FadeIn
 							key={company}
-							className="flex-shrink-0 items-center justify-center"
+							className="flex-shrink-0 items-center justify-center carousel-item"
 						>
-							<Link
-								href={`https://www.${company}.com`}
-								target="_blank"
-								rel="noopener noreferrer"
-								className="flex-shrink-0"
-							>
-								<Image
-									src={`/logos/${company}.svg`}
-									alt={`${company} logo`}
-									width={120}
-									height={20}
-									className="transition-all duration-300 ease-in-out filter grayscale-[0.85] hover:grayscale-0"
-								/>
-							</Link>
-						</FadeIn>
-					))}
+								<Link
+									href={`https://www.${company}.com`}
+									target="_blank"
+									rel="noopener noreferrer"
+									className="flex-shrink-0"
+								>
+									<Image
+										src={`/logos/${company}.svg`}
+										alt={`${company} logo`}
+										width={120}
+										height={20}
+										className="transition-all duration-300 ease-in-out filter grayscale-[0.85] hover:grayscale-0"
+									/>
+								</Link>
+							</FadeIn>
+						))}
 				</InfiniteCarousel>
+				</div>
 			</div>
 		</section>
 	)

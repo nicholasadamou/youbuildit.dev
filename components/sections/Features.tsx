@@ -60,36 +60,32 @@ export default function Features() {
 		}
 	}
 
-	const featureVariants = {
-		hidden: {
-			opacity: 0,
-			y: 80,
-			scale: 0.8,
-			rotateY: 25
-		},
-		visible: {
-			opacity: 1,
-			y: 0,
-			scale: 1,
-			rotateY: 0,
-			transition: {
-				duration: 0.7
-			}
-		},
-		hover: {
-			y: -15,
-			scale: 1.05,
-			rotateY: -10,
-			rotateX: 10,
-			transition: {
-				duration: 0.4
-			}
-		},
-		tap: {
-			scale: 0.95,
-			y: -5
+const featureVariants = {
+	hidden: {
+		opacity: 0,
+		y: 50,
+		scale: 0.95
+	},
+	visible: {
+		opacity: 1,
+		y: 0,
+		scale: 1,
+		transition: {
+			duration: 0.6
 		}
+	},
+	hover: {
+		y: -8,
+		scale: 1.02,
+		transition: {
+			duration: 0.3
+		}
+	},
+	tap: {
+		scale: 0.98,
+		y: -2
 	}
+}
 
 	const iconVariants = {
 		hidden: { scale: 0, rotate: -180 },
@@ -131,13 +127,13 @@ export default function Features() {
 	}
 
 	return (
-		<motion.section
-			className="bg-white mt-24 py-16 sm:py-24 relative overflow-hidden"
-			initial="hidden"
-			whileInView="visible"
-			viewport={{ once: true, amount: 0.2 }}
-			variants={containerVariants}
-		>
+	<motion.section
+		className="bg-white mt-16 sm:mt-24 py-12 sm:py-16 md:py-24 relative overflow-hidden"
+		initial="hidden"
+		whileInView="visible"
+		viewport={{ once: true, amount: 0.2 }}
+		variants={containerVariants}
+	>
 			{/* Animated background elements */}
 			<motion.div
 				className="absolute top-16 right-10 w-40 h-40 bg-gradient-to-br from-[--brand]/10 to-transparent rounded-full blur-2xl"
@@ -169,16 +165,16 @@ export default function Features() {
 			/>
 
 			<div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-				<motion.div
-					className="text-center mb-12"
-					variants={headerVariants}
+			<motion.div
+				className="text-center mb-8 sm:mb-12 px-4"
+				variants={headerVariants}
+			>
+				<motion.h2
+					className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-primary leading-tight"
+					initial={{ opacity: 0, y: 30 }}
+					animate={{ opacity: 1, y: 0 }}
+					transition={{ duration: 0.7, delay: 0.2 }}
 				>
-					<motion.h2
-						className="text-3xl font-extrabold text-primary sm:text-4xl"
-						initial={{ opacity: 0, y: 30 }}
-						animate={{ opacity: 1, y: 0 }}
-						transition={{ duration: 0.7, delay: 0.2 }}
-					>
 						Why Choose Our{' '}
 						<motion.span
 							className="text-[--brand] inline-block"
@@ -194,20 +190,20 @@ export default function Features() {
 							Challenges?
 						</motion.span>
 					</motion.h2>
-					<motion.p
-						className="mt-4 text-xl text-muted-foreground max-w-3xl mx-auto"
-						initial={{ opacity: 0, y: 20 }}
-						animate={{ opacity: 1, y: 0 }}
-						transition={{ duration: 0.6, delay: 0.4 }}
-					>
+				<motion.p
+					className="mt-4 text-lg sm:text-xl text-muted-foreground max-w-3xl mx-auto"
+					initial={{ opacity: 0, y: 20 }}
+					animate={{ opacity: 1, y: 0 }}
+					transition={{ duration: 0.6, delay: 0.4 }}
+				>
 						Designed to help you grow as a software engineer through practical, real-world projects.
 					</motion.p>
 				</motion.div>
 
-				<motion.div
-					className="mt-16 grid gap-8 md:grid-cols-3"
-					variants={containerVariants}
-				>
+			<motion.div
+				className="mt-12 sm:mt-16 grid gap-6 sm:gap-8 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3"
+				variants={containerVariants}
+			>
 					{features.map((feature, index) => {
 						const Icon = feature.icon
 
@@ -242,26 +238,26 @@ export default function Features() {
 									}}
 								/>
 
-								{/* Content card */}
-								<motion.div
-									className="relative bg-white p-8 rounded-lg shadow-xl h-full flex flex-col"
-									initial={{ opacity: 0 }}
-									animate={{ opacity: 1 }}
-									transition={{ delay: 0.2, duration: 0.5 }}
-								>
+							{/* Content card */}
+							<motion.div
+								className="relative bg-white p-6 sm:p-8 rounded-lg shadow-xl h-full flex flex-col"
+								initial={{ opacity: 0 }}
+								animate={{ opacity: 1 }}
+								transition={{ delay: 0.2, duration: 0.5 }}
+							>
 									{/* Icon with animated background */}
 									<motion.div
-										className={`w-16 h-16 ${feature.bgColor} rounded-full flex items-center justify-center mb-6 mx-auto shadow-lg`}
+										className={`w-14 h-14 sm:w-16 sm:h-16 ${feature.bgColor} rounded-full flex items-center justify-center mb-4 sm:mb-6 mx-auto shadow-lg`}
 										variants={iconVariants}
 										whileHover="hover"
 									>
-										<Icon className="h-8 w-8 text-white" />
+										<Icon className="h-7 w-7 sm:h-8 sm:w-8 text-white" />
 									</motion.div>
 
 									{/* Text content */}
 									<div className="text-center flex-1 flex flex-col">
 										<motion.h3
-											className="text-xl font-semibold text-primary mb-4"
+											className="text-lg sm:text-xl font-semibold text-primary mb-3 sm:mb-4"
 											initial={{ opacity: 0, y: 20 }}
 											animate={{ opacity: 1, y: 0 }}
 											transition={{ delay: 0.4 + (index * 0.1), duration: 0.5 }}
