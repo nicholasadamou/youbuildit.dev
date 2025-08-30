@@ -44,12 +44,20 @@ You Build It is an interactive coding challenges platform designed to help devel
    pnpm install
    ```
 
-3. **Run the development server:**
+3. **Configure environment variables:**
+   ```bash
+   # Copy the example environment file
+   cp .env.example .env
+   ```
+   
+   Edit the `.env` file and add your environment variables (see [Environment Variables](#-environment-variables) section below).
+
+4. **Run the development server:**
    ```bash
    pnpm dev
    ```
 
-4. **Open your browser:**
+5. **Open your browser:**
    Navigate to [http://localhost:3000](http://localhost:3000) to see the application.
 
 ## 🏗️ Project Structure
@@ -96,6 +104,46 @@ You Build It is an interactive coding challenges platform designed to help devel
 - **[ESLint](https://eslint.org/)** - Code linting
 - **[PostCSS](https://postcss.org/)** - CSS processing
 - **[Autoprefixer](https://github.com/postcss/autoprefixer)** - CSS vendor prefixing
+
+## 🔐 Environment Variables
+
+The application uses environment variables for configuration. Copy `.env.example` to `.env` and configure the following variables:
+
+### Required Variables
+
+| Variable | Description | Required | Default |
+|----------|-------------|----------|----------|
+| `GITHUB_TOKEN` | GitHub personal access token for commit tracking API | Optional* | - |
+
+### Optional Variables
+
+| Variable | Description | Required | Default |
+|----------|-------------|----------|----------|
+| `NODE_ENV` | Node environment | No | `development` |
+| `NEXT_PUBLIC_BASE_URL` | Base URL for the application | No | Auto-detected |
+
+### Setting up GitHub Token
+
+1. **Create a GitHub Personal Access Token:**
+   - Go to [GitHub Settings > Developer settings > Personal access tokens](https://github.com/settings/tokens)
+   - Click "Generate new token (classic)"
+   - Select scopes: `public_repo` (for public repositories)
+   - Copy the generated token
+
+2. **Add to your `.env` file:**
+   ```bash
+   GITHUB_TOKEN=ghp_your_token_here
+   ```
+
+**Note:** The GitHub token is optional for local development but required for the commit tracking feature to work properly.
+
+### Environment File Structure
+
+```bash
+# .env
+GITHUB_TOKEN=your_github_personal_access_token_here
+NODE_ENV=development
+```
 
 ## ⚡ Features & Architecture
 
