@@ -5,11 +5,11 @@ import Link from 'next/link'
 import type { ClientChallenge } from '@/types/challenge'
 import Footer from '@/components/sections/Footer'
 import { motion, AnimatePresence } from 'framer-motion'
-import { 
-  Search, 
-  Clock, 
-  Code, 
-  Tag, 
+import {
+  Search,
+  Clock,
+  Code,
+  Tag,
   Filter,
   ArrowRight,
   Grid,
@@ -61,11 +61,11 @@ export default function ChallengesPage() {
   // Filter and search challenges
   const filteredChallenges = useMemo(() => {
     return allChallenges.filter((challenge: ClientChallenge) => {
-      const matchesSearch = 
+      const matchesSearch =
         challenge.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
         challenge.summary.toLowerCase().includes(searchQuery.toLowerCase()) ||
         challenge.skills.some(skill => skill.toLowerCase().includes(searchQuery.toLowerCase()))
-      
+
       const matchesCategory = selectedCategory === 'All' || challenge.category === selectedCategory
       const matchesDifficulty = selectedDifficulty === 'All' || challenge.difficulty === selectedDifficulty
 
@@ -93,10 +93,10 @@ export default function ChallengesPage() {
         whileHover={{ y: viewMode === 'grid' ? -5 : 0, scale: viewMode === 'grid' ? 1.02 : 1 }}
         layout
       >
-        <Link 
+        <Link
           href={`/challenge/${challenge.slug}`}
-          className={`group block ${viewMode === 'grid' 
-            ? 'p-6 bg-white border border-gray-200 rounded-lg hover:border-[--brand] hover:shadow-lg transition-all duration-200' 
+          className={`group block ${viewMode === 'grid'
+            ? 'p-6 bg-white border border-gray-200 rounded-lg hover:border-[--brand] hover:shadow-lg transition-all duration-200'
             : 'p-4 bg-white border-b border-gray-200 hover:bg-gray-50 transition-colors'
           }`}
         >
@@ -110,19 +110,19 @@ export default function ChallengesPage() {
                 </h3>
                 <span
                   className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium border ${
-                    isDifficulty(challenge.difficulty) 
-                      ? difficultyColors[challenge.difficulty] 
+                    isDifficulty(challenge.difficulty)
+                      ? difficultyColors[challenge.difficulty]
                       : 'bg-gray-100 text-gray-800 border-gray-200'
                   } ${viewMode === 'list' ? 'ml-4' : ''}`}
                 >
                   {challenge.difficulty}
                 </span>
               </div>
-              
+
               <p className={`text-gray-600 mb-4 ${viewMode === 'list' ? 'line-clamp-2' : ''}`}>
                 {challenge.summary}
               </p>
-              
+
               <div className={`flex ${viewMode === 'grid' ? 'flex-col gap-3' : 'items-center gap-6'}`}>
                 <div className="flex items-center gap-4">
                   <div className="flex items-center gap-1 text-sm text-gray-500">
@@ -134,7 +134,7 @@ export default function ChallengesPage() {
                     {challenge.category}
                   </div>
                 </div>
-                
+
                 <div className="flex flex-wrap gap-1">
                   {challenge.skills.slice(0, viewMode === 'grid' ? 4 : 3).map((skill: string, skillIndex: number) => (
                     <span
@@ -152,7 +152,7 @@ export default function ChallengesPage() {
                 </div>
               </div>
             </div>
-            
+
             <div className={`${viewMode === 'grid' ? 'mt-4 pt-4 border-t border-gray-100' : ''} flex items-center justify-between`}>
               <span className="text-sm text-gray-500">
                 {viewMode === 'grid' ? 'Click to start challenge' : ''}
@@ -172,13 +172,13 @@ export default function ChallengesPage() {
         {/* Hero Section */}
         <div className="bg-white border-b border-gray-200">
           <div className="max-w-7xl mx-auto px-4 py-12">
-            <motion.div 
+            <motion.div
               className="text-center mb-12"
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6 }}
             >
-              <motion.h1 
+              <motion.h1
                 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -186,22 +186,22 @@ export default function ChallengesPage() {
               >
                 Coding Challenges
               </motion.h1>
-              <motion.p 
+              <motion.p
                 className="text-xl text-gray-600 mb-8 max-w-3xl mx-auto"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.2 }}
               >
-                Build real applications and improve your programming skills with our hands-on coding challenges. 
+                Build real applications and improve your programming skills with our hands-on coding challenges.
                 Each challenge teaches practical concepts through building tools you&apos;ll actually use.
               </motion.p>
-              <motion.div 
+              <motion.div
                 className="flex items-center justify-center gap-4 text-sm text-gray-500"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.3 }}
               >
-                <motion.span 
+                <motion.span
                   className="flex items-center gap-1"
                   initial={{ opacity: 0, scale: 0.8 }}
                   animate={{ opacity: 1, scale: 1 }}
@@ -210,7 +210,7 @@ export default function ChallengesPage() {
                   <Code className="h-4 w-4" />
                   {allChallenges.length} Challenges
                 </motion.span>
-                <motion.span 
+                <motion.span
                   className="flex items-center gap-1"
                   initial={{ opacity: 0, scale: 0.8 }}
                   animate={{ opacity: 1, scale: 1 }}
@@ -223,20 +223,20 @@ export default function ChallengesPage() {
             </motion.div>
 
             {/* Search and Filters */}
-            <motion.div 
+            <motion.div
               className="max-w-4xl mx-auto"
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.4 }}
             >
-              <motion.div 
+              <motion.div
                 className="flex flex-col md:flex-row gap-4 mb-6"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: 0.5 }}
               >
                 {/* Search */}
-                <motion.div 
+                <motion.div
                   className="flex-1 relative"
                   initial={{ opacity: 0, scale: 0.95 }}
                   animate={{ opacity: 1, scale: 1 }}
@@ -253,20 +253,20 @@ export default function ChallengesPage() {
                 </motion.div>
               </motion.div>
 
-              <motion.div 
+              <motion.div
                 className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: 0.6 }}
               >
                 {/* Filters */}
-                <motion.div 
+                <motion.div
                   className="flex flex-wrap gap-3"
                   initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ duration: 0.4, delay: 0.7 }}
                 >
-                  <motion.div 
+                  <motion.div
                     className="flex items-center gap-2"
                     initial={{ opacity: 0, scale: 0.9 }}
                     animate={{ opacity: 1, scale: 1 }}
@@ -274,6 +274,8 @@ export default function ChallengesPage() {
                   >
                     <Filter className="h-4 w-4 text-gray-500" />
                     <select
+                      id="category-filter"
+                      name="category"
                       value={selectedCategory}
                       onChange={(e) => setSelectedCategory(e.target.value)}
                       className="border border-gray-300 rounded-md px-3 py-1 text-sm text-gray-700 bg-white focus:ring-2 focus:ring-[--brand] focus:border-transparent"
@@ -284,8 +286,10 @@ export default function ChallengesPage() {
                       ))}
                     </select>
                   </motion.div>
-                  
+
                   <motion.select
+                    id="difficulty-filter"
+                    name="difficulty"
                     value={selectedDifficulty}
                     onChange={(e) => setSelectedDifficulty(e.target.value)}
                     className="border border-gray-300 rounded-md px-3 py-1 text-sm text-gray-700 bg-white focus:ring-2 focus:ring-[--brand] focus:border-transparent"
@@ -300,7 +304,7 @@ export default function ChallengesPage() {
                 </motion.div>
 
                 {/* View Mode Toggle */}
-                <motion.div 
+                <motion.div
                   className="flex items-center gap-2"
                   initial={{ opacity: 0, x: 20 }}
                   animate={{ opacity: 1, x: 0 }}
@@ -309,8 +313,8 @@ export default function ChallengesPage() {
                   <motion.button
                     onClick={() => setViewMode('grid')}
                     className={`p-2 rounded-md transition-colors ${
-                      viewMode === 'grid' 
-                        ? 'bg-[--brand] text-white' 
+                      viewMode === 'grid'
+                        ? 'bg-[--brand] text-white'
                         : 'bg-white text-gray-600 hover:bg-gray-100 border border-gray-300'
                     }`}
                     whileHover={{ scale: 1.05 }}
@@ -321,8 +325,8 @@ export default function ChallengesPage() {
                   <motion.button
                     onClick={() => setViewMode('list')}
                     className={`p-2 rounded-md transition-colors ${
-                      viewMode === 'list' 
-                        ? 'bg-[--brand] text-white' 
+                      viewMode === 'list'
+                        ? 'bg-[--brand] text-white'
                         : 'bg-white text-gray-600 hover:bg-gray-100 border border-gray-300'
                     }`}
                     whileHover={{ scale: 1.05 }}
@@ -334,7 +338,7 @@ export default function ChallengesPage() {
               </motion.div>
 
               {/* Results Count */}
-              <motion.div 
+              <motion.div
                 className="mb-6"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
@@ -354,7 +358,7 @@ export default function ChallengesPage() {
         </div>
 
         {/* Challenges Grid/List */}
-        <motion.div 
+        <motion.div
           className="max-w-7xl mx-auto px-4 py-12"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -362,7 +366,7 @@ export default function ChallengesPage() {
         >
           <AnimatePresence mode="wait">
             {filteredChallenges.length === 0 ? (
-              <motion.div 
+              <motion.div
                 key="no-results"
                 className="text-center py-12"
                 initial={{ opacity: 0, scale: 0.9 }}
@@ -378,7 +382,7 @@ export default function ChallengesPage() {
                   >
                     <Search className="h-12 w-12 text-gray-400 mx-auto mb-4" />
                   </motion.div>
-                  <motion.h3 
+                  <motion.h3
                     className="text-lg font-semibold text-gray-900 mb-2"
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
@@ -386,7 +390,7 @@ export default function ChallengesPage() {
                   >
                     No challenges found
                   </motion.h3>
-                  <motion.p 
+                  <motion.p
                     className="text-gray-600 mb-4"
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
@@ -412,9 +416,9 @@ export default function ChallengesPage() {
                 </div>
               </motion.div>
             ) : (
-              <motion.div 
+              <motion.div
                 key="results"
-                className={viewMode === 'grid' 
+                className={viewMode === 'grid'
                   ? 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6'
                   : 'space-y-0'
                 }
