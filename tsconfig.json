@@ -34,7 +34,7 @@
 		"**/*.ts",
 		"**/*.tsx",
 		".next/types/**/*.ts",
-		"app/utils/fetcher.js",
+		"lib/fetcher.js",
 		"types/**/*.d.ts"
 	],
 	"exclude": [

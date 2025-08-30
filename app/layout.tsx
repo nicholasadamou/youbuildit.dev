@@ -5,12 +5,12 @@ import "./globals.css";
 import Navbar from "@/components/Navbar";
 
 const geistSans = localFont({
-	src: "./fonts/GeistVF.woff",
+	src: "../public/fonts/GeistVF.woff",
 	variable: "--font-geist-sans",
 	weight: "100 900",
 });
 const geistMono = localFont({
-	src: "./fonts/GeistMonoVF.woff",
+	src: "../public/fonts/GeistMonoVF.woff",
 	variable: "--font-geist-mono",
 	weight: "100 900",
 });
@@ -18,6 +18,11 @@ const geistMono = localFont({
 export const metadata: Metadata = {
 	title: "You Build It",
 	description: "Helping you become a better software engineer through coding challenges that build real applications.",
+	icons: {
+		icon: '/icons/favicon.ico',
+		apple: '/icons/apple-touch-icon.png',
+	},
+	manifest: '/icons/manifest.webmanifest',
 };
 
 export default function RootLayout({
