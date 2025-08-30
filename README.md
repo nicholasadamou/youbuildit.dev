@@ -1,52 +1,295 @@
-# You Build It
+# You Build It 🛠️
 
 ![Next.js](https://img.shields.io/badge/-Next.js-000000?style=flat-square&logo=next.js&logoColor=white)
 ![TypeScript](https://img.shields.io/badge/-TypeScript-007ACC?style=flat-square&logo=typescript&logoColor=white)
 ![Tailwind CSS](https://img.shields.io/badge/-Tailwind%20CSS-06B6D4?style=flat-square&logo=tailwindcss&logoColor=white)
 ![Framer Motion](https://img.shields.io/badge/-Framer%20Motion-0081C9?style=flat-square&logo=framer&logoColor=white)
-![mdx](https://img.shields.io/badge/-mdx-0081C9?style=flat-square&logo=mdx&logoColor=white)
+![MDX](https://img.shields.io/badge/-MDX-0081C9?style=flat-square&logo=mdx&logoColor=white)
 
 ![preview](/preview.png)
 
-Helping you become a better software engineer through coding challenges that build real applications.
+**Helping you become a better software engineer through coding challenges that build real applications.**
 
-## Getting Started
+## 🎯 About
 
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+You Build It is an interactive coding challenges platform designed to help developers improve their programming skills through hands-on, practical projects. Unlike traditional algorithmic challenges, our platform focuses on building real-world applications and tools that you'll actually use.
 
-First, run the development server:
+### Key Features
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+- 🔍 **Interactive Challenge Browser** - Browse challenges by difficulty, category, and required skills
+- 📚 **Rich Content Experience** - Challenges written in MDX with syntax highlighting and interactive elements
+- 🎨 **Modern UI/UX** - Beautiful, responsive design with smooth animations
+- 🔧 **Real-World Projects** - Build actual tools like Docker, grep, JSON parsers, web servers, and more
+- 📊 **Skill Tracking** - Track the technologies and concepts you learn
+- 🚀 **Progressive Difficulty** - From beginner-friendly to advanced challenges
+
+## 🚀 Quick Start
+
+### Prerequisites
+
+- **Node.js** 18.0 or higher
+- **npm**, **yarn**, **pnpm**, or **bun** package manager
+- **Git** for version control
+
+### Installation
+
+1. **Clone the repository:**
+   ```bash
+   git clone https://github.com/youbuildit/youbuildit.dev.git
+   cd youbuildit.dev
+   ```
+
+2. **Install dependencies:**
+   ```bash
+   npm install
+   # or
+   yarn install
+   # or
+   pnpm install
+   # or
+   bun install
+   ```
+
+3. **Set up environment variables:**
+   ```bash
+   cp .env.example .env
+   # Edit .env and add your GitHub token for enhanced features
+   ```
+
+4. **Run the development server:**
+   ```bash
+   npm run dev
+   # or
+   yarn dev
+   # or
+   pnpm dev
+   # or
+   bun dev
+   ```
+
+5. **Open your browser:**
+   Navigate to [http://localhost:3000](http://localhost:3000) to see the application.
+
+## 🏗️ Project Structure
+
+```
+├── app/                    # Next.js App Router
+│   ├── api/               # API routes
+│   │   ├── challenges/    # Challenges API endpoint
+│   │   └── commit/        # Commit tracking API
+│   ├── challenge/         # Individual challenge pages
+│   ├── challenges/        # Challenge browser page
+│   ├── layout.tsx         # Root layout
+│   └── page.tsx          # Homepage
+├── components/            # Reusable React components
+│   ├── mdx/              # MDX-specific components
+│   ├── sections/         # Page sections (Hero, Features, etc.)
+│   └── ui/               # Base UI components
+├── content/              # Challenge content (MDX files)
+│   └── challenges/       # Individual challenge files
+├── lib/                  # Utility functions and configuration
+├── public/               # Static assets
+├── styles/               # Global styles and CSS
+└── types/                # TypeScript type definitions
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 🔧 Technology Stack
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Core Technologies
+- **[Next.js 15](https://nextjs.org/)** - React framework with App Router
+- **[TypeScript](https://www.typescriptlang.org/)** - Type-safe JavaScript
+- **[React 19](https://react.dev/)** - UI library
+- **[Tailwind CSS](https://tailwindcss.com/)** - Utility-first CSS framework
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### Key Libraries
+- **[Framer Motion](https://www.framer.com/motion/)** - Animations and transitions
+- **[MDX](https://mdxjs.com/)** - Markdown with React components
+- **[React Markdown](https://github.com/remarkjs/react-markdown)** - Markdown rendering
+- **[React Syntax Highlighter](https://github.com/react-syntax-highlighter/react-syntax-highlighter)** - Code syntax highlighting
+- **[Gray Matter](https://github.com/jonschlinkert/gray-matter)** - Front matter parsing
+- **[Lucide React](https://lucide.dev/)** - Icon library
+- **[Radix UI](https://www.radix-ui.com/)** - Headless UI primitives
 
-## Learn More
+### Development Tools
+- **[ESLint](https://eslint.org/)** - Code linting
+- **[PostCSS](https://postcss.org/)** - CSS processing
+- **[Autoprefixer](https://github.com/postcss/autoprefixer)** - CSS vendor prefixing
 
-To learn more about Next.js, take a look at the following resources:
+## ⚡ Features & Architecture
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Challenge System
+- **Dynamic Challenge Loading**: Challenges are dynamically loaded from MDX files in the `content/challenges/` directory
+- **Rich Metadata**: Each challenge includes difficulty, category, skills, estimated time, and more
+- **Interactive Content**: MDX allows for interactive code examples and embedded components
+- **Search & Filtering**: Advanced filtering by difficulty, category, and skills
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### API Endpoints
+- `GET /api/challenges` - Fetch all available challenges with metadata
+- `POST /api/commit` - Track challenge completion and progress
 
-## Deploy on Vercel
+### UI Components
+- **Responsive Design**: Mobile-first approach with Tailwind CSS
+- **Animation System**: Smooth page transitions and micro-interactions with Framer Motion
+- **Accessibility**: Built with semantic HTML and ARIA attributes
+- **Dark Mode Ready**: Component architecture supports theme switching
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### Content Management
+- **MDX Integration**: Challenges written in MDX for rich, interactive content
+- **Syntax Highlighting**: Automatic syntax highlighting for code blocks
+- **Table of Contents**: Auto-generated TOC for long-form content
+- **Reading Time**: Estimated reading time calculation
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 📜 Available Scripts
 
-## Contributing
+- `npm run dev` - Start development server
+- `npm run build` - Build for production
+- `npm run start` - Start production server
+- `npm run lint` - Run ESLint
 
-If you find a typo with one of the challenges, please submit an issue or open a pull request within [_You Build It_ Challenges](https://github.com/youbuildit/challenges) repository.
+## 🌐 Environment Variables
+
+Create a `.env` file in the root directory:
+
+```env
+GITHUB_TOKEN=your_github_token_here
+```
+
+- **GITHUB_TOKEN**: Optional GitHub personal access token for enhanced GitHub integration features
+
+## 🚀 Deployment
+
+### Vercel (Recommended)
+The easiest way to deploy is using the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme):
+
+1. Push your code to GitHub
+2. Import your repository to Vercel
+3. Add environment variables in the Vercel dashboard
+4. Deploy with automatic builds on every push
+
+### Other Platforms
+- **Netlify**: Use the `npm run build` command and deploy the `.next` folder
+- **Docker**: Create a Dockerfile based on the [Next.js Docker example](https://github.com/vercel/next.js/tree/canary/examples/with-docker)
+- **Traditional Hosting**: Build static files with `npm run build` and serve the output
+
+Check out the [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+
+## 🎓 Learning Resources
+
+### Next.js & React
+- [Next.js Documentation](https://nextjs.org/docs) - Comprehensive Next.js guide
+- [Learn Next.js](https://nextjs.org/learn) - Interactive tutorial
+- [React Documentation](https://react.dev/) - Official React docs
+
+### TypeScript
+- [TypeScript Handbook](https://www.typescriptlang.org/docs/) - Complete TypeScript guide
+- [Next.js with TypeScript](https://nextjs.org/docs/app/building-your-application/configuring/typescript) - TypeScript integration
+
+### Styling & UI
+- [Tailwind CSS Documentation](https://tailwindcss.com/docs) - Utility-first CSS framework
+- [Framer Motion](https://www.framer.com/motion/) - Animation library
+- [Radix UI](https://www.radix-ui.com/) - Unstyled UI primitives
+
+### Content & MDX
+- [MDX Documentation](https://mdxjs.com/) - Markdown with React components
+- [Gray Matter](https://github.com/jonschlinkert/gray-matter) - Front matter parsing
+
+## 🐛 Troubleshooting
+
+### Common Issues
+
+**Build fails with TypeScript errors:**
+```bash
+npm run lint
+npm run build
+```
+
+**Styling issues:**
+- Clear `.next` cache: `rm -rf .next`
+- Restart development server: `npm run dev`
+
+**MDX content not loading:**
+- Check file paths in `content/challenges/`
+- Verify MDX frontmatter format
+- Check for syntax errors in MDX files
+
+**Environment variables not working:**
+- Ensure `.env` file is in root directory
+- Restart development server after changes
+- Check variable names match `.env.example`
+
+### Getting Help
+
+1. **Search existing issues** in the repository
+2. **Check the documentation** for relevant sections
+3. **Create a new issue** with:
+   - Clear description of the problem
+   - Steps to reproduce
+   - Expected vs actual behavior
+   - System information (OS, Node.js version)
+
+## 🤝 Contributing
+
+We welcome contributions! Here's how you can help:
+
+### Types of Contributions
+
+- 🐛 **Bug Reports**: Found a bug? Let us know!
+- 💡 **Feature Requests**: Have an idea? Share it!
+- 📝 **Documentation**: Help improve the docs
+- 🎨 **Design**: UI/UX improvements
+- 🗺 **Challenges**: New coding challenges (see below)
+
+### For Platform Development
+
+1. **Fork the repository**
+2. **Create a feature branch**: `git checkout -b feature/amazing-feature`
+3. **Make your changes** following the coding standards
+4. **Test your changes**: `npm run lint && npm run build`
+5. **Commit**: `git commit -m 'Add amazing feature'`
+6. **Push**: `git push origin feature/amazing-feature`
+7. **Open a Pull Request**
+
+### For Challenge Content
+
+Challenges are managed in a separate repository:
+
+- **Repository**: [youbuildit/challenges](https://github.com/youbuildit/challenges)
+- **Content Issues**: Report typos, errors, or improvements
+- **New Challenges**: Submit new challenge ideas or implementations
+
+### Development Guidelines
+
+- **Code Style**: Follow existing patterns and use ESLint
+- **TypeScript**: Maintain type safety, avoid `any` types
+- **Components**: Create reusable, accessible components
+- **Performance**: Consider loading times and bundle size
+- **Accessibility**: Follow WCAG guidelines
+- **Responsive Design**: Ensure mobile compatibility
+
+### Commit Convention
+
+We use conventional commits:
+
+- `feat:` New features
+- `fix:` Bug fixes
+- `docs:` Documentation changes
+- `style:` Code style changes
+- `refactor:` Code refactoring
+- `test:` Test additions or changes
+- `chore:` Build process or auxiliary tool changes
+
+## 📜 License
+
+This project is licensed under the [MIT License](LICENSE) - see the LICENSE file for details.
+
+## 🙏 Acknowledgments
+
+- Built with [Next.js](https://nextjs.org/) and [React](https://react.dev/)
+- Styled with [Tailwind CSS](https://tailwindcss.com/)
+- Animations powered by [Framer Motion](https://www.framer.com/motion/)
+- Icons from [Lucide](https://lucide.dev/)
+- Fonts by [Vercel](https://vercel.com/font)
+
+---
+
+**Ready to build something amazing?** 🚀 [Start with your first challenge!](https://youbuildit.dev/challenges)
