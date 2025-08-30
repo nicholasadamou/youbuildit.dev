@@ -62,15 +62,46 @@ export default function CommandSearch({ isOpen, onClose }: CommandSearchProps) {
     onClose()
   }, [router, onClose])
 
-  // Reset state when modal opens
+  // Reset state when modal opens and handle body scroll locking
   useEffect(() => {
     if (isOpen) {
       setQuery('')
       setSelectedIndex(0)
+      
+      // Get current scroll position
+      const scrollY = window.scrollY
+      
+      // Save original styles
+      const originalBodyStyle = {
+        position: document.body.style.position,
+        top: document.body.style.top,
+        left: document.body.style.left,
+        right: document.body.style.right,
+        overflow: document.body.style.overflow,
+        width: document.body.style.width
+      }
+      
+      // Lock body scroll with position fixed
+      document.body.style.position = 'fixed'
+      document.body.style.top = `-${scrollY}px`
+      document.body.style.left = '0'
+      document.body.style.right = '0'
+      document.body.style.overflow = 'hidden'
+      document.body.style.width = '100%'
+      
       // Focus the input after the modal animation
       setTimeout(() => {
         inputRef.current?.focus()
       }, 100)
+      
+      // Cleanup function to restore scroll when modal closes
+      return () => {
+        // Restore original styles
+        Object.assign(document.body.style, originalBodyStyle)
+        
+        // Restore scroll position
+        window.scrollTo(0, scrollY)
+      }
     }
   }, [isOpen])
 

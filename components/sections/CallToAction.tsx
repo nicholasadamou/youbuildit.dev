@@ -2,17 +2,77 @@
 
 import {motion} from 'framer-motion'
 import Link from 'next/link'
-import {Zap} from 'lucide-react'
+import {Zap, Code, Users, Trophy, ArrowRight, Star, Shuffle} from 'lucide-react'
 import {Button} from "@/components/ui/button"
+import { useRouter } from 'next/navigation'
+import { useState } from 'react'
+
+const stats = [
+	{
+		icon: Code,
+		number: "18+",
+		label: "Coding Challenges",
+		color: "text-blue-500"
+	},
+	{
+		icon: Zap,
+		number: "8hrs",
+		label: "Average Completion",
+		color: "text-green-500"
+	},
+	{
+		icon: Trophy,
+		number: "100%",
+		label: "Practical Focus",
+		color: "text-yellow-500"
+	}
+]
+
+const benefits = [
+	"Build real-world applications, not toy projects",
+	"Learn industry-standard practices and patterns",
+	"Get hands-on experience with modern technologies",
+	"Create impressive portfolio projects that showcase your skills"
+]
 
 export default function CallToAction() {
+	const router = useRouter()
+	const [isLoadingRandom, setIsLoadingRandom] = useState(false)
+
+	// Handle random challenge selection
+	const handleRandomChallenge = async () => {
+		setIsLoadingRandom(true)
+		try {
+			const response = await fetch('/api/challenges')
+			if (!response.ok) {
+				throw new Error('Failed to fetch challenges')
+			}
+			const challenges = await response.json()
+
+			if (challenges.length > 0) {
+				const randomIndex = Math.floor(Math.random() * challenges.length)
+				const randomChallenge = challenges[randomIndex]
+				router.push(`/challenge/${randomChallenge.slug}`)
+			} else {
+				// Fallback to challenges page if no challenges found
+				router.push('/challenges')
+			}
+		} catch (error) {
+			console.error('Error selecting random challenge:', error)
+			// Fallback to challenges page on error
+			router.push('/challenges')
+		} finally {
+			setIsLoadingRandom(false)
+		}
+	}
+
 	// Animation variants
 	const containerVariants = {
 		hidden: { opacity: 0 },
 		visible: {
 			opacity: 1,
 			transition: {
-				staggerChildren: 0.2,
+				staggerChildren: 0.15,
 				delayChildren: 0.1,
 				duration: 0.6
 			}
@@ -107,23 +167,52 @@ export default function CallToAction() {
 		}
 	}
 
+	const statsVariants = {
+		hidden: { opacity: 0, y: 30 },
+		visible: {
+			opacity: 1,
+			y: 0,
+			transition: {
+				duration: 0.6
+			}
+		},
+		hover: {
+			y: -5,
+			scale: 1.05,
+			transition: {
+				duration: 0.3
+			}
+		}
+	}
+
+	const benefitVariants = {
+		hidden: { opacity: 0, x: -20 },
+		visible: {
+			opacity: 1,
+			x: 0,
+			transition: {
+				duration: 0.5
+			}
+		}
+	}
+
 	return (
-	<motion.section 
-		className="bg-secondary py-16 sm:py-20 md:py-32 relative overflow-hidden w-full max-w-full"
+	<motion.section
+		className="bg-[#fafafa] py-16 sm:py-20 md:py-32 relative overflow-hidden w-full max-w-full"
 		initial="hidden"
 		whileInView="visible"
-		viewport={{ once: true, amount: 0.3 }}
+		viewport={{ once: true, amount: 0.2 }}
 		variants={containerVariants}
 	>
-			{/* Animated Background Gradient */}
-			<motion.div 
-				className="absolute inset-0 bg-gradient-to-br from-[#2fbc77]/20 to-transparent"
+			{/* Enhanced Background with subtle gradient */}
+			<motion.div
+				className="absolute inset-0 bg-gradient-to-br from-[#fafafa] via-[#f5f5f5] to-[#fafafa]"
 				variants={backgroundVariants}
 			/>
-			
-			{/* Floating Background Elements */}
+
+			{/* Multiple Floating Background Elements - more visible on light bg */}
 			<motion.div
-				className="absolute top-10 left-10 w-20 h-20 bg-[--brand]/10 rounded-full blur-xl"
+				className="absolute top-10 left-10 w-20 h-20 bg-[#2fbc77]/15 rounded-full blur-xl"
 				animate={{
 					y: [-10, 10, -10],
 					x: [-5, 5, -5],
@@ -136,7 +225,7 @@ export default function CallToAction() {
 				}}
 			/>
 			<motion.div
-				className="absolute bottom-16 right-16 w-32 h-32 bg-[--brand]/5 rounded-full blur-2xl"
+				className="absolute bottom-16 right-16 w-32 h-32 bg-[#2fbc77]/8 rounded-full blur-2xl"
 				animate={{
 					y: [10, -10, 10],
 					x: [5, -5, 5],
@@ -149,66 +238,220 @@ export default function CallToAction() {
 					delay: 1
 				}}
 			/>
+			<motion.div
+				className="absolute top-1/2 right-1/4 w-16 h-16 bg-blue-500/15 rounded-full blur-lg"
+				animate={{
+					y: [15, -15, 15],
+					rotate: [0, 360],
+					scale: [0.8, 1.2, 0.8]
+				}}
+				transition={{
+					duration: 10,
+					repeat: Infinity,
+					ease: "easeInOut",
+					delay: 2
+				}}
+			/>
+			<motion.div
+				className="absolute top-1/4 left-1/3 w-24 h-24 bg-purple-500/15 rounded-full blur-xl"
+				animate={{
+					y: [-12, 12, -12],
+					x: [8, -8, 8],
+					scale: [1.2, 0.8, 1.2]
+				}}
+				transition={{
+					duration: 7,
+					repeat: Infinity,
+					ease: "easeInOut",
+					delay: 0.5
+				}}
+			/>
 
-			<motion.div 
-				className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10"
-				variants={itemVariants}
-			>
-				<div className="grid place-items-center items-center">
-				<div className="text-center px-4">
-					<motion.h2 
-						className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold text-primary mb-4 sm:mb-6 leading-tight"
+			<div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+				{/* Main Content */}
+				<motion.div
+					className="text-center mb-12 sm:mb-16"
+					variants={itemVariants}
+				>
+					<motion.h2
+						className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold text-primary mb-6 sm:mb-8 leading-tight sm:leading-loose"
 						variants={titleVariants}
 					>
 							Ready to Become a{' '}
-							<motion.span 
-								className="text-[--brand] inline-block"
+							<motion.span
+								className="text-transparent bg-clip-text bg-gradient-to-r from-[#2fbc77] to-[#2fb676] inline-block py-0 md:py-2 overflow-visible"
+								style={{ lineHeight: 'inherit' }}
 								variants={highlightVariants}
-								whileHover={{ 
+								whileHover={{
 									scale: 1.05,
-									textShadow: "0 0 8px rgba(47, 188, 119, 0.6)",
+									textShadow: "0 0 12px rgba(47, 188, 119, 0.8)",
 									transition: { duration: 0.3 }
 								}}
 							>
 								Better Engineer?
 							</motion.span>
 						</motion.h2>
-					
-					<motion.p 
-						className="text-lg sm:text-xl text-primary mb-6 sm:mb-8 max-w-3xl mx-auto"
+
+					<motion.p
+						className="text-lg sm:text-xl md:text-2xl text-muted-foreground mb-8 sm:mb-12 max-w-4xl mx-auto leading-relaxed"
 						variants={itemVariants}
 					>
-							Start your journey today with our practical coding challenges and take your skills to
-							the next level.
+							Transform your programming skills through hands-on challenges that mirror real-world development scenarios.
+							Join thousands of developers who have accelerated their careers with our practical approach to learning.
 						</motion.p>
-						
+				</motion.div>
+
+				{/* Benefits List */}
+				<motion.div
+					className="grid md:grid-cols-2 gap-4 sm:gap-6 mb-12 sm:mb-16 max-w-4xl mx-auto"
+					variants={containerVariants}
+				>
+					{benefits.map((benefit, index) => (
 						<motion.div
-							variants={buttonVariants}
-							whileHover="hover"
-							whileTap="tap"
+							key={index}
+							className="flex items-center space-x-3 bg-white/90 backdrop-blur-md p-4 sm:p-6 rounded-xl shadow-lg border border-gray-200/50 hover:border-[#2fbc77]/30"
+							variants={benefitVariants}
+							whileHover={{
+								scale: 1.02,
+								y: -3,
+								boxShadow: "0 12px 35px rgba(47, 188, 119, 0.15), 0 4px 15px rgba(0,0,0,0.08)",
+								transition: { duration: 0.2 }
+							}}
 						>
-					<Button asChild size="lg" className="bg-[--brand] text-white hover:bg-[--brand]/90 p-3 sm:p-4 shadow-lg hover:shadow-xl transition-shadow duration-300 text-sm sm:text-base">
-						<Link href="/challenges" className="inline-flex items-center">
-							<motion.span
-								initial={{ opacity: 0, x: -10 }}
-								animate={{ opacity: 1, x: 0 }}
-								transition={{ delay: 0.6, duration: 0.4 }}
-							>
-								Explore our Challenges
-							</motion.span>
 							<motion.div
-								variants={zapVariants}
-								whileHover="hover"
-								className="ml-2"
+								className="w-6 h-6 bg-[--brand] rounded-full flex items-center justify-center flex-shrink-0"
+								initial={{ scale: 0, rotate: -180 }}
+								animate={{ scale: 1, rotate: 0 }}
+								transition={{ delay: 0.8 + (index * 0.1), duration: 0.5 }}
 							>
-								<Zap className="h-6 w-6 sm:h-8 sm:w-8"/>
+								<Star className="w-4 h-4 text-white" fill="currentColor" />
 							</motion.div>
-						</Link>
-					</Button>
+							<span className="text-primary font-medium text-sm sm:text-base">{benefit}</span>
 						</motion.div>
-					</div>
-				</div>
-			</motion.div>
+					))}
+				</motion.div>
+
+				{/* Stats */}
+				<motion.div
+					className="grid grid-cols-3 gap-4 sm:gap-8 mb-12 sm:mb-16 max-w-3xl mx-auto"
+					variants={containerVariants}
+				>
+					{stats.map((stat, index) => {
+						const Icon = stat.icon
+						return (
+							<motion.div
+								key={stat.label}
+								className="text-center bg-white/95 backdrop-blur-md p-4 sm:p-6 rounded-2xl shadow-lg border border-gray-200/40 hover:border-[#2fbc77]/40 hover:shadow-xl"
+								variants={statsVariants}
+								whileHover={{
+									y: -8,
+									scale: 1.05,
+									boxShadow: "0 20px 40px rgba(47, 188, 119, 0.12), 0 8px 25px rgba(0,0,0,0.08)",
+									transition: { duration: 0.3 }
+								}}
+							>
+								<motion.div
+									className={`w-12 h-12 sm:w-16 sm:h-16 mx-auto mb-3 sm:mb-4 ${stat.color} bg-gray-100 rounded-2xl flex items-center justify-center`}
+									initial={{ scale: 0, rotate: -90 }}
+									animate={{ scale: 1, rotate: 0 }}
+									transition={{ delay: 1.2 + (index * 0.15), duration: 0.6 }}
+								>
+									<Icon className="w-6 h-6 sm:w-8 sm:h-8" />
+								</motion.div>
+								<motion.div
+									className="text-2xl sm:text-3xl font-bold text-primary mb-1 sm:mb-2"
+									initial={{ opacity: 0, y: 20 }}
+									animate={{ opacity: 1, y: 0 }}
+									transition={{ delay: 1.4 + (index * 0.15), duration: 0.5 }}
+								>
+									{stat.number}
+								</motion.div>
+								<motion.div
+									className="text-xs sm:text-sm text-muted-foreground font-medium"
+									initial={{ opacity: 0 }}
+									animate={{ opacity: 1 }}
+									transition={{ delay: 1.6 + (index * 0.15), duration: 0.5 }}
+								>
+									{stat.label}
+								</motion.div>
+							</motion.div>
+						)
+					})}
+				</motion.div>
+				{/* Call to Action Buttons */}
+				<motion.div
+					className="flex flex-col sm:flex-row gap-4 sm:gap-6 justify-center items-center"
+					variants={itemVariants}
+				>
+					{/* Primary CTA - Explore Challenges */}
+					<motion.div
+						variants={buttonVariants}
+						whileHover="hover"
+						whileTap="tap"
+					>
+						<Button asChild size="lg" className="bg-gradient-to-r from-[#2fbc77] to-[#2fb676] text-white hover:from-[#28a869] hover:to-[#28a869] px-8 sm:px-10 py-4 sm:py-5 shadow-2xl hover:shadow-[0_25px_50px_rgba(47,188,119,0.3)] transition-all duration-300 text-lg sm:text-xl font-bold rounded-2xl border-2 border-[#2fbc77] hover:border-[#28a869]">
+							<Link href="/challenges" className="inline-flex items-center group">
+								<motion.span
+									initial={{ opacity: 0, x: -10 }}
+									animate={{ opacity: 1, x: 0 }}
+									transition={{ delay: 1.8, duration: 0.4 }}
+								>
+									Explore Challenges
+								</motion.span>
+								<motion.div
+									className="ml-3 group-hover:translate-x-1 transition-transform duration-200"
+									initial={{ opacity: 0, x: -5 }}
+									animate={{ opacity: 1, x: 0 }}
+									transition={{ delay: 2.0, duration: 0.4 }}
+								>
+									<ArrowRight className="h-6 w-6 sm:h-7 sm:w-7"/>
+								</motion.div>
+							</Link>
+						</Button>
+					</motion.div>
+
+					{/* Secondary CTA - Random Challenge */}
+					<motion.div
+						variants={buttonVariants}
+						whileHover={{
+							scale: 1.05,
+							y: -2,
+							transition: { duration: 0.2 }
+						}}
+						whileTap={{ scale: 0.95 }}
+					>
+						<Button
+							onClick={handleRandomChallenge}
+							disabled={isLoadingRandom}
+							variant="outline"
+							size="lg"
+							className="border-2 border-gray-300/60 text-primary hover:border-[#2fbc77] hover:bg-[#2fbc77]/10 hover:text-[#2fbc77] px-6 sm:px-8 py-4 sm:py-5 text-base sm:text-lg font-semibold rounded-2xl bg-white/95 backdrop-blur-md shadow-lg hover:shadow-[0_15px_30px_rgba(47,188,119,0.15)] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+						>
+							<div className="inline-flex items-center group">
+								<motion.div
+									className={`mr-3 transition-transform duration-300 ${
+										isLoadingRandom
+											? 'animate-spin'
+											: 'group-hover:rotate-180'
+									}`}
+									initial={{ opacity: 0, rotate: -90 }}
+									animate={{ opacity: 1, rotate: 0 }}
+									transition={{ delay: 2.2, duration: 0.5 }}
+								>
+									<Shuffle className="h-5 w-5 sm:h-6 sm:w-6"/>
+								</motion.div>
+								<motion.span
+									initial={{ opacity: 0, x: -10 }}
+									animate={{ opacity: 1, x: 0 }}
+									transition={{ delay: 2.0, duration: 0.4 }}
+								>
+									{isLoadingRandom ? 'Finding Challenge...' : 'Try Random Challenge'}
+								</motion.span>
+							</div>
+						</Button>
+					</motion.div>
+				</motion.div>
+			</div>
 		</motion.section>
 	)
 }

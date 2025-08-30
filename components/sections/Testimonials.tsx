@@ -106,43 +106,67 @@ const ceoData = [
 	{ name: 'Vlad Magdalin', company: 'Webflow', industry: 'nocode' }
 ];
 
-// Quote templates organized by tone and style
-const quoteTemplates = {
-	visionary: [
-		"Building {challenge} opened up entirely new possibilities for how we think about {industry}. This is the kind of innovative thinking that drives breakthrough solutions.",
-		"When we tackled {challenge}, it reminded me why I'm passionate about {industry}. The future belongs to those who can solve complex problems like this.",
-		"The {challenge} project exemplifies the kind of forward-thinking approach we need more of in {industry}. Absolutely game-changing work.",
-		"Working through {challenge} was like peering into the future of {industry}. This is exactly the type of innovation that transforms entire markets."
+// Funny project-specific quotes mapped to challenge slugs
+const funnyQuotes = {
+	"build-your-own-cat": [
+		"I thought I knew what 'cat' was until I tried to build it myself. Turns out, it's not just about printing files—it's about understanding the very essence of Unix philosophy. My therapist says I'm making progress.",
+		"Building my own cat was like discovering fire, except instead of warmth, I got carpal tunnel from all the edge case handling. Worth every keystroke!",
+		"Who knew something as simple as 'cat' could be so complex? I now have deep respect for whoever first invented this command. Also, I may never look at actual cats the same way again.",
+		"After building cat from scratch, I finally understand why my terminal has been judging me all these years. The original developers were geniuses... or masochists. Probably both."
 	],
-	pragmatic: [
-		"We've implemented similar solutions to {challenge} at {company}, and I can tell you firsthand—this approach works. Solid engineering fundamentals.",
-		"The {challenge} problem is one every {industry} company faces. This solution demonstrates real understanding of the core issues.",
-		"Having built {company} from the ground up, I recognize quality work when I see it. The {challenge} implementation is exactly what we need.",
-		"At {company}, we've tackled problems like {challenge} many times. This solution shows the kind of systematic thinking that scales."
+	"build-your-own-cut": [
+		"I used to think 'cut' was just about removing parts of text. Now I realize it's actually about cutting through the illusion that command-line tools are simple. My mind is blown, and slightly bruised.",
+		"Building cut taught me that parsing command-line arguments is like trying to understand what your cat wants at 3 AM. Eventually you figure it out, but there's a lot of confusion along the way.",
+		"The cut command: simple in theory, existential crisis in practice. I've never been more proud of handling delimiter edge cases. My family doesn't understand, but the terminal does.",
+		"Who knew that 'cutting' text could be so... cutting edge? (I'll see myself out, but not before I implement proper field separation!)"
 	],
-	entrepreneurial: [
-		"If I were starting {company} today, projects like {challenge} would be exactly what I'd want my team working on. This is how you build the future.",
-		"The {challenge} challenge reminds me of the early days at {company}—complex problems that require both creativity and technical excellence.",
-		"Building {challenge} captures that startup energy I love. This is the kind of innovative problem-solving that disrupts entire industries.",
-		"When I see work like {challenge}, it takes me back to {company}'s founding. This demonstrates the entrepreneurial spirit that drives real change."
+	"build-your-own-database": [
+		"I built my own database and now I understand why database administrators have that distant look in their eyes. Also, I may have accidentally achieved enlightenment while implementing B-trees.",
+		"Building a database from scratch is like playing chess with yourself while blindfolded and riding a unicycle. Surprisingly fun, definitely humbling, probably inadvisable.",
+		"After creating my own database, I have a new appreciation for the phrase 'it's not a bug, it's a feature.' Especially when ACID compliance becomes more of a suggestion.",
+		"I used to mock database administrators. Now I understand they're not grumpy—they're enlightened beings who've transcended the need for sleep and sanity."
 	],
-	technical: [
-		"The technical approach to {challenge} is impressive. As someone who's built systems at {company} scale, I appreciate the attention to architectural detail.",
-		"Having worked on similar challenges in {industry}, I can see the engineering sophistication behind {challenge}. Really well-executed solution.",
-		"The {challenge} implementation demonstrates deep technical understanding. This is the caliber of work that drives {industry} forward.",
-		"From a systems perspective, {challenge} tackles some genuinely difficult problems. The kind of engineering work that makes {company} successful."
+	"build-your-own-diff": [
+		"Building diff made me realize that finding differences between files is a lot like marriage counseling—it's all about patience, precision, and occasionally wanting to throw your computer out the window.",
+		"I thought diff was just about showing what changed. Turns out, it's actually about confronting the fundamental nature of change itself. Also, dynamic programming is hard.",
+		"After implementing my own diff, I now see differences everywhere. The barista gave me a weird look when I started explaining the longest common subsequence algorithm while ordering coffee.",
+		"Who knew that comparing two files could be so philosophical? I've achieved inner peace through edit distance calculations. My meditation app is confused."
 	],
-	inspirational: [
-		"Projects like {challenge} inspire me to keep pushing boundaries in {industry}. This represents the best of what's possible when talent meets opportunity.",
-		"Seeing {challenge} reminds me why I fell in love with {industry} in the first place. This is innovation in its purest form.",
-		"The passion and skill evident in {challenge} gives me tremendous optimism for the future of {industry}. Exceptional work.",
-		"Work like {challenge} is why I'm excited about the next generation of {industry} leaders. This demonstrates both vision and execution."
+	"build-your-own-docker": [
+		"Building my own Docker taught me that containers aren't just about isolation—they're about isolating yourself from the crushing reality that systems programming is really, really hard.",
+		"I created a container runtime and now I understand why Docker became so popular. It's not magic, it's just really, really clever use of Linux kernel features. Also, namespaces are wild.",
+		"After building Docker from scratch, I have a new respect for the phrase 'it works on my machine.' Now it truly works on ANY machine! (Terms and conditions may apply.)",
+		"Who needs therapy when you can debug namespace conflicts at 2 AM? Building a container runtime is cheaper than a psychiatrist and twice as enlightening."
 	],
-	experienced: [
-		"After decades in {industry}, I can recognize groundbreaking work when I see it. {challenge} represents exactly this kind of breakthrough thinking.",
-		"Having led {company} through multiple technology transitions, I know quality when I see it. The {challenge} solution is top-tier.",
-		"In my years building {company}, I've seen many approaches to problems like {challenge}. This one stands out for its clarity and effectiveness.",
-		"The {challenge} project demonstrates the kind of strategic thinking that took {company} from startup to industry leader. Impressive work."
+	"build-your-own-find": [
+		"Building find made me realize that searching for files is like searching for meaning in life—sometimes you find what you're looking for, sometimes you find something better, and sometimes you just find pain.",
+		"I implemented my own find command and now I can locate any file on my system. Unfortunately, I still can't find my keys, my purpose in life, or why I chose systems programming as a hobby.",
+		"After building find from scratch, I've developed an unhealthy emotional attachment to directory traversal algorithms. My friends are concerned, but my file system has never been more organized.",
+		"Who knew that walking a directory tree could be so therapeutic? It's like forest bathing, but for programmers, and occasionally you find that config file you lost three months ago."
+	],
+	"build-your-own-git": [
+		"Building my own Git finally helped me understand what all those cryptic error messages mean. Turns out, Git isn't angry at me—it's just disappointed. Which is somehow worse.",
+		"After implementing Git from scratch, I've achieved a zen-like understanding of version control. I am one with the commit graph. The merge conflicts are part of me now.",
+		"I built my own Git and now I understand why Linus Torvalds seems so confident all the time. When you've created something this elegant, why wouldn't you be a little smug?",
+		"Building Git taught me that version control isn't just about managing code—it's about managing the versions of yourself that wrote that code. Past me was an idiot, but at least I can blame him specifically now."
+	],
+	"build-your-own-grep": [
+		"I built my own grep and now I can find patterns in everything—text files, code, my life choices, the fundamental structure of reality. My therapist says this might be a problem.",
+		"Building grep from scratch taught me that regular expressions aren't just patterns—they're a way of life. A very confusing, occasionally magical way of life.",
+		"After implementing grep, I've developed the ability to see patterns everywhere. The barista's foam art? That's just /^[A-Za-z]+$/ with extra steps.",
+		"Who knew that searching text could be so existential? I'm not just finding patterns anymore—I'm finding myself. Also, regex is still terrifying."
+	],
+	"build-your-own-head-tail": [
+		"Building head and tail made me realize that sometimes you don't need to see the whole file—just like how you don't need to understand the entire universe to appreciate a good coffee. Wisdom through truncation.",
+		"I implemented head and tail, and now I have a philosophical appreciation for beginnings and endings. Also, buffer management is harder than it looks.",
+		"After building head and tail, I've learned to appreciate the beauty of seeing just enough. It's like mindfulness, but for file reading, and with more memory allocation.",
+		"Who knew that reading the first or last lines of a file could teach you so much about life? Sometimes the middle parts are just noise anyway."
+	],
+	"build-your-own-http-client": [
+		"Building an HTTP client taught me that the internet is held together by standards, hope, and an alarming amount of error handling. Also, HTTP is surprisingly chatty.",
+		"I created my own HTTP client and now I understand why browsers are so complicated. Turns out, fetching a webpage is like ordering food at a restaurant where the menu changes every second.",
+		"After implementing HTTP from scratch, I have a new appreciation for curl. What I thought would be simple became a journey through the seven layers of networking hell.",
+		"Building an HTTP client is like learning to speak a foreign language, except the language is made of headers and the grammar is 'good luck, figure it out.'"
 	]
 };
 
@@ -194,7 +218,6 @@ const industryContexts = {
 function createUniqueTestimonialCombinations(challenges: ClientChallenge[]) {
 	const usedCombinations = new Set<string>();
 	const availableCeos = [...ceoData];
-	const quoteStyles = Object.keys(quoteTemplates);
 	
 	// Shuffle arrays to ensure randomness
 	function shuffleArray<T>(array: T[]): T[] {
@@ -207,29 +230,33 @@ function createUniqueTestimonialCombinations(challenges: ClientChallenge[]) {
 	}
 	
 	const shuffledCeos = shuffleArray(availableCeos);
-	const shuffledQuoteStyles = shuffleArray(quoteStyles);
 	
 	return challenges.map((challenge, index) => {
 		// Ensure we don't run out of CEOs by cycling through if needed
 		const ceoIndex = index % shuffledCeos.length;
 		const ceo = shuffledCeos[ceoIndex];
 		
-		// Ensure we don't run out of quote styles
-		const styleIndex = index % shuffledQuoteStyles.length;
-		const style = shuffledQuoteStyles[styleIndex];
+		// Get funny quotes for this specific challenge
+		const challengeQuotes = funnyQuotes[challenge.slug as keyof typeof funnyQuotes];
 		
-		// Get quote templates for this style
-		const templates = quoteTemplates[style as keyof typeof quoteTemplates];
-		const templateIndex = index % templates.length;
-		const template = templates[templateIndex];
+		// Fallback to generic funny programming quotes if challenge-specific ones don't exist
+		const fallbackQuotes = [
+			"I built this and now I understand why programmers drink so much coffee. Also, why we have trust issues with our own code.",
+			"This challenge taught me that debugging is like being a detective in a crime novel where you're also the murderer. Plot twist: I'm terrible at both roles.",
+			"After completing this project, I've achieved enlightenment. Also, carpal tunnel. But mostly enlightenment.",
+			"Building this was like solving a puzzle, except half the pieces were missing and the other half were on fire. 10/10 would recommend."
+		];
+		
+		const quotesToUse = challengeQuotes || fallbackQuotes;
+		const quoteIndex = index % quotesToUse.length;
+		const selectedQuote = quotesToUse[quoteIndex];
 		
 		// Create unique combination key
-		const combinationKey = `${ceo.name}-${challenge.slug}-${style}-${templateIndex}`;
+		const combinationKey = `${ceo.name}-${challenge.slug}-${quoteIndex}`;
 		
 		// If we've used this combination, find an alternative
 		let finalCeo = ceo;
-		let finalStyle = style;
-		let finalTemplate = template;
+		let finalQuoteIndex = quoteIndex;
 		let attempts = 0;
 		
 		while (usedCombinations.has(combinationKey) && attempts < 50) {
@@ -237,16 +264,10 @@ function createUniqueTestimonialCombinations(challenges: ClientChallenge[]) {
 			const altCeoIndex = (ceoIndex + attempts + 1) % shuffledCeos.length;
 			finalCeo = shuffledCeos[altCeoIndex];
 			
-			// Try different style
-			const altStyleIndex = (styleIndex + attempts + 1) % shuffledQuoteStyles.length;
-			finalStyle = shuffledQuoteStyles[altStyleIndex];
+			// Try different quote
+			finalQuoteIndex = (quoteIndex + attempts + 1) % quotesToUse.length;
 			
-			// Try different template
-			const altTemplates = quoteTemplates[finalStyle as keyof typeof quoteTemplates];
-			const altTemplateIndex = (templateIndex + attempts + 1) % altTemplates.length;
-			finalTemplate = altTemplates[altTemplateIndex];
-			
-			const newCombinationKey = `${finalCeo.name}-${challenge.slug}-${finalStyle}-${altTemplateIndex}`;
+			const newCombinationKey = `${finalCeo.name}-${challenge.slug}-${finalQuoteIndex}`;
 			if (!usedCombinations.has(newCombinationKey)) {
 				usedCombinations.add(newCombinationKey);
 				break;
@@ -256,22 +277,17 @@ function createUniqueTestimonialCombinations(challenges: ClientChallenge[]) {
 		
 		usedCombinations.add(combinationKey);
 		
-		// Generate personalized quote
-		const industryContext = industryContexts[finalCeo.industry as keyof typeof industryContexts] || finalCeo.industry;
-		const personalizedQuote = finalTemplate
-			.replace('{challenge}', challenge.title)
-			.replace('{company}', finalCeo.company)
-			.replace('{industry}', industryContext);
+		// Select final quote
+		const finalQuote = quotesToUse[finalQuoteIndex];
 		
 		return {
 			name: finalCeo.name,
 			role: 'CEO',
 			company: finalCeo.company,
-			quote: personalizedQuote,
+			quote: finalQuote,
 			rating: Math.floor(Math.random() * 2) + 4, // Random 4 or 5
 			challenge: challenge.title,
 			challenge_link: challenge.slug,
-			style: finalStyle,
 			industry: finalCeo.industry
 		};
 	});

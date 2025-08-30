@@ -181,7 +181,7 @@ export default function HeroSection() {
 	return (
 		<div
 			ref={sectionRef}
-			className="relative mt-0 md:mt-16 pb-20 flex flex-col w-full max-w-full overflow-hidden"
+			className="relative mt-0 md:mt-16 pb-8 sm:pb-12 flex flex-col w-full max-w-full overflow-hidden"
 		>
 			{/* Static Background Layer */}
 			<div className="absolute inset-0 bg-gradient-to-t from-[#2fbc77]/15 to-transparent" />
