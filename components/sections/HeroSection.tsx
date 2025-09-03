@@ -84,10 +84,7 @@ const HeroHeading = () => {
           >
             Great Engineer
           </motion.span>
-          <motion.span
-            variants={itemVariants}
-            className="block sm:inline w-full sm:w-auto"
-          >
+          <motion.span variants={itemVariants} className="inline w-auto">
             Through Real Challenges
           </motion.span>
         </motion.div>
