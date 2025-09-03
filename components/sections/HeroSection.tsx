@@ -202,7 +202,7 @@ export default function HeroSection() {
             animate={{ opacity: 1 }}
             transition={{ duration: 0.5 }}
           >
-            <div className="max-w-3xl mx-auto w-full">
+            <div className="max-w-4xl mx-auto w-full">
               <HeroHeading />
             </div>
           </motion.div>
