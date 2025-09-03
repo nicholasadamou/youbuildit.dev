@@ -67,14 +67,18 @@ export default function CommandSearch({ isOpen, onClose }: CommandSearchProps) {
     [router, onClose]
   );
 
+  // Store scroll position
+  const [scrollY, setScrollY] = useState(0);
+
   // Reset state when modal opens and handle body scroll locking
   useEffect(() => {
     if (isOpen) {
       setQuery('');
       setSelectedIndex(0);
 
-      // Get current scroll position
-      const scrollY = window.scrollY;
+      // Get and store current scroll position
+      const currentScrollY = window.scrollY;
+      setScrollY(currentScrollY);
 
       // Save original styles
       const originalBodyStyle = {
@@ -92,16 +96,15 @@ export default function CommandSearch({ isOpen, onClose }: CommandSearchProps) {
         height: document.documentElement.style.height,
       };
 
-      // Enhanced scroll locking for mobile devices
+      // Enhanced scroll locking with better backdrop blur support
       document.body.style.position = 'fixed';
-      document.body.style.top = `-${scrollY}px`;
+      document.body.style.top = `-${currentScrollY}px`;
       document.body.style.left = '0';
       document.body.style.right = '0';
       document.body.style.overflow = 'hidden';
       document.body.style.width = '100%';
-      document.body.style.height = '100%';
 
-      // Also lock html element for better mobile support
+      // Lock html element for better mobile support
       document.documentElement.style.overflow = 'hidden';
       document.documentElement.style.height = '100%';
 
@@ -137,7 +140,7 @@ export default function CommandSearch({ isOpen, onClose }: CommandSearchProps) {
         Object.assign(document.documentElement.style, originalHtmlStyle);
 
         // Restore scroll position
-        window.scrollTo(0, scrollY);
+        window.scrollTo(0, currentScrollY);
       };
     }
   }, [isOpen]);
@@ -204,13 +207,26 @@ export default function CommandSearch({ isOpen, onClose }: CommandSearchProps) {
 
   if (!isOpen) return null;
 
+  // Calculate modal positioning based on scroll position
+  const modalTopOffset = Math.max(60, 200 - scrollY * 0.3); // Adaptive positioning
+
   return (
     <div
-      className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-start justify-center pt-[20vh]"
+      className="fixed inset-0 z-50 flex items-start justify-center"
+      style={{ paddingTop: `${modalTopOffset}px` }}
       onClick={handleBackdropClick}
       onTouchMove={handleBackdropTouchMove}
     >
-      <div className="w-full max-w-2xl mx-4 bg-white rounded-lg shadow-2xl border border-gray-200 overflow-hidden">
+      {/* Backdrop with enhanced blur effect */}
+      <div
+        className="absolute inset-0 bg-black/60 backdrop-blur-md backdrop-saturate-150"
+        style={{
+          backdropFilter: 'blur(8px) saturate(150%)',
+          WebkitBackdropFilter: 'blur(8px) saturate(150%)',
+        }}
+      />
+      {/* Modal content */}
+      <div className="relative w-full max-w-2xl mx-4 bg-white rounded-lg shadow-2xl border border-gray-200 overflow-hidden animate-in fade-in-0 slide-in-from-top-4 duration-200">
         {/* Search Input */}
         <div className="flex items-center px-4 py-3 border-b border-gray-200">
           <Search className="h-5 w-5 text-gray-400 mr-3" />
