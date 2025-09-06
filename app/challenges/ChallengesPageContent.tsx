@@ -1,5 +1,13 @@
 'use client';
 
+import StructuredData from '@/components/StructuredData';
+import {
+  generateCourseSchema,
+  generateBreadcrumbSchema,
+  combineSchemas,
+} from '@/lib/structured-data';
+import { getBaseUrl } from '@/lib/getBaseUrl';
+
 import { useState, useMemo, useEffect } from 'react';
 import Link from 'next/link';
 import type { ClientChallenge } from '@/types/challenge';
@@ -195,8 +203,21 @@ export default function ChallengesPageContent() {
     );
   };
 
+  // Generate structured data for the challenges page
+  const baseUrl = getBaseUrl();
+  const breadcrumbs = [
+    { name: 'Home', url: baseUrl },
+    { name: 'Challenges', url: `${baseUrl}/challenges` },
+  ];
+
+  const structuredData = combineSchemas([
+    generateCourseSchema(),
+    generateBreadcrumbSchema(breadcrumbs),
+  ]);
+
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col">
+      <StructuredData data={structuredData} />
       {/* Main Content */}
       <div className="flex-1">
         {/* Hero Section */}

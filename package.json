@@ -38,7 +38,8 @@
     "reading-time": "^1.5.0",
     "simple-icons": "^15.12.0",
     "tailwind-merge": "^3.3.1",
-    "tailwindcss-animate": "^1.0.7"
+    "tailwindcss-animate": "^1.0.7",
+    "web-vitals": "^5.1.0"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.3.1",

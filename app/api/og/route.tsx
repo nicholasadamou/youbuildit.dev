@@ -369,9 +369,10 @@ export async function GET(request: NextRequest) {
         height: 630,
       }
     );
-  } catch (e: any) {
-    console.error(`Failed to generate OG image: ${e.message}`);
-    return new Response(`Failed to generate image: ${e.message}`, {
+  } catch (e: unknown) {
+    const message = e instanceof Error ? e.message : 'Unknown error';
+    console.error(`Failed to generate OG image: ${message}`);
+    return new Response(`Failed to generate image: ${message}`, {
       status: 500,
     });
   }

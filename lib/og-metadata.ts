@@ -106,21 +106,55 @@ export function generateOpenGraphMetadata({
 
 export const defaultSiteMetadata: Metadata = {
   title: {
-    default: 'You Build It - Learn by Building Real Applications',
-    template: '%s | You Build It',
+    default:
+      'You Build It - Learn by Building Real Applications | Coding Challenges Platform',
+    template: '%s | You Build It - Coding Challenges',
   },
   description:
-    'Helping you become a better software engineer through coding challenges that build real applications. Learn by doing with hands-on projects.',
+    'Master software engineering through hands-on coding challenges that build real applications. Learn JavaScript, TypeScript, React, Node.js, Docker, APIs, and more by creating production-ready projects. Free interactive programming tutorials for beginners to advanced developers.',
   keywords: [
+    // Primary keywords
     'coding challenges',
-    'programming',
-    'software engineering',
-    'web development',
+    'programming challenges',
+    'software engineering challenges',
     'learn to code',
-    'real applications',
-    'hands-on projects',
     'coding practice',
+    'programming practice',
+
+    // Technology-specific keywords
+    'javascript challenges',
+    'typescript challenges',
+    'react challenges',
+    'nodejs challenges',
+    'web development challenges',
+    'fullstack development',
+    'docker challenges',
+    'api development',
+    'database challenges',
+
+    // Learning-focused keywords
+    'hands-on programming',
+    'project based learning',
+    'real world projects',
+    'build real applications',
+    'coding tutorials',
+    'interactive coding',
+    'programming education',
+    'software development training',
+
+    // Skill level keywords
+    'beginner programming',
+    'intermediate coding',
+    'advanced programming',
     'developer skills',
+    'programming skills',
+    'software engineering skills',
+
+    // Platform-specific
+    'free coding challenges',
+    'online programming platform',
+    'coding challenge platform',
+    'developer training platform',
   ],
   authors: [{ name: 'You Build It' }],
   creator: 'You Build It',
@@ -153,6 +187,44 @@ export const defaultSiteMetadata: Metadata = {
   robots: {
     index: true,
     follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
+  },
+  category: 'education',
+  classification: 'education',
+  other: {
+    // Additional SEO meta tags
+    'theme-color': '#3b82f6',
+    'color-scheme': 'light',
+    'format-detection': 'telephone=no',
+    'mobile-web-capable': 'yes',
+    'apple-mobile-web-app-capable': 'yes',
+    'apple-mobile-web-app-status-bar-style': 'default',
+    'apple-mobile-web-app-title': 'You Build It',
+    'application-name': 'You Build It',
+    'msapplication-TileColor': '#3b82f6',
+    'msapplication-config': '/icons/browserconfig.xml',
+    // Educational content meta tags
+    audience: 'developers, programmers, software engineers, students',
+    subject: 'software development, programming, coding education',
+    coverage: 'worldwide',
+    distribution: 'global',
+    rating: 'general',
+    'revisit-after': '7 days',
+  },
+  verification: {
+    // Add your verification codes here when you have them
+    // google: 'your-google-verification-code',
+    // yandex: 'your-yandex-verification-code',
+    // yahoo: 'your-yahoo-verification-code',
+    // other: {
+    //   me: ['your-domain@email.com', 'https://your-social-profile'],
+    // },
   },
   icons: {
     icon: [
@@ -161,6 +233,7 @@ export const defaultSiteMetadata: Metadata = {
       { url: '/icons/icon-512x512.png', sizes: '512x512', type: 'image/png' },
     ],
     apple: [{ url: '/icons/apple-touch-icon.png' }],
+    shortcut: ['/icons/favicon.ico'],
   },
   manifest: '/icons/manifest.webmanifest',
 };
