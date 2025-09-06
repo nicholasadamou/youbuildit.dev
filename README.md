@@ -33,11 +33,17 @@ You Build It is an interactive coding challenges platform designed to help devel
 
 ### Installation
 
-1. **Clone the repository:**
+1. **Clone the repository with submodules:**
 
    ```bash
-   git clone https://github.com/youbuildit/youbuildit.dev.git
+   git clone --recurse-submodules https://github.com/youbuildit/youbuildit.dev.git
    cd youbuildit.dev
+   ```
+
+   **Note:** If you've already cloned without submodules, you can initialize them with:
+
+   ```bash
+   git submodule update --init --recursive
    ```
 
 2. **Install dependencies:**
