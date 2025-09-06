@@ -5,6 +5,7 @@ import {
   getChallengesSlugs,
   getRelatedChallenges,
 } from '@/lib/mdx';
+import { generateOpenGraphMetadata } from '@/lib/og-metadata';
 import ChallengePageContent from './ChallengePageContent';
 
 interface ChallengePageProps {
@@ -28,20 +29,27 @@ export async function generateMetadata({
 
   if (!challenge) {
     return {
-      title: 'Challenge Not Found',
+      title: 'Challenge Not Found - You Build It',
       description: 'The requested challenge could not be found.',
+      robots: {
+        index: false,
+        follow: false,
+      },
     };
   }
 
-  return {
-    title: `${challenge.title} - You Build It`,
+  return generateOpenGraphMetadata({
+    title: challenge.title,
     description: challenge.summary,
-    openGraph: {
-      title: challenge.title,
-      description: challenge.summary,
-      type: 'article',
+    path: `/challenge/${challenge.slug}`,
+    type: 'article',
+    challengeData: {
+      category: challenge.category,
+      difficulty: challenge.difficulty,
+      skills: challenge.skills,
+      estimatedTime: challenge.estimatedTime,
     },
-  };
+  });
 }
 
 export default async function ChallengePage({ params }: ChallengePageProps) {

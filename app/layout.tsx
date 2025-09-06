@@ -3,6 +3,7 @@ import type { Metadata } from 'next';
 import localFont from 'next/font/local';
 import './globals.css';
 import Navbar from '@/components/Navbar';
+import { defaultSiteMetadata } from '@/lib/og-metadata';
 
 const geistSans = localFont({
   src: '../public/fonts/GeistVF.woff',
@@ -15,16 +16,7 @@ const geistMono = localFont({
   weight: '100 900',
 });
 
-export const metadata: Metadata = {
-  title: 'You Build It',
-  description:
-    'Helping you become a better software engineer through coding challenges that build real applications.',
-  icons: {
-    icon: '/icons/favicon.ico',
-    apple: '/icons/apple-touch-icon.png',
-  },
-  manifest: '/icons/manifest.webmanifest',
-};
+export const metadata: Metadata = defaultSiteMetadata;
 
 export default function RootLayout({
   children,

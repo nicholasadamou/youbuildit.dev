@@ -349,4 +349,4 @@ This project is licensed under the [MIT License](LICENSE) - see the LICENSE file
 
 ---
 
-**Ready to build something amazing?** 🚀 [Start with your first challenge!](https://youbuildit.vercel.app//challenges)
+**Ready to build something amazing?** 🚀 [Start with your first challenge!](https://youbuildit.vercel.app/challenges)
