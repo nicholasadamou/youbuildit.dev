@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import type { ClientChallenge } from '@/types/challenge';
+import { useChallenges } from '@/hooks/useChallenges';
 import { Search, Clock, Code, ArrowRight } from 'lucide-react';
 import DifficultyTag from '@/components/ui/DifficultyTag';
 
@@ -14,26 +15,9 @@ interface CommandSearchProps {
 export default function CommandSearch({ isOpen, onClose }: CommandSearchProps) {
   const [query, setQuery] = useState('');
   const [selectedIndex, setSelectedIndex] = useState(0);
-  const [allChallenges, setAllChallenges] = useState<ClientChallenge[]>([]);
+  const { challenges: allChallenges } = useChallenges();
   const router = useRouter();
   const inputRef = useRef<HTMLInputElement>(null);
-
-  // Load challenges
-  useEffect(() => {
-    async function loadChallenges() {
-      try {
-        const response = await fetch('/api/challenges');
-        if (!response.ok) {
-          throw new Error('Failed to fetch challenges');
-        }
-        const challenges = await response.json();
-        setAllChallenges(challenges);
-      } catch (error) {
-        console.error('Error loading challenges:', error);
-      }
-    }
-    loadChallenges();
-  }, []);
 
   // Filter challenges based on search query
   const filteredChallenges = allChallenges

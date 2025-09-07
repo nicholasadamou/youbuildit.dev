@@ -8,9 +8,10 @@ import {
 } from '@/lib/structured-data';
 import { getBaseUrl } from '@/lib/getBaseUrl';
 
-import { useState, useMemo, useEffect } from 'react';
+import { useState, useMemo } from 'react';
 import Link from 'next/link';
 import type { ClientChallenge } from '@/types/challenge';
+import { useChallenges } from '@/hooks/useChallenges';
 import Footer from '@/components/sections/Footer';
 import { motion, AnimatePresence } from 'framer-motion';
 import DifficultyTag from '@/components/ui/DifficultyTag';
@@ -28,26 +29,7 @@ import {
 const difficulties = ['All', 'Beginner', 'Intermediate', 'Advanced'];
 
 export default function ChallengesPageContent() {
-  const [allChallenges, setAllChallenges] = useState<ClientChallenge[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    async function loadChallenges() {
-      try {
-        const response = await fetch('/api/challenges');
-        if (!response.ok) {
-          throw new Error('Failed to fetch challenges');
-        }
-        const challenges = await response.json();
-        setAllChallenges(challenges);
-      } catch (error) {
-        console.error('Error loading challenges:', error);
-      } finally {
-        setLoading(false);
-      }
-    }
-    loadChallenges();
-  }, []);
+  const { challenges: allChallenges, loading } = useChallenges();
 
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All');

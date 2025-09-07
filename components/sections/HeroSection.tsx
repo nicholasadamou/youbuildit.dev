@@ -1,9 +1,10 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { motion, useScroll, useTransform, useInView } from 'framer-motion';
 import { useRef } from 'react';
 import type { ClientChallenge } from '@/types/challenge';
+import { useChallenges } from '@/hooks/useChallenges';
 import { InfiniteCarousel } from '@/components/InfiniteCarousel';
 import ChallengeCard from '@/components/ChallengeCard';
 import FadeIn from '@/components/FadeIn';
@@ -124,11 +125,13 @@ const carouselVariants = {
   hidden: {
     opacity: 0,
     y: 50,
+    scale: 1,
     filter: 'blur(10px)',
   },
   visible: {
     opacity: 1,
     y: 0,
+    scale: 1,
     filter: 'blur(0px)',
     transition: {
       type: 'spring' as const,
@@ -142,8 +145,7 @@ const carouselVariants = {
 
 export default function HeroSection() {
   const [hoveredChallenge, setHoveredChallenge] = useState<string | null>(null);
-  const [allChallenges, setAllChallenges] = useState<ClientChallenge[]>([]);
-  const [loading, setLoading] = useState(true);
+  const { challenges: allChallenges, loading } = useChallenges();
   const sectionRef = useRef(null);
   const { scrollYProgress } = useScroll({
     target: sectionRef,
@@ -157,24 +159,6 @@ export default function HeroSection() {
     [0, 0.8, 1],
     [0.3, 0.2, 0.1]
   );
-
-  useEffect(() => {
-    async function loadChallenges() {
-      try {
-        const response = await fetch('/api/challenges');
-        if (!response.ok) {
-          throw new Error('Failed to fetch challenges');
-        }
-        const challenges = await response.json();
-        setAllChallenges(challenges);
-      } catch (error) {
-        console.error('Error loading challenges:', error);
-      } finally {
-        setLoading(false);
-      }
-    }
-    loadChallenges();
-  }, []);
 
   return (
     <div

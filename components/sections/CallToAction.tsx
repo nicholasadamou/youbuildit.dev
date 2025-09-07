@@ -6,6 +6,7 @@ import { Zap, Code, Trophy, ArrowRight, Star, Shuffle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
+import { useChallenges } from '@/hooks/useChallenges';
 
 const stats = [
   {
@@ -38,20 +39,14 @@ const benefits = [
 export default function CallToAction() {
   const router = useRouter();
   const [isLoadingRandom, setIsLoadingRandom] = useState(false);
+  const { getRandomChallenge } = useChallenges();
 
   // Handle random challenge selection
   const handleRandomChallenge = async () => {
     setIsLoadingRandom(true);
     try {
-      const response = await fetch('/api/challenges');
-      if (!response.ok) {
-        throw new Error('Failed to fetch challenges');
-      }
-      const challenges = await response.json();
-
-      if (challenges.length > 0) {
-        const randomIndex = Math.floor(Math.random() * challenges.length);
-        const randomChallenge = challenges[randomIndex];
+      const randomChallenge = getRandomChallenge();
+      if (randomChallenge) {
         router.push(`/challenge/${randomChallenge.slug}`);
       } else {
         // Fallback to challenges page if no challenges found

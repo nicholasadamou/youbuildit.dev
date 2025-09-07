@@ -2,9 +2,10 @@
 
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Quote, Star } from 'lucide-react';
+import { Star, Quote } from 'lucide-react';
 import Link from 'next/link';
 import type { ClientChallenge } from '@/types/challenge';
+import { useChallenges } from '@/hooks/useChallenges';
 import {
   Card,
   CardContent,
@@ -268,67 +269,52 @@ function generateTestimonials(challenges: ClientChallenge[]) {
 
 export default function Testimonials() {
   const [testimonialData, setTestimonialData] = useState<TestimonialType[]>([]);
-  const [loading, setLoading] = useState(true);
+  const { challenges, loading, error } = useChallenges();
 
   useEffect(() => {
-    async function loadChallenges() {
-      try {
-        const response = await fetch('/api/challenges');
-        if (!response.ok) {
-          throw new Error(`Failed to fetch challenges: ${response.status}`);
-        }
-        const allChallenges = await response.json();
-        console.log('Loaded challenges:', allChallenges.length);
-
-        if (allChallenges.length === 0) {
-          throw new Error('No challenges found');
-        }
-
-        const generatedTestimonials = generateTestimonials(allChallenges);
-        console.log('Generated testimonials:', generatedTestimonials.length);
-        setTestimonialData(generatedTestimonials);
-      } catch (err) {
-        console.error('Error loading challenges:', err);
-        // Create fallback testimonials if API fails
-        const fallbackTestimonials = [
-          {
-            name: 'Sarah Chen',
-            role: 'Senior Developer',
-            company: 'TechCorp',
-            quote:
-              'The coding challenges helped me improve my problem-solving skills significantly. The real-world applications make learning much more engaging.',
-            rating: 5,
-            challenge: 'React Dashboard',
-            challenge_link: 'react-dashboard',
-          },
-          {
-            name: 'Michael Johnson',
-            role: 'Full Stack Engineer',
-            company: 'StartupXYZ',
-            quote:
-              'These challenges bridge the gap between theoretical knowledge and practical application. Perfect for skill development.',
-            rating: 5,
-            challenge: 'API Integration',
-            challenge_link: 'api-integration',
-          },
-          {
-            name: 'Emily Rodriguez',
-            role: 'Frontend Developer',
-            company: 'DesignHub',
-            quote:
-              'The step-by-step approach and detailed explanations make complex concepts easy to understand and implement.',
-            rating: 4,
-            challenge: 'Component Library',
-            challenge_link: 'component-library',
-          },
-        ];
-        setTestimonialData(fallbackTestimonials);
-      } finally {
-        setLoading(false);
-      }
+    if (!loading && !error && challenges.length > 0) {
+      console.log('Loaded challenges:', challenges.length);
+      const generatedTestimonials = generateTestimonials(challenges);
+      console.log('Generated testimonials:', generatedTestimonials.length);
+      setTestimonialData(generatedTestimonials);
+    } else if (!loading && (error || challenges.length === 0)) {
+      console.error('Error loading challenges or no challenges found:', error);
+      // Create fallback testimonials if API fails or no challenges
+      const fallbackTestimonials = [
+        {
+          name: 'Sarah Chen',
+          role: 'Senior Developer',
+          company: 'TechCorp',
+          quote:
+            'The coding challenges helped me improve my problem-solving skills significantly. The real-world applications make learning much more engaging.',
+          rating: 5,
+          challenge: 'React Dashboard',
+          challenge_link: 'react-dashboard',
+        },
+        {
+          name: 'Michael Johnson',
+          role: 'Full Stack Engineer',
+          company: 'StartupXYZ',
+          quote:
+            'These challenges bridge the gap between theoretical knowledge and practical application. Perfect for skill development.',
+          rating: 5,
+          challenge: 'API Integration',
+          challenge_link: 'api-integration',
+        },
+        {
+          name: 'Emily Rodriguez',
+          role: 'Frontend Developer',
+          company: 'DesignHub',
+          quote:
+            'The step-by-step approach and detailed explanations make complex concepts easy to understand and implement.',
+          rating: 4,
+          challenge: 'Component Library',
+          challenge_link: 'component-library',
+        },
+      ];
+      setTestimonialData(fallbackTestimonials);
     }
-    loadChallenges();
-  }, []);
+  }, [challenges, loading, error]);
 
   // Simplified animation variants for better mobile performance
   const containerVariants = {
