@@ -22,7 +22,15 @@ export default function WebVitals() {
 
             // Example: Send to Google Analytics 4
             if (typeof window !== 'undefined' && 'gtag' in window) {
-              (window as any).gtag('event', metric.name, {
+              (
+                window as unknown as {
+                  gtag: (
+                    command: string,
+                    eventName: string,
+                    options?: Record<string, unknown>
+                  ) => void;
+                }
+              ).gtag('event', metric.name, {
                 value: Math.round(
                   metric.name === 'CLS' ? metric.value * 1000 : metric.value
                 ),

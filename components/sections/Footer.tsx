@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { GitCommit, Github } from 'lucide-react';
+import { GitCommit, Github, Shuffle, FileText } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 import {
@@ -12,6 +12,7 @@ import {
   TooltipTrigger,
 } from '@/components/ui/tooltip';
 import Logo from '@/components/Logo';
+import RandomChallengeLink from '@/components/RandomChallengeLink';
 
 interface FooterProps {
   bgColor?: string;
@@ -216,6 +217,14 @@ export default function Footer({ bgColor = 'bg-card' }: FooterProps) {
                   </Link>
                 </motion.div>
               </motion.li>
+              <motion.li variants={itemVariants}>
+                <RandomChallengeLink
+                  className="text-muted-foreground transition-colors hover:text-card-foreground text-left"
+                  icon={<Shuffle className="w-4 h-4" />}
+                >
+                  Random Challenge
+                </RandomChallengeLink>
+              </motion.li>
             </motion.ul>
           </motion.div>
 
@@ -237,10 +246,26 @@ export default function Footer({ bgColor = 'bg-card' }: FooterProps) {
                     href="https://github.com/youbuildit"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-muted-foreground transition-colors hover:text-card-foreground"
+                    className="text-muted-foreground transition-colors hover:text-card-foreground flex items-center gap-2"
                   >
+                    <Github className="w-4 h-4" />
                     GitHub
                   </a>
+                </motion.div>
+              </motion.li>
+              <motion.li variants={itemVariants}>
+                <motion.div
+                  variants={linkVariants}
+                  whileHover="hover"
+                  whileTap="tap"
+                >
+                  <Link
+                    href="/terms"
+                    className="text-muted-foreground transition-colors hover:text-card-foreground flex items-center gap-2"
+                  >
+                    <FileText className="w-4 h-4" />
+                    Terms of Use
+                  </Link>
                 </motion.div>
               </motion.li>
             </motion.ul>

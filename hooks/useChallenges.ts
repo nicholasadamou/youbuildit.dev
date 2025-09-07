@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import type { ClientChallenge } from '@/types/challenge';
 
 interface UseChallengesOptions {
@@ -46,7 +46,7 @@ export function useChallenges(
   const [loading, setLoading] = useState(autoLoad);
   const [error, setError] = useState<Error | null>(null);
 
-  const loadChallenges = async () => {
+  const loadChallenges = useCallback(async () => {
     try {
       setLoading(true);
       setError(null);
@@ -66,7 +66,7 @@ export function useChallenges(
     } finally {
       setLoading(false);
     }
-  };
+  }, [errorMessage]);
 
   const getRandomChallenge = (): ClientChallenge | null => {
     if (challenges.length === 0) return null;
@@ -78,7 +78,7 @@ export function useChallenges(
     if (autoLoad) {
       loadChallenges();
     }
-  }, [autoLoad]);
+  }, [autoLoad, loadChallenges]);
 
   return {
     challenges,
