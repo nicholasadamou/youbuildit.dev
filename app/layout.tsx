@@ -6,6 +6,7 @@ import Navbar from '@/components/Navbar';
 import WebVitals from '@/components/WebVitals';
 import { ThemeProvider } from '@/components/ThemeProvider';
 import { defaultSiteMetadata } from '@/lib/og-metadata';
+import { Analytics } from '@vercel/analytics/react';
 
 const geistSans = localFont({
   src: '../public/fonts/GeistVF.woff',
@@ -37,6 +38,8 @@ export default function RootLayout({
             {children}
           </main>
         </ThemeProvider>
+        {/* Only render analytics in production or when deployment ID is available */}
+        {process.env.NODE_ENV === 'production' && <Analytics />}
       </body>
     </html>
   );

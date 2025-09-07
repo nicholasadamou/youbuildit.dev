@@ -335,33 +335,6 @@ export async function GET(request: NextRequest) {
               youbuildit.dev
             </div>
           </div>
-
-          {/* Decorative Elements */}
-          <div
-            style={{
-              position: 'absolute',
-              top: '40px',
-              right: '40px',
-              width: '120px',
-              height: '120px',
-              borderRadius: '50%',
-              background: `linear-gradient(135deg, ${BRAND_COLOR}30, ${BRAND_LIGHT}20)`,
-              zIndex: 0,
-            }}
-          />
-
-          <div
-            style={{
-              position: 'absolute',
-              bottom: '40px',
-              left: '40px',
-              width: '80px',
-              height: '80px',
-              borderRadius: '50%',
-              background: `linear-gradient(45deg, ${BRAND_COLOR}20, transparent)`,
-              zIndex: 0,
-            }}
-          />
         </div>
       ),
       {
