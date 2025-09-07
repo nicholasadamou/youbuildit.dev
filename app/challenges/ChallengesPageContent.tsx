@@ -24,7 +24,9 @@ import {
   ArrowRight,
   Grid,
   List,
+  Target,
 } from 'lucide-react';
+import { FilterDropdown } from '@/components/ui/FilterDropdown';
 
 const difficulties = ['All', 'Beginner', 'Intermediate', 'Advanced'];
 
@@ -293,39 +295,32 @@ export default function ChallengesPageContent() {
                     animate={{ opacity: 1, scale: 1 }}
                     transition={{ duration: 0.3, delay: 0.8 }}
                   >
-                    <Filter className="h-4 w-4 text-muted-foreground" />
-                    <select
-                      id="category-filter"
-                      name="category"
+                    <FilterDropdown
                       value={selectedCategory}
-                      onChange={e => setSelectedCategory(e.target.value)}
-                      className="border border-input rounded-md px-3 py-1 text-sm text-foreground bg-background focus:ring-2 focus:ring-[--brand] focus:border-transparent"
-                    >
-                      <option value="All">All Categories</option>
-                      {categories.map(category => (
-                        <option key={category} value={category}>
-                          {category}
-                        </option>
-                      ))}
-                    </select>
+                      onValueChange={setSelectedCategory}
+                      options={['All', ...categories]}
+                      placeholder="All Categories"
+                      icon={
+                        <Filter className="h-4 w-4 text-muted-foreground" />
+                      }
+                    />
                   </motion.div>
 
-                  <motion.select
-                    id="difficulty-filter"
-                    name="difficulty"
-                    value={selectedDifficulty}
-                    onChange={e => setSelectedDifficulty(e.target.value)}
-                    className="border border-input rounded-md px-3 py-1 text-sm text-foreground bg-background focus:ring-2 focus:ring-[--brand] focus:border-transparent"
+                  <motion.div
                     initial={{ opacity: 0, scale: 0.9 }}
                     animate={{ opacity: 1, scale: 1 }}
                     transition={{ duration: 0.3, delay: 0.9 }}
                   >
-                    {difficulties.map(difficulty => (
-                      <option key={difficulty} value={difficulty}>
-                        {difficulty}
-                      </option>
-                    ))}
-                  </motion.select>
+                    <FilterDropdown
+                      value={selectedDifficulty}
+                      onValueChange={setSelectedDifficulty}
+                      options={difficulties}
+                      placeholder="All Difficulties"
+                      icon={
+                        <Target className="h-4 w-4 text-muted-foreground" />
+                      }
+                    />
+                  </motion.div>
                 </motion.div>
 
                 {/* View Mode Toggle */}
