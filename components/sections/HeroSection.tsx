@@ -80,7 +80,7 @@ const HeroHeading = () => {
           </motion.span>
           <motion.span
             variants={gradientVariants}
-            className="text-transparent bg-clip-text bg-gradient-to-r from-[#2fbc77] to-[#2fb676] bg-[length:200%_100%] sm:whitespace-nowrap"
+            className="text-transparent bg-clip-text bg-gradient-to-r from-[--brand] to-[--brand-dark] bg-[length:200%_100%] sm:whitespace-nowrap"
           >
             Great Engineer
           </motion.span>
@@ -182,11 +182,11 @@ export default function HeroSection() {
       className="relative mt-0 md:mt-16 pb-8 sm:pb-12 flex flex-col w-full max-w-full overflow-hidden"
     >
       {/* Static Background Layer */}
-      <div className="absolute inset-0 bg-gradient-to-t from-[#2fbc77]/15 to-transparent" />
+      <div className="absolute inset-0 bg-gradient-to-t from-[--brand]/15 to-transparent" />
 
       {/* Animated Parallax Background */}
       <motion.div
-        className="absolute inset-0 bg-gradient-to-t from-[#2fbc77]/10 to-transparent"
+        className="absolute inset-0 bg-gradient-to-t from-[--brand]/10 to-transparent"
         style={{
           y: backgroundY,
           opacity: backgroundOpacity,

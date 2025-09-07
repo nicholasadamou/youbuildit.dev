@@ -4,18 +4,7 @@ import { useState, useEffect, useRef, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import type { ClientChallenge } from '@/types/challenge';
 import { Search, Clock, Code, ArrowRight } from 'lucide-react';
-
-const difficultyColors = {
-  Beginner: 'bg-green-100 text-green-800 border-green-200',
-  Intermediate: 'bg-yellow-100 text-yellow-800 border-yellow-200',
-  Advanced: 'bg-red-100 text-red-800 border-red-200',
-};
-
-const isDifficulty = (
-  difficulty: string
-): difficulty is keyof typeof difficultyColors => {
-  return difficulty in difficultyColors;
-};
+import DifficultyTag from '@/components/ui/DifficultyTag';
 
 interface CommandSearchProps {
   isOpen: boolean;
@@ -226,20 +215,20 @@ export default function CommandSearch({ isOpen, onClose }: CommandSearchProps) {
         }}
       />
       {/* Modal content */}
-      <div className="relative w-full max-w-2xl mx-4 bg-white rounded-lg shadow-2xl border border-gray-200 overflow-hidden animate-in fade-in-0 slide-in-from-top-4 duration-200">
+      <div className="relative w-full max-w-2xl mx-4 bg-card rounded-lg shadow-2xl border border-border overflow-hidden animate-in fade-in-0 slide-in-from-top-4 duration-200">
         {/* Search Input */}
-        <div className="flex items-center px-4 py-3 border-b border-gray-200">
-          <Search className="h-5 w-5 text-gray-400 mr-3" />
+        <div className="flex items-center px-4 py-3 border-b border-border">
+          <Search className="h-5 w-5 text-muted-foreground mr-3" />
           <input
             ref={inputRef}
             type="text"
             placeholder="Search challenges..."
             value={query}
             onChange={e => setQuery(e.target.value)}
-            className="flex-1 text-lg text-gray-700 placeholder-gray-400 bg-transparent border-none outline-none"
+            className="flex-1 text-lg text-card-foreground placeholder-muted-foreground bg-transparent border-none outline-none"
           />
           {query && (
-            <span className="text-sm text-gray-400 ml-2">
+            <span className="text-sm text-muted-foreground ml-2">
               {filteredChallenges.length} result
               {filteredChallenges.length !== 1 ? 's' : ''}
             </span>
@@ -253,18 +242,20 @@ export default function CommandSearch({ isOpen, onClose }: CommandSearchProps) {
         >
           {query === '' ? (
             <div className="p-6 text-center">
-              <Search className="h-8 w-8 text-gray-300 mx-auto mb-3" />
-              <p className="text-gray-500 mb-2">Search for challenges</p>
-              <p className="text-sm text-gray-400">
+              <Search className="h-8 w-8 text-muted-foreground/50 mx-auto mb-3" />
+              <p className="text-muted-foreground mb-2">
+                Search for challenges
+              </p>
+              <p className="text-sm text-muted-foreground/70">
                 Try searching for &quot;shell&quot;, &quot;web server&quot;, or
                 &quot;JSON parser&quot;
               </p>
             </div>
           ) : filteredChallenges.length === 0 ? (
             <div className="p-6 text-center">
-              <Search className="h-8 w-8 text-gray-300 mx-auto mb-3" />
-              <p className="text-gray-500 mb-2">No challenges found</p>
-              <p className="text-sm text-gray-400">
+              <Search className="h-8 w-8 text-muted-foreground/50 mx-auto mb-3" />
+              <p className="text-muted-foreground mb-2">No challenges found</p>
+              <p className="text-sm text-muted-foreground/70">
                 Try a different search term
               </p>
             </div>
@@ -275,30 +266,26 @@ export default function CommandSearch({ isOpen, onClose }: CommandSearchProps) {
                   <button
                     key={challenge.slug}
                     onClick={() => handleSelectChallenge(challenge)}
-                    className={`w-full px-4 py-3 text-left hover:bg-gray-50 transition-colors ${
-                      index === selectedIndex ? 'bg-gray-50' : ''
+                    className={`w-full px-4 py-3 text-left hover:bg-accent transition-colors ${
+                      index === selectedIndex ? 'bg-accent' : ''
                     }`}
                   >
                     <div className="flex items-center justify-between">
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-3 mb-1">
-                          <h3 className="font-semibold text-gray-900 truncate">
+                          <h3 className="font-semibold text-card-foreground truncate">
                             {challenge.title}
                           </h3>
-                          <span
-                            className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium border ${
-                              isDifficulty(challenge.difficulty)
-                                ? difficultyColors[challenge.difficulty]
-                                : 'bg-gray-100 text-gray-800 border-gray-200'
-                            }`}
-                          >
-                            {challenge.difficulty}
-                          </span>
+                          <DifficultyTag
+                            difficulty={challenge.difficulty}
+                            size="sm"
+                            animated={false}
+                          />
                         </div>
-                        <p className="text-sm text-gray-600 mb-2 line-clamp-2">
+                        <p className="text-sm text-muted-foreground mb-2 line-clamp-2">
                           {challenge.summary}
                         </p>
-                        <div className="flex items-center gap-4 text-xs text-gray-500">
+                        <div className="flex items-center gap-4 text-xs text-muted-foreground">
                           <span className="flex items-center gap-1">
                             <Clock className="h-3 w-3" />
                             {challenge.estimatedTime}
@@ -309,7 +296,7 @@ export default function CommandSearch({ isOpen, onClose }: CommandSearchProps) {
                           </span>
                         </div>
                       </div>
-                      <ArrowRight className="h-4 w-4 text-gray-400 ml-4 flex-shrink-0" />
+                      <ArrowRight className="h-4 w-4 text-muted-foreground ml-4 flex-shrink-0" />
                     </div>
                   </button>
                 )
@@ -320,8 +307,8 @@ export default function CommandSearch({ isOpen, onClose }: CommandSearchProps) {
 
         {/* Footer */}
         {query !== '' && (
-          <div className="px-4 py-3 border-t border-gray-200 bg-gray-50">
-            <div className="flex items-center justify-between text-xs text-gray-500">
+          <div className="px-4 py-3 border-t border-border bg-secondary">
+            <div className="flex items-center justify-between text-xs text-muted-foreground">
               <div className="flex items-center gap-4">
                 <span className="flex items-center gap-1">
                   <ArrowRight className="h-3 w-3 rotate-90" />

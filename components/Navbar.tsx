@@ -13,6 +13,7 @@ import {
 import { Button } from '@/components/ui/button';
 import Logo from '@/components/Logo';
 import CommandSearch, { useCommandSearch } from '@/components/CommandSearch';
+import ThemeToggle from '@/components/ThemeToggle';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { useState, useEffect, useRef } from 'react';
 
@@ -25,7 +26,7 @@ export default function Navbar() {
   const backgroundColor = useTransform(
     scrollY,
     [0, 50],
-    ['rgba(255, 255, 255, 0)', 'rgba(255, 255, 255, 0.9)']
+    ['hsla(var(--background) / 0)', 'hsla(var(--background) / 0.9)']
   );
 
   const boxShadow = useTransform(
@@ -53,12 +54,13 @@ export default function Navbar() {
     <>
       <motion.nav
         ref={navRef}
-        className={`transition-all duration-300 z-50 ${
+        className={`transition-all duration-300 z-50 will-change-transform ${
           isFixed
-            ? 'fixed top-0 left-0 right-0 bg-white/95 backdrop-blur-sm border-b border-gray-200 shadow-lg'
+            ? 'fixed top-0 left-0 right-0 bg-background/95 backdrop-blur-sm border-b border-border shadow-lg'
             : 'relative bg-transparent'
         }`}
         style={{
+          contain: 'layout style paint',
           backgroundColor: isFixed ? undefined : backgroundColor.get(),
           boxShadow: isFixed ? undefined : boxShadow.get(),
         }}
@@ -66,7 +68,7 @@ export default function Navbar() {
         animate={{ y: isFixed ? 0 : 0 }}
         transition={{ type: 'spring', stiffness: 300, damping: 30 }}
       >
-        <div className="w-full">
+        <div className="navbar-container w-full">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex items-center justify-between h-16">
               <motion.div
@@ -80,23 +82,32 @@ export default function Navbar() {
                   aria-label="Go to homepage"
                 >
                   <Logo />
-                  <span className="text-xl font-bold text-primary">
+                  <span className="text-xl font-bold text-foreground">
                     You Build It
                   </span>
                 </Link>
               </motion.div>
               <div className="hidden md:flex items-center space-x-3">
-                {/* Search Button */}
+                {/* Theme Toggle */}
                 <motion.div
                   initial={{ opacity: 0, y: -20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5, delay: 0.1 }}
                 >
+                  <ThemeToggle />
+                </motion.div>
+
+                {/* Search Button */}
+                <motion.div
+                  initial={{ opacity: 0, y: -20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: 0.2 }}
+                >
                   <Button
                     variant="outline"
                     size="sm"
                     onClick={openSearch}
-                    className="flex items-center gap-2 px-3 py-2 text-sm text-gray-600 border-gray-300 hover:bg-gray-50 hover:text-gray-600 transition-colors"
+                    className="flex items-center gap-2 px-3 py-2 text-sm text-muted-foreground border-border hover:bg-accent hover:text-accent-foreground transition-colors"
                   >
                     <Search className="h-4 w-4" />
                     <span className="hidden lg:inline">Search challenges</span>
@@ -112,12 +123,12 @@ export default function Navbar() {
                 <motion.div
                   initial={{ opacity: 0, y: -20 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5 }}
+                  transition={{ duration: 0.5, delay: 0.3 }}
                 >
                   <Button
                     asChild
                     variant="default"
-                    className="bg-[--brand] hover:bg-[#175535] text-white"
+                    className="bg-[--brand] hover:bg-[--brand-dark] text-white"
                   >
                     <Link
                       href="/challenges"
@@ -130,12 +141,15 @@ export default function Navbar() {
                 </motion.div>
               </div>
               <div className="md:hidden flex items-center space-x-2">
+                {/* Mobile Theme Toggle */}
+                <ThemeToggle />
+
                 {/* Mobile Search Button */}
                 <Button
                   variant="ghost"
                   size="icon"
                   onClick={openSearch}
-                  className="text-gray-600 hover:text-gray-900 hover:bg-gray-100"
+                  className="text-muted-foreground hover:text-foreground hover:bg-accent"
                   aria-label="Search challenges"
                 >
                   <Search className="h-5 w-5" />
@@ -152,7 +166,7 @@ export default function Navbar() {
                         variant="ghost"
                         size="icon"
                         aria-label="Open main menu"
-                        className="text-gray-600 hover:text-gray-900 hover:bg-gray-100"
+                        className="text-muted-foreground hover:text-foreground hover:bg-accent"
                       >
                         <Menu className="h-6 w-6" />
                       </Button>
@@ -170,14 +184,14 @@ export default function Navbar() {
                     {/* Header */}
                     <div className="flex items-center space-x-3 mb-8 mt-6">
                       <Logo />
-                      <span className="text-xl font-bold text-primary">
+                      <span className="text-xl font-bold text-foreground">
                         You Build It
                       </span>
                     </div>
 
                     {/* Search Section */}
                     <div className="mb-6">
-                      <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">
+                      <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-3">
                         Search
                       </h3>
                       <SheetClose asChild>
@@ -185,7 +199,7 @@ export default function Navbar() {
                           variant="outline"
                           size="sm"
                           onClick={openSearch}
-                          className="w-full flex items-center gap-3 justify-start px-3 py-2 text-sm text-gray-600 border-gray-300 hover:bg-gray-50 hover:text-gray-600"
+                          className="w-full flex items-center gap-3 justify-start px-3 py-2 text-sm text-muted-foreground border-border hover:bg-accent hover:text-accent-foreground"
                         >
                           <Search className="h-4 w-4" />
                           <span>Search challenges</span>
@@ -200,7 +214,7 @@ export default function Navbar() {
 
                     {/* Navigation */}
                     <nav className="flex-grow">
-                      <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">
+                      <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-3">
                         Navigation
                       </h3>
                       <div className="space-y-3">
@@ -211,18 +225,18 @@ export default function Navbar() {
                           <SheetClose asChild>
                             <Link
                               href="/"
-                              className="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-100 transition-colors group"
+                              className="flex items-center space-x-3 p-3 rounded-lg hover:bg-accent transition-colors group"
                             >
-                              <div className="w-8 h-8 bg-gray-100 rounded-lg flex items-center justify-center group-hover:bg-gray-200 transition-colors">
-                                <span className="text-sm font-semibold text-gray-600">
+                              <div className="w-8 h-8 bg-muted rounded-lg flex items-center justify-center group-hover:bg-accent transition-colors">
+                                <span className="text-sm font-semibold text-muted-foreground">
                                   🏠
                                 </span>
                               </div>
                               <div>
-                                <span className="font-medium text-gray-900">
+                                <span className="font-medium text-foreground">
                                   Home
                                 </span>
-                                <p className="text-xs text-gray-500">
+                                <p className="text-xs text-muted-foreground">
                                   Back to homepage
                                 </p>
                               </div>
@@ -237,16 +251,16 @@ export default function Navbar() {
                           <SheetClose asChild>
                             <Link
                               href="/challenges"
-                              className="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-100 transition-colors group"
+                              className="flex items-center space-x-3 p-3 rounded-lg hover:bg-accent transition-colors group"
                             >
                               <div className="w-8 h-8 bg-[--brand]/10 rounded-lg flex items-center justify-center group-hover:bg-[--brand]/20 transition-colors">
                                 <Zap className="h-4 w-4 text-[--brand]" />
                               </div>
                               <div>
-                                <span className="font-medium text-gray-900">
+                                <span className="font-medium text-foreground">
                                   Explore Challenges
                                 </span>
-                                <p className="text-xs text-gray-500">
+                                <p className="text-xs text-muted-foreground">
                                   Browse all coding challenges
                                 </p>
                               </div>
@@ -257,8 +271,8 @@ export default function Navbar() {
                     </nav>
 
                     {/* Footer */}
-                    <div className="mt-8 pb-6 border-t border-gray-200 pt-6">
-                      <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-4">
+                    <div className="mt-8 pb-6 border-t border-border pt-6">
+                      <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-4">
                         Connect with us
                       </h3>
                       <div className="flex space-x-4">
@@ -269,7 +283,7 @@ export default function Navbar() {
                             href="https://github.com/youbuildit"
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="flex items-center space-x-2 text-gray-400 hover:text-gray-500 transition-colors"
+                            className="flex items-center space-x-2 text-muted-foreground hover:text-foreground transition-colors"
                             aria-label="You Build It on GitHub"
                           >
                             <Github className="h-5 w-5" />

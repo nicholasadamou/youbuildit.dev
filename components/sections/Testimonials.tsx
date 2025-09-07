@@ -526,7 +526,7 @@ export default function Testimonials() {
                 whileTap="tap"
                 style={{ perspective: '1000px' }}
               >
-                <Card className="h-full flex flex-col overflow-hidden bg-gradient-to-br from-white to-gray-50 border-2 hover:border-[--brand]/20 transition-colors duration-300">
+                <Card className="h-full flex flex-col overflow-hidden bg-card border-2 hover:border-[--brand]/20 transition-colors duration-300">
                   <CardHeader className="relative p-4 sm:p-6">
                     <motion.div
                       className="flex items-center space-x-4"
@@ -535,7 +535,7 @@ export default function Testimonials() {
                       transition={{ delay: 0.3 + index * 0.1, duration: 0.5 }}
                     >
                       <div>
-                        <h3 className="text-base sm:text-lg font-semibold">
+                        <h3 className="text-base sm:text-lg font-semibold text-card-foreground">
                           {testimonial.name}
                         </h3>
                         <p className="text-xs sm:text-sm text-muted-foreground">
@@ -577,7 +577,7 @@ export default function Testimonials() {
                         <Quote className="absolute top-0 left-0 h-8 w-8 text-[--brand]" />
                       </motion.div>
                       <motion.p
-                        className="italic pl-8 sm:pl-10 text-foreground text-sm sm:text-base leading-relaxed"
+                        className="italic pl-8 sm:pl-10 text-card-foreground text-sm sm:text-base leading-relaxed"
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.7 + index * 0.1, duration: 0.6 }}
@@ -587,7 +587,7 @@ export default function Testimonials() {
                     </div>
                   </CardContent>
 
-                  <CardFooter className="flex flex-col items-start space-y-2 border-t pt-3 sm:pt-4 bg-white/50 p-4 sm:p-6">
+                  <CardFooter className="flex flex-col items-start space-y-2 border-t border-border pt-3 sm:pt-4 bg-secondary/50 p-4 sm:p-6">
                     <motion.p
                       className="text-xs sm:text-sm text-muted-foreground"
                       initial={{ opacity: 0 }}

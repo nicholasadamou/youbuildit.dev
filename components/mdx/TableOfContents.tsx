@@ -11,8 +11,8 @@ interface TableOfContentsProps {
 export default function TableOfContents({ headings }: TableOfContentsProps) {
   if (headings.length === 0) {
     return (
-      <div className="my-6 p-4 bg-gray-50 border border-gray-200 rounded-lg">
-        <p className="text-gray-600 text-sm">
+      <div className="my-6 p-4 bg-secondary border border-border rounded-lg">
+        <p className="text-muted-foreground text-sm">
           No headings found to generate table of contents.
         </p>
       </div>
@@ -20,7 +20,7 @@ export default function TableOfContents({ headings }: TableOfContentsProps) {
   }
 
   return (
-    <div className="my-6 p-4 bg-gray-50 border border-gray-200 rounded-lg">
+    <div className="my-6 p-4 bg-secondary border border-border rounded-lg">
       <nav className="space-y-2">
         {headings.map((heading, index) => {
           // Calculate indentation based on heading level

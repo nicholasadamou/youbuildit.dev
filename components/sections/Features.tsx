@@ -128,7 +128,7 @@ export default function Features() {
 
   return (
     <motion.section
-      className="bg-white mt-8 sm:mt-12 py-12 sm:py-16 md:py-20 relative overflow-hidden w-full max-w-full"
+      className="bg-background mt-8 sm:mt-12 py-12 sm:py-16 md:py-20 relative overflow-hidden w-full max-w-full"
       initial="hidden"
       whileInView="visible"
       viewport={{ once: true, amount: 0.2 }}
@@ -170,7 +170,7 @@ export default function Features() {
           variants={headerVariants}
         >
           <motion.h2
-            className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-primary leading-tight"
+            className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-foreground leading-tight"
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.2 }}
@@ -241,7 +241,7 @@ export default function Features() {
 
                 {/* Content card */}
                 <motion.div
-                  className="relative bg-white p-6 sm:p-8 rounded-lg shadow-xl h-full flex flex-col"
+                  className="relative bg-card p-6 sm:p-8 rounded-lg shadow-xl h-full flex flex-col"
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{ delay: 0.2, duration: 0.5 }}
@@ -258,7 +258,7 @@ export default function Features() {
                   {/* Text content */}
                   <div className="text-center flex-1 flex flex-col">
                     <motion.h3
-                      className="text-lg sm:text-xl font-semibold text-primary mb-3 sm:mb-4"
+                      className="text-lg sm:text-xl font-semibold text-card-foreground mb-3 sm:mb-4"
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: 0.4 + index * 0.1, duration: 0.5 }}

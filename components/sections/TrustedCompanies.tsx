@@ -23,14 +23,14 @@ const companies = [
 
 export default function TrustedCompanies() {
   return (
-    <section className="bg-[#fafafa] py-16 sm:py-24 w-full max-w-full overflow-x-hidden">
+    <section className="bg-muted py-16 sm:py-24 w-full max-w-full overflow-x-hidden">
       <motion.div
         className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center w-full"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
       >
-        <h2 className="text-3xl font-extrabold text-primary sm:text-4xl">
+        <h2 className="text-3xl font-extrabold text-foreground sm:text-4xl">
           Trusted by Engineers from Top Companies
         </h2>
         <p className="mt-4 text-xl text-muted-foreground">
@@ -54,7 +54,7 @@ export default function TrustedCompanies() {
                   alt={`${company} logo`}
                   width={120}
                   height={20}
-                  className="transition-all duration-300 ease-in-out filter grayscale-[0.85] hover:grayscale-0"
+                  className="transition-all duration-300 ease-in-out filter grayscale hover:grayscale-0 opacity-70 hover:opacity-100"
                 />
               </Link>
             ))}

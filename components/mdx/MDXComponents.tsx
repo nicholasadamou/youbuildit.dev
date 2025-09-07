@@ -2,7 +2,11 @@ import React, { ReactNode } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
-import { oneLight } from 'react-syntax-highlighter/dist/esm/styles/prism';
+import {
+  oneLight,
+  oneDark,
+} from 'react-syntax-highlighter/dist/esm/styles/prism';
+import { useTheme } from 'next-themes';
 import { Components } from 'react-markdown';
 import { useToc } from './TocContext';
 import TableOfContents from './TableOfContents';
@@ -42,12 +46,12 @@ function H1Component({
   return (
     <h1
       id={id}
-      className="text-3xl font-bold text-gray-900 mb-6 mt-8 scroll-mt-8"
+      className="text-3xl font-bold text-foreground mb-6 mt-8 scroll-mt-8"
       {...props}
     >
       <Link
         href={`#${id}`}
-        className="no-underline hover:underline text-gray-900"
+        className="no-underline hover:underline text-foreground"
       >
         {children}
       </Link>
@@ -70,12 +74,12 @@ function H2Component({
     <>
       <h2
         id={id}
-        className="text-2xl font-semibold text-gray-900 mb-4 mt-8 scroll-mt-8"
+        className="text-2xl font-semibold text-foreground mb-4 mt-8 scroll-mt-8"
         {...props}
       >
         <Link
           href={`#${id}`}
-          className="no-underline hover:underline text-gray-900"
+          className="no-underline hover:underline text-foreground"
         >
           {children}
         </Link>
@@ -94,12 +98,12 @@ function H3Component({
   return (
     <h3
       id={id}
-      className="text-xl font-semibold text-gray-900 mb-3 mt-6 scroll-mt-8"
+      className="text-xl font-semibold text-foreground mb-3 mt-6 scroll-mt-8"
       {...props}
     >
       <Link
         href={`#${id}`}
-        className="no-underline hover:underline text-gray-900"
+        className="no-underline hover:underline text-foreground"
       >
         {children}
       </Link>
@@ -116,16 +120,52 @@ function H4Component({
   return (
     <h4
       id={id}
-      className="text-lg font-semibold text-gray-900 mb-2 mt-4 scroll-mt-8"
+      className="text-lg font-semibold text-foreground mb-2 mt-4 scroll-mt-8"
       {...props}
     >
       <Link
         href={`#${id}`}
-        className="no-underline hover:underline text-gray-900"
+        className="no-underline hover:underline text-foreground"
       >
         {children}
       </Link>
     </h4>
+  );
+}
+
+function CodeComponent({
+  children,
+  className,
+  ...props
+}: React.ComponentProps<'code'>) {
+  const match = /language-(\w+)/.exec(className || '');
+  const { theme, systemTheme } = useTheme();
+
+  // Determine if we should use dark theme
+  const effectiveTheme = theme === 'system' ? systemTheme : theme;
+  const isDark = effectiveTheme === 'dark';
+
+  if (match) {
+    return (
+      <SyntaxHighlighter
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        style={(isDark ? oneDark : oneLight) as any}
+        language={match[1]}
+        PreTag="div"
+        className="rounded-lg mb-6"
+      >
+        {String(children).replace(/\n$/, '')}
+      </SyntaxHighlighter>
+    );
+  }
+
+  return (
+    <code
+      className="bg-secondary px-2 py-1 rounded text-sm font-mono text-secondary-foreground border border-border"
+      {...props}
+    >
+      {children}
+    </code>
   );
 }
 
@@ -138,7 +178,7 @@ const MDXComponents: Components = {
 
   // Text elements
   p: ({ children, ...props }) => (
-    <p className="text-gray-700 leading-7 mb-4" {...props}>
+    <p className="text-foreground leading-7 mb-4" {...props}>
       {children}
     </p>
   ),
@@ -146,7 +186,7 @@ const MDXComponents: Components = {
   // Lists - with proper styling
   ul: ({ children, ...props }) => (
     <ul
-      className="list-disc list-outside ml-6 text-gray-700 mb-6 space-y-2"
+      className="list-disc list-outside ml-6 text-foreground mb-6 space-y-2"
       {...props}
     >
       {children}
@@ -155,7 +195,7 @@ const MDXComponents: Components = {
 
   ol: ({ children, ...props }) => (
     <ol
-      className="list-decimal list-outside ml-6 text-gray-700 mb-6 space-y-2"
+      className="list-decimal list-outside ml-6 text-foreground mb-6 space-y-2"
       {...props}
     >
       {children}
@@ -163,7 +203,7 @@ const MDXComponents: Components = {
   ),
 
   li: ({ children, ...props }) => (
-    <li className="text-gray-700 leading-6" {...props}>
+    <li className="text-foreground leading-6" {...props}>
       {children}
     </li>
   ),
@@ -206,37 +246,12 @@ const MDXComponents: Components = {
   },
 
   // Code
-  code: ({ children, className, ...props }) => {
-    const match = /language-(\w+)/.exec(className || '');
-
-    if (match) {
-      return (
-        <SyntaxHighlighter
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          style={oneLight as any}
-          language={match[1]}
-          PreTag="div"
-          className="rounded-lg mb-6 border-0"
-        >
-          {String(children).replace(/\n$/, '')}
-        </SyntaxHighlighter>
-      );
-    }
-
-    return (
-      <code
-        className="bg-gray-100 px-2 py-1 rounded text-sm font-mono text-gray-800 border"
-        {...props}
-      >
-        {children}
-      </code>
-    );
-  },
+  code: CodeComponent,
 
   // Pre (for code blocks without language)
   pre: ({ children, ...props }) => (
     <pre
-      className="bg-gray-50 text-gray-800 p-4 rounded-lg mb-6 overflow-x-auto text-sm border"
+      className="bg-transparent text-foreground rounded-lg mb-6 overflow-x-auto text-sm"
       {...props}
     >
       {children}
@@ -246,7 +261,7 @@ const MDXComponents: Components = {
   // Blockquote
   blockquote: ({ children, ...props }) => (
     <blockquote
-      className="border-l-4 border-[--brand] pl-6 py-2 my-6 italic text-gray-600 bg-gray-50"
+      className="border-l-4 border-[--brand] pl-6 py-2 my-6 italic text-muted-foreground bg-secondary"
       {...props}
     >
       {children}
@@ -257,7 +272,7 @@ const MDXComponents: Components = {
   table: ({ children, ...props }) => (
     <div className="overflow-x-auto mb-6">
       <table
-        className="min-w-full divide-y divide-gray-200 border border-gray-200 rounded-lg"
+        className="min-w-full divide-y divide-border border border-border rounded-lg"
         {...props}
       >
         {children}
@@ -266,13 +281,13 @@ const MDXComponents: Components = {
   ),
 
   thead: ({ children, ...props }) => (
-    <thead className="bg-gray-50" {...props}>
+    <thead className="bg-secondary" {...props}>
       {children}
     </thead>
   ),
 
   tbody: ({ children, ...props }) => (
-    <tbody className="bg-white divide-y divide-gray-200" {...props}>
+    <tbody className="bg-card divide-y divide-border" {...props}>
       {children}
     </tbody>
   ),
@@ -281,7 +296,7 @@ const MDXComponents: Components = {
 
   th: ({ children, ...props }) => (
     <th
-      className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+      className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider"
       {...props}
     >
       {children}
@@ -290,7 +305,7 @@ const MDXComponents: Components = {
 
   td: ({ children, ...props }) => (
     <td
-      className="px-6 py-4 whitespace-nowrap text-sm text-gray-700"
+      className="px-6 py-4 whitespace-nowrap text-sm text-card-foreground"
       {...props}
     >
       {children}
@@ -299,7 +314,7 @@ const MDXComponents: Components = {
 
   // Strong/Bold
   strong: ({ children, ...props }) => (
-    <strong className="font-semibold text-gray-900" {...props}>
+    <strong className="font-semibold text-foreground" {...props}>
       {children}
     </strong>
   ),
@@ -312,7 +327,7 @@ const MDXComponents: Components = {
   ),
 
   // Horizontal rule
-  hr: ({ ...props }) => <hr className="my-8 border-gray-200" {...props} />,
+  hr: ({ ...props }) => <hr className="my-8 border-border" {...props} />,
 
   // Images
   img: ({ src, alt, ...props }) => {

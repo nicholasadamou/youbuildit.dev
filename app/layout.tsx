@@ -4,6 +4,7 @@ import localFont from 'next/font/local';
 import './globals.css';
 import Navbar from '@/components/Navbar';
 import WebVitals from '@/components/WebVitals';
+import { ThemeProvider } from '@/components/ThemeProvider';
 import { defaultSiteMetadata } from '@/lib/og-metadata';
 
 const geistSans = localFont({
@@ -25,13 +26,17 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased overflow-x-hidden`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased overflow-hidden`}
       >
-        <WebVitals />
-        <Navbar />
-        <main className="bg-white text-white min-h-screen">{children}</main>
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+          <WebVitals />
+          <Navbar />
+          <main className="bg-background text-foreground min-h-screen">
+            {children}
+          </main>
+        </ThemeProvider>
       </body>
     </html>
   );

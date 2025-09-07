@@ -8,7 +8,7 @@ export default function WebVitals() {
     // Only run in production and if Web Vitals API is available
     if (process.env.NODE_ENV === 'production' && 'web-vital' in window) {
       import('web-vitals')
-        .then(({ getCLS, getFID, getFCP, getLCP, getTTFB }) => {
+        .then(({ onCLS, onINP, onFCP, onLCP, onTTFB }) => {
           function sendToAnalytics(metric: {
             name: string;
             value: number;
@@ -21,18 +21,14 @@ export default function WebVitals() {
             }
 
             // Example: Send to Google Analytics 4
-            if (typeof gtag !== 'undefined') {
-              (window as { gtag: (...args: unknown[]) => void }).gtag(
-                'event',
-                metric.name,
-                {
-                  value: Math.round(
-                    metric.name === 'CLS' ? metric.value * 1000 : metric.value
-                  ),
-                  event_label: metric.id,
-                  non_interaction: true,
-                }
-              );
+            if (typeof window !== 'undefined' && 'gtag' in window) {
+              (window as any).gtag('event', metric.name, {
+                value: Math.round(
+                  metric.name === 'CLS' ? metric.value * 1000 : metric.value
+                ),
+                event_label: metric.id,
+                non_interaction: true,
+              });
             }
 
             // Example: Send to custom analytics endpoint
@@ -44,11 +40,11 @@ export default function WebVitals() {
           }
 
           // Measure all Web Vitals
-          getCLS(sendToAnalytics);
-          getFID(sendToAnalytics);
-          getFCP(sendToAnalytics);
-          getLCP(sendToAnalytics);
-          getTTFB(sendToAnalytics);
+          onCLS(sendToAnalytics);
+          onINP(sendToAnalytics); // INP replaced FID in v5
+          onFCP(sendToAnalytics);
+          onLCP(sendToAnalytics);
+          onTTFB(sendToAnalytics);
         })
         .catch(error => {
           console.warn('Failed to load web-vitals:', error);

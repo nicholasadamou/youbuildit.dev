@@ -179,7 +179,7 @@ export default function CallToAction() {
 
   return (
     <motion.section
-      className="bg-[#fafafa] py-16 sm:py-20 md:py-32 relative overflow-hidden w-full max-w-full"
+      className="bg-secondary py-16 sm:py-20 md:py-32 relative overflow-hidden w-full max-w-full"
       initial="hidden"
       whileInView="visible"
       viewport={{ once: true, amount: 0.2 }}
@@ -187,7 +187,7 @@ export default function CallToAction() {
     >
       {/* Enhanced Background with subtle gradient */}
       <motion.div
-        className="absolute inset-0 bg-gradient-to-br from-[#fafafa] via-[#f5f5f5] to-[#fafafa]"
+        className="absolute inset-0 bg-gradient-to-br from-secondary via-muted to-secondary"
         variants={backgroundVariants}
       />
 
@@ -198,7 +198,7 @@ export default function CallToAction() {
           variants={itemVariants}
         >
           <motion.h2
-            className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold text-primary mb-6 sm:mb-8 leading-tight sm:leading-loose"
+            className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold text-secondary-foreground mb-6 sm:mb-8 leading-tight sm:leading-loose"
             variants={titleVariants}
           >
             Ready to Become a{' '}
@@ -235,7 +235,7 @@ export default function CallToAction() {
           {benefits.map((benefit, index) => (
             <motion.div
               key={index}
-              className="flex items-center space-x-3 bg-white/90 backdrop-blur-md p-4 sm:p-6 rounded-xl shadow-lg border border-gray-200/50 hover:border-[#2fbc77]/30"
+              className="flex items-center space-x-3 bg-card/90 backdrop-blur-md p-4 sm:p-6 rounded-xl shadow-lg border border-border hover:border-[#2fbc77]/30"
               variants={benefitVariants}
               whileHover={{
                 scale: 1.02,
@@ -253,7 +253,7 @@ export default function CallToAction() {
               >
                 <Star className="w-4 h-4 text-white" fill="currentColor" />
               </motion.div>
-              <span className="text-primary font-medium text-sm sm:text-base">
+              <span className="text-card-foreground font-medium text-sm sm:text-base">
                 {benefit}
               </span>
             </motion.div>
@@ -270,7 +270,7 @@ export default function CallToAction() {
             return (
               <motion.div
                 key={stat.label}
-                className="text-center bg-white/95 backdrop-blur-md p-4 sm:p-6 rounded-2xl shadow-lg border border-gray-200/40 hover:border-[#2fbc77]/40 hover:shadow-xl"
+                className="text-center bg-card/95 backdrop-blur-md p-4 sm:p-6 rounded-2xl shadow-lg border border-border hover:border-[#2fbc77]/40 hover:shadow-xl"
                 variants={statsVariants}
                 whileHover={{
                   y: -8,
@@ -281,7 +281,7 @@ export default function CallToAction() {
                 }}
               >
                 <motion.div
-                  className={`w-12 h-12 sm:w-16 sm:h-16 mx-auto mb-3 sm:mb-4 ${stat.color} bg-gray-100 rounded-2xl flex items-center justify-center`}
+                  className={`w-12 h-12 sm:w-16 sm:h-16 mx-auto mb-3 sm:mb-4 ${stat.color} bg-secondary rounded-2xl flex items-center justify-center`}
                   initial={{ scale: 0, rotate: -90 }}
                   animate={{ scale: 1, rotate: 0 }}
                   transition={{ delay: 1.2 + index * 0.15, duration: 0.6 }}
@@ -289,7 +289,7 @@ export default function CallToAction() {
                   <Icon className="w-6 h-6 sm:w-8 sm:h-8" />
                 </motion.div>
                 <motion.div
-                  className="text-2xl sm:text-3xl font-bold text-primary mb-1 sm:mb-2"
+                  className="text-2xl sm:text-3xl font-bold text-card-foreground mb-1 sm:mb-2"
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 1.4 + index * 0.15, duration: 0.5 }}
@@ -364,7 +364,7 @@ export default function CallToAction() {
               disabled={isLoadingRandom}
               variant="outline"
               size="lg"
-              className="h-12 px-8 rounded-md text-gray-700 hover:text-gray-800 border-gray-300"
+              className="h-12 px-8 rounded-md text-secondary-foreground hover:text-card-foreground border-border bg-card hover:bg-card/80"
             >
               <div className="inline-flex items-center group">
                 <motion.div

@@ -17,7 +17,7 @@ interface FooterProps {
   bgColor?: string;
 }
 
-export default function Footer({ bgColor = 'white' }: FooterProps) {
+export default function Footer({ bgColor = 'bg-card' }: FooterProps) {
   const [commitHash, setCommitHash] = useState<string | null>(null);
 
   useEffect(() => {
@@ -87,7 +87,7 @@ export default function Footer({ bgColor = 'white' }: FooterProps) {
 
   return (
     <motion.footer
-      className={`${bgColor ? bgColor : 'bg-white'} w-full max-w-full overflow-x-hidden`}
+      className={`${bgColor || 'bg-card'} w-full max-w-full overflow-hidden`}
       initial="hidden"
       whileInView="visible"
       viewport={{ once: true, amount: 0.2 }}
@@ -103,7 +103,7 @@ export default function Footer({ bgColor = 'white' }: FooterProps) {
               <Link
                 href="/"
                 aria-label="Go to homepage"
-                className="flex items-center group"
+                className="inline-flex items-center group w-fit"
               >
                 <motion.div
                   whileHover={{ rotate: 5 }}
@@ -112,7 +112,7 @@ export default function Footer({ bgColor = 'white' }: FooterProps) {
                   <Logo />
                 </motion.div>
                 <motion.span
-                  className="ml-3 text-xl font-semibold text-primary"
+                  className="ml-3 text-xl font-semibold text-card-foreground"
                   whileHover={{ x: 2 }}
                   transition={{ duration: 0.2 }}
                 >
@@ -143,13 +143,17 @@ export default function Footer({ bgColor = 'white' }: FooterProps) {
                         transition={{ duration: 0.2 }}
                       >
                         <Link
-                          className="text-sm transition-colors duration-200 text-secondary flex items-center gap-1 bg-[#f5f5f5] py-1 px-2 rounded-full hover:bg-gray-200"
+                          className={`text-sm transition-colors duration-200 text-muted-foreground flex items-center gap-1 bg-card border border-border py-1 px-2 rounded-full hover:text-accent-foreground ${
+                            bgColor
+                              ? 'hover:bg-primary hover:text-secondary'
+                              : 'hover:bg-accent'
+                          }`}
                           href={`https://github.com/nicholasadamou/youbuildit.dev/commit/${commitHash}`}
                           target="_blank"
                           rel="noopener noreferrer"
                         >
-                          <GitCommit className="text-muted-foreground w-4 h-4" />
-                          <span className="font-mono text-muted-foreground">
+                          <GitCommit className="w-4 h-4" />
+                          <span className="font-mono">
                             {commitHash.slice(0, 7)}
                           </span>
                         </Link>
@@ -168,7 +172,11 @@ export default function Footer({ bgColor = 'white' }: FooterProps) {
                 transition={{ duration: 0.2 }}
               >
                 <Link
-                  className="text-sm hover:text-primary transition-colors duration-200 text-muted-foreground flex items-center gap-1 p-2 rounded-full hover:bg-gray-100"
+                  className={`text-sm transition-colors duration-200 text-muted-foreground flex items-center gap-1 p-2 rounded-full hover:text-accent-foreground ${
+                    bgColor && bgColor !== 'bg-card'
+                      ? 'hover:bg-card'
+                      : 'hover:bg-accent'
+                  }`}
                   href="https://github.com/nicholasadamou/youbuildit.dev"
                   target="_blank"
                   rel="noopener noreferrer"
@@ -188,7 +196,7 @@ export default function Footer({ bgColor = 'white' }: FooterProps) {
 
           <motion.div variants={itemVariants}>
             <motion.h3
-              className="text-md font-semibold mb-4 text-primary"
+              className="text-md font-semibold mb-4 text-card-foreground"
               variants={itemVariants}
             >
               Quick Links
@@ -202,7 +210,7 @@ export default function Footer({ bgColor = 'white' }: FooterProps) {
                 >
                   <Link
                     href="/challenges"
-                    className="text-muted-foreground transition-colors hover:text-primary"
+                    className="text-muted-foreground transition-colors hover:text-card-foreground"
                   >
                     Challenges
                   </Link>
@@ -213,7 +221,7 @@ export default function Footer({ bgColor = 'white' }: FooterProps) {
 
           <motion.div variants={itemVariants}>
             <motion.h3
-              className="text-md font-semibold mb-4 text-primary"
+              className="text-md font-semibold mb-4 text-card-foreground"
               variants={itemVariants}
             >
               Connect
@@ -229,7 +237,7 @@ export default function Footer({ bgColor = 'white' }: FooterProps) {
                     href="https://github.com/youbuildit"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-muted-foreground transition-colors hover:text-primary"
+                    className="text-muted-foreground transition-colors hover:text-card-foreground"
                   >
                     GitHub
                   </a>

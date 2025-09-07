@@ -2,18 +2,7 @@ import type { ClientChallenge } from '@/types/challenge';
 import { ArrowRight, Clock, Code } from 'lucide-react';
 import Link from 'next/link';
 import { motion, type Variants } from 'framer-motion';
-
-const difficultyGradients = {
-  Beginner: 'bg-gradient-to-r from-green-400 to-green-600',
-  Intermediate: 'bg-gradient-to-r from-yellow-400 to-yellow-600',
-  Advanced: 'bg-gradient-to-r from-red-400 to-red-600',
-};
-
-const isDifficulty = (
-  difficulty: string
-): difficulty is keyof typeof difficultyGradients => {
-  return difficulty in difficultyGradients;
-};
+import DifficultyTag from '@/components/ui/DifficultyTag';
 
 // Card animation variants - removed vertical movement and scaling
 const cardVariants: Variants = {
@@ -56,7 +45,7 @@ const ChallengeCard = ({
     initial="idle"
     animate={isHovered ? 'hover' : 'idle'}
     whileHover="hover"
-    className="flex-shrink-0 w-80 sm:w-96 bg-[#fafafa] rounded-lg overflow-hidden border border-[#e4e4e7] flex flex-col cursor-pointer"
+    className="flex-shrink-0 w-80 sm:w-96 bg-card rounded-lg overflow-hidden border border-border flex flex-col cursor-pointer"
     onMouseEnter={() => onHover(challenge.slug)}
     onMouseLeave={() => onHover(null)}
     style={{ transformStyle: 'preserve-3d' }}
@@ -64,26 +53,18 @@ const ChallengeCard = ({
     <div className="p-3 sm:p-4 flex flex-col h-full min-h-[230px] sm:min-h-[250px]">
       <div className="flex justify-between items-start mb-2">
         <motion.h3
-          className="text-base sm:text-lg font-semibold text-primary leading-tight"
+          className="text-base sm:text-lg font-semibold text-card-foreground leading-tight"
           initial={{ opacity: 0.8 }}
           whileHover={{ opacity: 1 }}
           transition={{ duration: 0.2 }}
         >
           {challenge.title}
         </motion.h3>
-        <motion.span
-          className={`text-xs font-medium px-2 py-1 rounded-full ${
-            isDifficulty(challenge.difficulty)
-              ? difficultyGradients[challenge.difficulty]
-              : '' // Fallback if invalid
-          } text-white`}
-          whileHover={{
-            scale: 1.05,
-          }}
-          transition={{ type: 'spring', damping: 15, stiffness: 300 }}
-        >
-          {challenge.difficulty}
-        </motion.span>
+        <DifficultyTag
+          difficulty={challenge.difficulty}
+          size="sm"
+          animated={true}
+        />
       </div>
       <motion.p
         className="text-xs sm:text-sm text-muted-foreground mb-2 line-clamp-2"
@@ -97,10 +78,9 @@ const ChallengeCard = ({
         {challenge.skills.slice(0, 2).map((skill, index) => (
           <motion.span
             key={index}
-            className="text-xs bg-gray-200 text-muted-foreground px-2 py-1 rounded-full"
+            className="text-xs bg-secondary text-secondary-foreground px-2 py-1 rounded-full"
             whileHover={{
               scale: 1.05,
-              backgroundColor: '#e5e5e5',
             }}
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
