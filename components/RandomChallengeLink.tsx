@@ -2,7 +2,6 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { motion } from 'framer-motion';
 
 interface RandomChallengeLinkProps {
   className?: string;
@@ -45,35 +44,19 @@ export default function RandomChallengeLink({
   };
 
   return (
-    <motion.div
-      whileHover="hover"
-      whileTap="tap"
-      variants={{
-        hover: {
-          scale: 1.05,
-          transition: {
-            duration: 0.2,
-          },
-        },
-        tap: {
-          scale: 0.95,
-        },
-      }}
+    <button
+      onClick={handleRandomChallenge}
+      disabled={isLoading}
+      className={`${className} ${isLoading ? 'opacity-50 cursor-not-allowed' : ''} flex items-center gap-2`}
     >
-      <button
-        onClick={handleRandomChallenge}
-        disabled={isLoading}
-        className={`${className} ${isLoading ? 'opacity-50 cursor-not-allowed' : ''} flex items-center gap-2`}
-      >
-        {isLoading ? (
-          'Loading...'
-        ) : (
-          <>
-            {icon && icon}
-            {children}
-          </>
-        )}
-      </button>
-    </motion.div>
+      {isLoading ? (
+        'Loading...'
+      ) : (
+        <>
+          {icon && icon}
+          {children}
+        </>
+      )}
+    </button>
   );
 }

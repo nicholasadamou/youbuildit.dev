@@ -74,18 +74,6 @@ export default function Footer({ bgColor = 'bg-card' }: FooterProps) {
     },
   };
 
-  const linkVariants = {
-    hover: {
-      scale: 1.05,
-      transition: {
-        duration: 0.2,
-      },
-    },
-    tap: {
-      scale: 0.95,
-    },
-  };
-
   return (
     <motion.footer
       className={`${bgColor || 'bg-card'} w-full max-w-full overflow-hidden`}
@@ -204,18 +192,12 @@ export default function Footer({ bgColor = 'bg-card' }: FooterProps) {
             </motion.h3>
             <motion.ul className="space-y-2" variants={containerVariants}>
               <motion.li variants={itemVariants}>
-                <motion.div
-                  variants={linkVariants}
-                  whileHover="hover"
-                  whileTap="tap"
+                <Link
+                  href="/challenges"
+                  className="text-muted-foreground transition-colors hover:text-card-foreground"
                 >
-                  <Link
-                    href="/challenges"
-                    className="text-muted-foreground transition-colors hover:text-card-foreground"
-                  >
-                    Challenges
-                  </Link>
-                </motion.div>
+                  Challenges
+                </Link>
               </motion.li>
               <motion.li variants={itemVariants}>
                 <RandomChallengeLink
@@ -237,36 +219,24 @@ export default function Footer({ bgColor = 'bg-card' }: FooterProps) {
             </motion.h3>
             <motion.ul className="space-y-2" variants={containerVariants}>
               <motion.li variants={itemVariants}>
-                <motion.div
-                  variants={linkVariants}
-                  whileHover="hover"
-                  whileTap="tap"
+                <a
+                  href="https://github.com/youbuildit"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-muted-foreground transition-colors hover:text-card-foreground flex items-center gap-2"
                 >
-                  <a
-                    href="https://github.com/youbuildit"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-muted-foreground transition-colors hover:text-card-foreground flex items-center gap-2"
-                  >
-                    <Github className="w-4 h-4" />
-                    GitHub
-                  </a>
-                </motion.div>
+                  <Github className="w-4 h-4" />
+                  GitHub
+                </a>
               </motion.li>
               <motion.li variants={itemVariants}>
-                <motion.div
-                  variants={linkVariants}
-                  whileHover="hover"
-                  whileTap="tap"
+                <Link
+                  href="/terms"
+                  className="text-muted-foreground transition-colors hover:text-card-foreground flex items-center gap-2"
                 >
-                  <Link
-                    href="/terms"
-                    className="text-muted-foreground transition-colors hover:text-card-foreground flex items-center gap-2"
-                  >
-                    <FileText className="w-4 h-4" />
-                    Terms of Use
-                  </Link>
-                </motion.div>
+                  <FileText className="w-4 h-4" />
+                  Terms of Use
+                </Link>
               </motion.li>
             </motion.ul>
           </motion.div>
