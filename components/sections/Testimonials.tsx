@@ -267,6 +267,68 @@ function generateTestimonials(challenges: ClientChallenge[]) {
   return createUniqueTestimonialCombinations(challenges);
 }
 
+// Function to select a diverse set of testimonials
+function selectDiverseTestimonials(
+  testimonials: TestimonialType[],
+  count: number
+): TestimonialType[] {
+  if (testimonials.length <= count) {
+    return testimonials;
+  }
+
+  // Create a map to track industries and challenges we've already included
+  const includedIndustries = new Set<string>();
+  const includedChallenges = new Set<string>();
+
+  // First, randomly shuffle the testimonials
+  const shuffled = [...testimonials];
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+  }
+
+  // Then select diverse testimonials
+  const selected: TestimonialType[] = [];
+
+  // First pass: try to get diverse industries and challenges
+  for (const testimonial of shuffled) {
+    // Skip if we already have enough testimonials
+    if (selected.length >= count) break;
+
+    // Check if this industry or challenge is already included
+    const industryIncluded =
+      testimonial.industry && includedIndustries.has(testimonial.industry);
+    const challengeIncluded = includedChallenges.has(
+      testimonial.challenge_link
+    );
+
+    // Prioritize testimonials that add diversity
+    if (!industryIncluded || !challengeIncluded) {
+      selected.push(testimonial);
+
+      // Track what we've included
+      if (testimonial.industry) {
+        includedIndustries.add(testimonial.industry);
+      }
+      includedChallenges.add(testimonial.challenge_link);
+    }
+  }
+
+  // Second pass: fill remaining slots if needed
+  if (selected.length < count) {
+    for (const testimonial of shuffled) {
+      if (selected.length >= count) break;
+
+      // Skip testimonials we've already selected
+      if (!selected.includes(testimonial)) {
+        selected.push(testimonial);
+      }
+    }
+  }
+
+  return selected;
+}
+
 export default function Testimonials() {
   const [testimonialData, setTestimonialData] = useState<TestimonialType[]>([]);
   const { challenges, loading, error } = useChallenges();
@@ -276,7 +338,13 @@ export default function Testimonials() {
       console.log('Loaded challenges:', challenges.length);
       const generatedTestimonials = generateTestimonials(challenges);
       console.log('Generated testimonials:', generatedTestimonials.length);
-      setTestimonialData(generatedTestimonials);
+
+      // Limit the number of testimonials displayed to 6
+      const limitedTestimonials = selectDiverseTestimonials(
+        generatedTestimonials,
+        6
+      );
+      setTestimonialData(limitedTestimonials);
     } else if (!loading && (error || challenges.length === 0)) {
       console.error('Error loading challenges or no challenges found:', error);
       // Create fallback testimonials if API fails or no challenges
