@@ -580,7 +580,7 @@ export default function Testimonials() {
                 whileTap="tap"
                 style={{ perspective: '1000px' }}
               >
-                <Card className="h-full flex flex-col overflow-hidden bg-card border-2 hover:border-[--brand]/20 transition-colors duration-300">
+                <Card className="h-full flex flex-col overflow-hidden bg-card border border-[#333333] dark:border-[#2a2a2a] hover:border-[--brand]/20 transition-colors duration-300">
                   <CardHeader className="relative p-4 sm:p-6">
                     <motion.div
                       className="flex items-center space-x-4"
@@ -641,7 +641,7 @@ export default function Testimonials() {
                     </div>
                   </CardContent>
 
-                  <CardFooter className="flex flex-col items-start space-y-2 border-t border-border pt-3 sm:pt-4 bg-secondary/50 p-4 sm:p-6">
+                  <CardFooter className="flex flex-col items-start space-y-2 border-t border-[#333333]/50 dark:border-[#2a2a2a]/50 pt-3 sm:pt-4 bg-secondary/50 p-4 sm:p-6">
                     <motion.p
                       className="text-xs sm:text-sm text-muted-foreground"
                       initial={{ opacity: 0 }}
