@@ -8,7 +8,7 @@ const BRAND_COLOR = '#37d388';
 const BRAND_LIGHT = '#a4e6c5';
 const BACKGROUND_COLOR = '#ffffff';
 const TEXT_PRIMARY = '#1f2937';
-const TEXT_SECONDARY = '#6b7280';
+const TEXT_SECONDARY = '#374151';
 
 export async function GET(request: NextRequest) {
   try {
@@ -207,7 +207,7 @@ export async function GET(request: NextRequest) {
                       backgroundColor: `${BRAND_COLOR}20`,
                       borderRadius: '16px',
                       fontSize: '18px',
-                      color: BRAND_COLOR,
+                      color: '#166534',
                       fontWeight: '600',
                     }}
                   >
