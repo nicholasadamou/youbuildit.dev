@@ -1,0 +1,379 @@
+'use client';
+
+import { useState } from 'react';
+import { useUser } from '@clerk/nextjs';
+import { CustomSignInButton } from '@/components/auth';
+import { Crown, Users, ArrowRight, Star, X, Home, List } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { Button } from '@/components/ui/button';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import PremiumBadge from './PremiumBadge';
+import { Challenge } from '@/lib/mdx';
+import { getUpgradeMessage } from '@/lib/subscription';
+import { useRouter } from 'next/navigation';
+
+interface PaywallOverlayProps {
+  challenge: Challenge;
+  onClose?: () => void;
+}
+
+export default function PaywallOverlay({
+  challenge,
+  onClose,
+}: PaywallOverlayProps) {
+  const { isSignedIn } = useUser();
+  const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter();
+
+  const handleUpgrade = async (priceId: string) => {
+    if (!isSignedIn) {
+      return;
+    }
+
+    setIsLoading(true);
+    try {
+      const response = await fetch('/api/subscriptions/checkout', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          priceId,
+          tier: challenge.tier,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to create checkout session');
+      }
+
+      const { sessionId } = await response.json();
+
+      // Redirect to Stripe Checkout
+      const { loadStripe } = await import('@stripe/stripe-js');
+      const stripePromise = loadStripe(
+        process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!
+      );
+      const stripe = await stripePromise;
+
+      if (stripe) {
+        await stripe.redirectToCheckout({ sessionId });
+      }
+    } catch (error) {
+      console.error('Error creating checkout session:', error);
+      alert('Something went wrong. Please try again.');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const isPro = challenge.tier === 'pro';
+  const isTeam = challenge.tier === 'team';
+
+  const handleGoHome = () => {
+    router.push('/');
+  };
+
+  const handleGoChallenges = () => {
+    router.push('/challenges?tier=free');
+  };
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, scale: 0.9, y: 20 }}
+      animate={{ opacity: 1, scale: 1, y: 0 }}
+      exit={{ opacity: 0, scale: 0.95, y: 10 }}
+      transition={{
+        duration: 0.3,
+        ease: [0.25, 0.46, 0.45, 0.94], // Custom easing for smooth feel
+      }}
+    >
+      <Card className="relative shadow-2xl bg-background border max-w-2xl mx-auto">
+        {/* Close button - only show if onClose is provided */}
+        {onClose && (
+          <button
+            onClick={onClose}
+            className="absolute -top-2 -right-2 bg-background border rounded-full p-2 shadow-lg hover:bg-muted transition-colors z-10"
+            aria-label="Close"
+          >
+            <X className="h-4 w-4" />
+          </button>
+        )}
+
+        <CardHeader className="text-center">
+          <motion.div
+            className="flex items-center justify-center gap-2 mb-4"
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.1, duration: 0.4 }}
+          >
+            <PremiumBadge tier={challenge.tier} size="lg" />
+          </motion.div>
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2, duration: 0.4 }}
+          >
+            <CardTitle className="text-2xl">Unlock {challenge.title}</CardTitle>
+          </motion.div>
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3, duration: 0.4 }}
+          >
+            <CardDescription className="text-lg">
+              {getUpgradeMessage(challenge)}
+            </CardDescription>
+          </motion.div>
+        </CardHeader>
+
+        <CardContent className="space-y-6">
+          {/* Challenge Preview */}
+          <motion.div
+            className="p-4 bg-muted rounded-lg"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.4, duration: 0.4 }}
+            whileHover={{ scale: 1.02 }}
+          >
+            <h4 className="font-semibold mb-2">Challenge Preview</h4>
+            <p className="text-muted-foreground text-sm">{challenge.summary}</p>
+            <div className="flex items-center gap-4 mt-3 text-xs text-muted-foreground">
+              <span>
+                <Badge variant="secondary" className="text-xs">
+                  {challenge.difficulty}
+                </Badge>
+              </span>
+              <span>{challenge.estimatedTime}</span>
+              <span>{challenge.category}</span>
+            </div>
+          </motion.div>
+
+          {/* Subscription Plans - Compact Version */}
+          <motion.div
+            className="grid md:grid-cols-2 gap-3"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.5, duration: 0.4 }}
+          >
+            {/* Pro Plan */}
+            <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.6, duration: 0.4 }}
+              whileHover={{
+                scale: 1.03,
+                y: -5,
+                transition: { duration: 0.2 },
+              }}
+            >
+              <Card
+                className={`relative ${isPro ? 'ring-2 ring-amber-500' : ''}`}
+              >
+                {isPro && (
+                  <div className="absolute -top-2 left-1/2 transform -translate-x-1/2">
+                    <Badge className="bg-amber-500 text-white text-xs">
+                      <Star className="w-3 h-3 mr-1" />
+                      Recommended
+                    </Badge>
+                  </div>
+                )}
+                <CardHeader className="text-center pb-3">
+                  <div className="flex items-center justify-center gap-2">
+                    <Crown className="w-4 h-4 text-amber-500" />
+                    <CardTitle className="text-lg">Pro</CardTitle>
+                  </div>
+                  <div>
+                    <div className="text-2xl font-bold">$9.99</div>
+                    <div className="text-xs text-muted-foreground">
+                      per month
+                    </div>
+                  </div>
+                </CardHeader>
+                <CardContent className="space-y-3 pt-0">
+                  <ul className="space-y-1 text-xs">
+                    <li className="flex items-center gap-2">
+                      <ArrowRight className="w-3 h-3 text-green-500 flex-shrink-0" />
+                      Access to all 50+ challenges
+                    </li>
+                    <li className="flex items-center gap-2">
+                      <ArrowRight className="w-3 h-3 text-green-500 flex-shrink-0" />
+                      Detailed solutions
+                    </li>
+                    <li className="flex items-center gap-2">
+                      <ArrowRight className="w-3 h-3 text-green-500 flex-shrink-0" />
+                      Priority support
+                    </li>
+                  </ul>
+                  <motion.div
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                  >
+                    <Button
+                      className="w-full"
+                      size="sm"
+                      onClick={() => handleUpgrade('price_pro_monthly')}
+                      disabled={isLoading}
+                    >
+                      {isLoading ? 'Loading...' : 'Upgrade to Pro'}
+                    </Button>
+                  </motion.div>
+                </CardContent>
+              </Card>
+            </motion.div>
+
+            {/* Team Plan */}
+            <motion.div
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.7, duration: 0.4 }}
+              whileHover={{
+                scale: 1.03,
+                y: -5,
+                transition: { duration: 0.2 },
+              }}
+            >
+              <Card
+                className={`relative ${isTeam ? 'ring-2 ring-purple-500' : ''}`}
+              >
+                {isTeam && (
+                  <div className="absolute -top-2 left-1/2 transform -translate-x-1/2">
+                    <Badge className="bg-purple-500 text-white text-xs">
+                      <Users className="w-3 h-3 mr-1" />
+                      Required
+                    </Badge>
+                  </div>
+                )}
+                <CardHeader className="text-center pb-3">
+                  <div className="flex items-center justify-center gap-2">
+                    <Users className="w-4 h-4 text-purple-500" />
+                    <CardTitle className="text-lg">Team</CardTitle>
+                  </div>
+                  <div>
+                    <div className="text-2xl font-bold">$29.99</div>
+                    <div className="text-xs text-muted-foreground">
+                      per month
+                    </div>
+                  </div>
+                </CardHeader>
+                <CardContent className="space-y-3 pt-0">
+                  <ul className="space-y-1 text-xs">
+                    <li className="flex items-center gap-2">
+                      <ArrowRight className="w-3 h-3 text-green-500 flex-shrink-0" />
+                      Everything in Pro
+                    </li>
+                    <li className="flex items-center gap-2">
+                      <ArrowRight className="w-3 h-3 text-green-500 flex-shrink-0" />
+                      Team dashboard
+                    </li>
+                    <li className="flex items-center gap-2">
+                      <ArrowRight className="w-3 h-3 text-green-500 flex-shrink-0" />
+                      Enterprise support
+                    </li>
+                  </ul>
+                  <motion.div
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                  >
+                    <Button
+                      className="w-full"
+                      variant="outline"
+                      size="sm"
+                      onClick={() => handleUpgrade('price_team_monthly')}
+                      disabled={isLoading}
+                    >
+                      {isLoading ? 'Loading...' : 'Upgrade to Team'}
+                    </Button>
+                  </motion.div>
+                </CardContent>
+              </Card>
+            </motion.div>
+          </motion.div>
+
+          {/* Sign in prompt for non-authenticated users */}
+          {!isSignedIn && (
+            <motion.div
+              className="text-center p-3 bg-muted rounded-lg"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.8, duration: 0.4 }}
+            >
+              <p className="text-xs text-muted-foreground mb-2">
+                Don&apos;t have an account yet?
+              </p>
+              <motion.div
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                <CustomSignInButton
+                  variant="outline"
+                  size="sm"
+                  mode="modal"
+                  showIcon={false}
+                >
+                  Sign in to get started
+                </CustomSignInButton>
+              </motion.div>
+            </motion.div>
+          )}
+
+          {/* Navigation Options */}
+          <motion.div
+            className="border-t pt-4"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.9, duration: 0.4 }}
+          >
+            <p className="text-sm text-muted-foreground mb-3 text-center">
+              Not ready to upgrade? You can:
+            </p>
+            <div className="flex gap-2 mb-3">
+              <motion.div
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="flex-1"
+              >
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={handleGoHome}
+                  className="w-full flex items-center justify-center gap-2"
+                >
+                  <Home className="w-4 h-4" />
+                  Go Home
+                </Button>
+              </motion.div>
+              <motion.div
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="flex-1"
+              >
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={handleGoChallenges}
+                  className="w-full flex items-center justify-center gap-2"
+                >
+                  <List className="w-4 h-4" />
+                  Browse Free Challenges
+                </Button>
+              </motion.div>
+            </div>
+            <p className="text-xs text-muted-foreground text-center">
+              Or press{' '}
+              <kbd className="px-1.5 py-0.5 bg-muted border rounded text-xs">
+                Escape
+              </kbd>{' '}
+              to go back
+            </p>
+          </motion.div>
+        </CardContent>
+      </Card>
+    </motion.div>
+  );
+}

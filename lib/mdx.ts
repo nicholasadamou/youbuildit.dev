@@ -16,6 +16,8 @@ export interface Challenge {
   skills: string[];
   estimatedTime: string;
   content: string;
+  tier: 'free' | 'pro' | 'team';
+  premium?: boolean; // Backward compatibility
 }
 
 export async function getAllChallenges(): Promise<Challenge[]> {
@@ -82,6 +84,8 @@ export async function getChallengeBySlug(
       skills: Array.isArray(data.skills) ? data.skills : [],
       estimatedTime: data.estimatedTime,
       content,
+      tier: data.tier || (data.premium ? 'pro' : 'free'), // Support both new tier and legacy premium
+      premium: data.premium,
     };
   } catch (error) {
     console.error(`Error reading challenge ${slug}:`, error);

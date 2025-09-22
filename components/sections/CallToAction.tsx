@@ -1,12 +1,11 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import Link from 'next/link';
-import { Zap, Code, Trophy, ArrowRight, Star, Shuffle } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { useRouter } from 'next/navigation';
-import { useState } from 'react';
-import { useChallenges } from '@/hooks/useChallenges';
+import { Code, Trophy, Star, Zap } from 'lucide-react';
+import {
+  ExploreChallengesButton,
+  RandomFreeChallengeButton,
+} from '@/components/ui/ChallengeNavigationButtons';
 
 const stats = [
   {
@@ -37,30 +36,6 @@ const benefits = [
 ];
 
 export default function CallToAction() {
-  const router = useRouter();
-  const [isLoadingRandom, setIsLoadingRandom] = useState(false);
-  const { getRandomChallenge } = useChallenges();
-
-  // Handle random challenge selection
-  const handleRandomChallenge = async () => {
-    setIsLoadingRandom(true);
-    try {
-      const randomChallenge = getRandomChallenge();
-      if (randomChallenge) {
-        router.push(`/challenge/${randomChallenge.slug}`);
-      } else {
-        // Fallback to challenges page if no challenges found
-        router.push('/challenges');
-      }
-    } catch (error) {
-      console.error('Error selecting random challenge:', error);
-      // Fallback to challenges page on error
-      router.push('/challenges');
-    } finally {
-      setIsLoadingRandom(false);
-    }
-  };
-
   // Animation variants
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -314,34 +289,11 @@ export default function CallToAction() {
             whileHover="hover"
             whileTap="tap"
           >
-            <Button
-              asChild
+            <ExploreChallengesButton
               variant="default"
               size="lg"
               className="bg-[--brand] hover:bg-[#175535] text-white h-12 px-8 rounded-md"
-            >
-              <Link
-                href="/challenges"
-                className="inline-flex items-center group"
-              >
-                <motion.span
-                  className="text-base sm:text-lg"
-                  initial={{ opacity: 0, x: -10 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: 1.8, duration: 0.4 }}
-                >
-                  Explore Challenges
-                </motion.span>
-                <motion.div
-                  className="ml-3 group-hover:translate-x-1 transition-transform duration-200"
-                  initial={{ opacity: 0, x: -5 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: 2.0, duration: 0.4 }}
-                >
-                  <ArrowRight className="h-6 w-6 sm:h-7 sm:w-7" />
-                </motion.div>
-              </Link>
-            </Button>
+            />
           </motion.div>
 
           {/* Secondary CTA - Random Challenge */}
@@ -354,36 +306,11 @@ export default function CallToAction() {
             }}
             whileTap={{ scale: 0.95 }}
           >
-            <Button
-              onClick={handleRandomChallenge}
-              disabled={isLoadingRandom}
+            <RandomFreeChallengeButton
               variant="outline"
               size="lg"
-              className="h-12 px-8 rounded-md text-secondary-foreground hover:text-card-foreground border-border bg-card hover:bg-card/80"
-            >
-              <div className="inline-flex items-center group">
-                <motion.div
-                  className={`mr-3 transition-transform duration-300 ${
-                    isLoadingRandom ? 'animate-spin' : 'group-hover:rotate-180'
-                  }`}
-                  initial={{ opacity: 0, rotate: -90 }}
-                  animate={{ opacity: 1, rotate: 0 }}
-                  transition={{ delay: 2.2, duration: 0.5 }}
-                >
-                  <Shuffle className="h-5 w-5 sm:h-6 sm:w-6" />
-                </motion.div>
-                <motion.span
-                  className="text-base sm:text-lg"
-                  initial={{ opacity: 0, x: -10 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: 2.0, duration: 0.4 }}
-                >
-                  {isLoadingRandom
-                    ? 'Finding Challenge...'
-                    : 'Try Random Challenge'}
-                </motion.span>
-              </div>
-            </Button>
+              className="h-12 px-8 rounded-md text-secondary-foreground hover:text-card-foreground border-border bg-card hover:bg-card/80 group"
+            />
           </motion.div>
         </motion.div>
       </div>

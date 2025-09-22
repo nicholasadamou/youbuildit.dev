@@ -72,7 +72,7 @@ const HeroHeading = () => {
     >
       <motion.h1
         variants={itemVariants}
-        className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black tracking-tight mb-4 sm:mb-6 text-primary"
+        className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black tracking-tight mb-4 sm:mb-6 text-white"
         style={{ lineHeight: '1.2' }}
       >
         <motion.div className="flex flex-wrap justify-center items-center gap-x-2 sm:gap-x-3 text-center">
@@ -92,7 +92,7 @@ const HeroHeading = () => {
       </motion.h1>
       <motion.p
         variants={itemVariants}
-        className="mt-4 sm:mt-6 text-xl sm:text-xl md:text-2xl text-secondary-foreground px-4 sm:px-0"
+        className="mt-4 sm:mt-6 text-xl sm:text-xl md:text-2xl text-white px-4 sm:px-0"
       >
         Master software engineering by building real applications not toys.
       </motion.p>
@@ -163,19 +163,77 @@ export default function HeroSection() {
   return (
     <div
       ref={sectionRef}
-      className="relative mt-0 md:mt-16 pb-8 sm:pb-12 flex flex-col w-full max-w-full overflow-hidden"
+      className="relative mt-0 md:pt-16 pb-8 sm:pb-12 flex flex-col w-full max-w-full overflow-hidden"
     >
-      {/* Static Background Layer */}
-      <div className="absolute inset-0 bg-gradient-to-t from-[--brand]/15 to-transparent" />
+      {/* Enhanced Background with Multiple Layers */}
+      <div className="absolute inset-0">
+        {/* Base gradient background */}
+        <div className="absolute inset-0 bg-gradient-to-br from-slate-50 via-green-50/30 to-emerald-50/40 dark:from-slate-950 dark:via-green-950/30 dark:to-emerald-950/40" />
 
-      {/* Animated Parallax Background */}
-      <motion.div
-        className="absolute inset-0 bg-gradient-to-t from-[--brand]/10 to-transparent"
-        style={{
-          y: backgroundY,
-          opacity: backgroundOpacity,
-        }}
-      />
+        {/* Mesh gradient overlay */}
+        <div className="absolute inset-0 bg-gradient-to-tr from-[--brand]/10 via-transparent to-blue-500/5" />
+
+        {/* Animated gradient orbs */}
+        <motion.div
+          className="absolute -top-48 -left-48 w-96 h-96 bg-gradient-to-br from-[--brand]/15 to-emerald-400/10 rounded-full filter blur-3xl"
+          animate={{
+            x: [0, 100, 0],
+            y: [0, -50, 0],
+            scale: [1, 1.3, 1],
+          }}
+          transition={{
+            duration: 25,
+            repeat: Infinity,
+            ease: 'linear',
+          }}
+        />
+        <motion.div
+          className="absolute -bottom-48 -right-48 w-96 h-96 bg-gradient-to-tl from-blue-400/10 to-[--brand]/15 rounded-full filter blur-3xl"
+          animate={{
+            x: [0, -120, 0],
+            y: [0, 60, 0],
+            scale: [1.3, 1, 1.3],
+          }}
+          transition={{
+            duration: 20,
+            repeat: Infinity,
+            ease: 'linear',
+          }}
+        />
+
+        {/* Additional accent orb */}
+        <motion.div
+          className="absolute top-1/3 left-1/2 w-64 h-64 bg-gradient-to-r from-purple-400/8 to-pink-400/8 rounded-full filter blur-2xl"
+          animate={{
+            rotate: [0, 360],
+            scale: [0.8, 1.2, 0.8],
+          }}
+          transition={{
+            duration: 30,
+            repeat: Infinity,
+            ease: 'linear',
+          }}
+        />
+
+        {/* Subtle pattern overlay */}
+        <div
+          className="absolute inset-0 opacity-5 dark:opacity-10"
+          style={{
+            backgroundImage:
+              'radial-gradient(circle at 25% 25%, currentColor 1px, transparent 1px)',
+            backgroundSize: '50px 50px',
+          }}
+        />
+
+        {/* Parallax layer for scroll effect */}
+        <motion.div
+          className="absolute inset-0 bg-gradient-to-t from-[--brand]/8 to-transparent"
+          style={{
+            y: backgroundY,
+            opacity: backgroundOpacity,
+          }}
+        />
+      </div>
 
       <div className="relative z-10 flex flex-col">
         <div className="flex flex-col">

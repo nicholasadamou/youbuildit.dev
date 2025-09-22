@@ -4,7 +4,7 @@ import localFont from 'next/font/local';
 import './globals.css';
 import Navbar from '@/components/Navbar';
 import WebVitals from '@/components/WebVitals';
-import { ThemeProvider } from '@/components/ThemeProvider';
+import { Providers } from '@/components/Providers';
 import { defaultSiteMetadata } from '@/lib/og-metadata';
 import { Analytics } from '@vercel/analytics/react';
 
@@ -29,15 +29,15 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased overflow-hidden`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+        <Providers>
           <WebVitals />
           <Navbar />
           <main className="bg-background text-foreground min-h-screen">
             {children}
           </main>
-        </ThemeProvider>
+        </Providers>
         {/* Only render analytics in production or when deployment ID is available */}
         {process.env.NODE_ENV === 'production' && <Analytics />}
       </body>

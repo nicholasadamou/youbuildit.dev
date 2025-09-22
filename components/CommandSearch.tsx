@@ -6,6 +6,7 @@ import type { ClientChallenge } from '@/types/challenge';
 import { useChallenges } from '@/hooks/useChallenges';
 import { Search, Clock, Code, ArrowRight } from 'lucide-react';
 import DifficultyTag from '@/components/ui/DifficultyTag';
+import PremiumBadge from '@/components/PremiumBadge';
 
 interface CommandSearchProps {
   isOpen: boolean;
@@ -260,11 +261,14 @@ export default function CommandSearch({ isOpen, onClose }: CommandSearchProps) {
                           <h3 className="font-semibold text-card-foreground truncate">
                             {challenge.title}
                           </h3>
-                          <DifficultyTag
-                            difficulty={challenge.difficulty}
-                            size="sm"
-                            animated={false}
-                          />
+                          <div className="flex items-center gap-2">
+                            <DifficultyTag
+                              difficulty={challenge.difficulty}
+                              size="sm"
+                              animated={false}
+                            />
+                            <PremiumBadge tier={challenge.tier} size="sm" />
+                          </div>
                         </div>
                         <p className="text-sm text-muted-foreground mb-2 line-clamp-2">
                           {challenge.summary}

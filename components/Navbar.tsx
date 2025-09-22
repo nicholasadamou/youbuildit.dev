@@ -3,6 +3,13 @@
 import Link from 'next/link';
 import { Menu, Zap, Github, Search, Command } from 'lucide-react';
 import {
+  CustomUserButton,
+  CustomSignInButton,
+  CustomSignedIn,
+  CustomSignedOut,
+} from '@/components/auth';
+import { ExploreChallengesButton } from '@/components/ui/ChallengeNavigationButtons';
+import {
   Sheet,
   SheetContent,
   SheetTrigger,
@@ -125,19 +132,37 @@ export default function Navbar() {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5, delay: 0.3 }}
                 >
-                  <Button
-                    asChild
+                  <ExploreChallengesButton
                     variant="default"
                     className="bg-[--brand] hover:bg-[--brand-dark] text-white"
-                  >
-                    <Link
-                      href="/challenges"
-                      className="inline-flex items-center space-x-2"
+                  />
+                </motion.div>
+
+                {/* Authentication */}
+                <motion.div
+                  className="flex items-center h-8"
+                  initial={{ opacity: 0, y: -20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: 0.4 }}
+                >
+                  <CustomSignedOut>
+                    <CustomSignInButton
+                      variant="outline"
+                      className="flex items-center space-x-2 h-8"
+                      mode="modal"
                     >
-                      <span>Explore Challenges</span>
-                      <Zap className="h-4 w-4" />
-                    </Link>
-                  </Button>
+                      Sign In
+                    </CustomSignInButton>
+                  </CustomSignedOut>
+                  <CustomSignedIn>
+                    <div className="flex items-center justify-center h-8">
+                      <CustomUserButton
+                        size="sm"
+                        afterSignOutUrl="/"
+                        className="h-8 w-8"
+                      />
+                    </div>
+                  </CustomSignedIn>
                 </motion.div>
               </div>
               <div className="md:hidden flex items-center space-x-2">
@@ -269,6 +294,41 @@ export default function Navbar() {
                         </motion.div>
                       </div>
                     </nav>
+
+                    {/* Authentication Section */}
+                    <div className="mb-6">
+                      <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-3">
+                        Account
+                      </h3>
+                      <CustomSignedOut>
+                        <SheetClose asChild>
+                          <CustomSignInButton
+                            variant="outline"
+                            className="w-full flex items-center space-x-2"
+                            mode="modal"
+                          >
+                            Sign In
+                          </CustomSignInButton>
+                        </SheetClose>
+                      </CustomSignedOut>
+                      <CustomSignedIn>
+                        <div className="flex items-center space-x-3">
+                          <CustomUserButton
+                            size="md"
+                            afterSignOutUrl="/"
+                            className="h-10 w-10"
+                          />
+                          <div className="flex flex-col">
+                            <span className="text-sm font-medium text-foreground">
+                              Account
+                            </span>
+                            <span className="text-xs text-muted-foreground">
+                              Manage profile & billing
+                            </span>
+                          </div>
+                        </div>
+                      </CustomSignedIn>
+                    </div>
 
                     {/* Footer */}
                     <div className="mt-8 pb-6 border-t border-border pt-6">

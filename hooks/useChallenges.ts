@@ -27,6 +27,8 @@ interface UseChallengesReturn {
   refetch: () => Promise<void>;
   /** Function to get a random challenge from the loaded challenges */
   getRandomChallenge: () => ClientChallenge | null;
+  /** Function to get a random free challenge from the loaded challenges */
+  getRandomFreeChallenge: () => ClientChallenge | null;
 }
 
 /**
@@ -74,6 +76,15 @@ export function useChallenges(
     return challenges[randomIndex];
   };
 
+  const getRandomFreeChallenge = (): ClientChallenge | null => {
+    const freeChallenges = challenges.filter(
+      challenge => challenge.tier === 'free'
+    );
+    if (freeChallenges.length === 0) return null;
+    const randomIndex = Math.floor(Math.random() * freeChallenges.length);
+    return freeChallenges[randomIndex];
+  };
+
   useEffect(() => {
     if (autoLoad) {
       loadChallenges();
@@ -86,5 +97,6 @@ export function useChallenges(
     error,
     refetch: loadChallenges,
     getRandomChallenge,
+    getRandomFreeChallenge,
   };
 }

@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { GitCommit, Github, Shuffle, FileText } from 'lucide-react';
+import { GitCommit, Github, FileText } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 import {
@@ -12,7 +12,7 @@ import {
   TooltipTrigger,
 } from '@/components/ui/tooltip';
 import Logo from '@/components/Logo';
-import RandomChallengeLink from '@/components/RandomChallengeLink';
+import { RandomFreeChallengeLink } from '@/components/ui/ChallengeNavigationButtons';
 
 interface FooterProps {
   bgColor?: string;
@@ -200,12 +200,13 @@ export default function Footer({ bgColor = 'bg-card' }: FooterProps) {
                 </Link>
               </motion.li>
               <motion.li variants={itemVariants}>
-                <RandomChallengeLink
+                <RandomFreeChallengeLink
                   className="text-muted-foreground transition-colors hover:text-card-foreground text-left"
-                  icon={<Shuffle className="w-4 h-4" />}
+                  showIcon={true}
+                  iconPosition="left"
                 >
                   Random Challenge
-                </RandomChallengeLink>
+                </RandomFreeChallengeLink>
               </motion.li>
             </motion.ul>
           </motion.div>

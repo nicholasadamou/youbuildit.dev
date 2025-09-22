@@ -3,6 +3,7 @@ import { ArrowRight, Clock, Code } from 'lucide-react';
 import Link from 'next/link';
 import { motion, type Variants } from 'framer-motion';
 import DifficultyTag from '@/components/ui/DifficultyTag';
+import PremiumBadge from '@/components/PremiumBadge';
 
 // Card animation variants - removed vertical movement and scaling
 const cardVariants: Variants = {
@@ -60,11 +61,14 @@ const ChallengeCard = ({
         >
           {challenge.title}
         </motion.h3>
-        <DifficultyTag
-          difficulty={challenge.difficulty}
-          size="sm"
-          animated={true}
-        />
+        <div className="flex flex-col gap-1 items-end">
+          <DifficultyTag
+            difficulty={challenge.difficulty}
+            size="sm"
+            animated={true}
+          />
+          <PremiumBadge tier={challenge.tier} size="sm" />
+        </div>
       </div>
       <motion.p
         className="text-xs sm:text-sm text-muted-foreground mb-2 line-clamp-2"

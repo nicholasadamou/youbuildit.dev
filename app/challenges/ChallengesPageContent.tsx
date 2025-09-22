@@ -8,7 +8,8 @@ import {
 } from '@/lib/structured-data';
 import { getBaseUrl } from '@/lib/getBaseUrl';
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
+import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import type { ClientChallenge } from '@/types/challenge';
 import { useChallenges } from '@/hooks/useChallenges';
@@ -25,18 +26,49 @@ import {
   Grid,
   List,
   Target,
+  Crown,
 } from 'lucide-react';
 import { FilterDropdown } from '@/components/ui/FilterDropdown';
+import PremiumBadge from '@/components/PremiumBadge';
 
 const difficulties = ['All', 'Beginner', 'Intermediate', 'Advanced'];
 
 export default function ChallengesPageContent() {
   const { challenges: allChallenges, loading } = useChallenges();
+  const searchParams = useSearchParams();
 
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [selectedDifficulty, setSelectedDifficulty] = useState('All');
+  const [showPremiumOnly, setShowPremiumOnly] = useState<
+    'All' | 'Free' | 'Premium'
+  >('All');
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
+
+  // Set initial filters based on URL parameters
+  useEffect(() => {
+    const tierParam = searchParams.get('tier');
+    if (tierParam === 'free') {
+      setShowPremiumOnly('Free');
+    } else if (tierParam === 'premium') {
+      setShowPremiumOnly('Premium');
+    }
+
+    const categoryParam = searchParams.get('category');
+    if (categoryParam && categoryParam !== 'All') {
+      setSelectedCategory(categoryParam);
+    }
+
+    const difficultyParam = searchParams.get('difficulty');
+    if (difficultyParam && difficultyParam !== 'All') {
+      setSelectedDifficulty(difficultyParam);
+    }
+
+    const searchParam = searchParams.get('search');
+    if (searchParam) {
+      setSearchQuery(searchParam);
+    }
+  }, [searchParams]);
 
   // Get unique categories for filtering
   const categories = Array.from(new Set(allChallenges.map(c => c.category)));
@@ -56,10 +88,25 @@ export default function ChallengesPageContent() {
       const matchesDifficulty =
         selectedDifficulty === 'All' ||
         challenge.difficulty === selectedDifficulty;
+      const matchesPremiumFilter =
+        showPremiumOnly === 'All' ||
+        (showPremiumOnly === 'Free' && challenge.tier === 'free') ||
+        (showPremiumOnly === 'Premium' && challenge.tier !== 'free');
 
-      return matchesSearch && matchesCategory && matchesDifficulty;
+      return (
+        matchesSearch &&
+        matchesCategory &&
+        matchesDifficulty &&
+        matchesPremiumFilter
+      );
     });
-  }, [allChallenges, searchQuery, selectedCategory, selectedDifficulty]);
+  }, [
+    allChallenges,
+    searchQuery,
+    selectedCategory,
+    selectedDifficulty,
+    showPremiumOnly,
+  ]);
 
   if (loading) {
     return (
@@ -110,12 +157,19 @@ export default function ChallengesPageContent() {
                 >
                   {challenge.title}
                 </h3>
-                <div className={viewMode === 'list' ? 'ml-4' : ''}>
+                <div
+                  className={`flex ${
+                    viewMode === 'grid'
+                      ? 'flex-col gap-1 items-end'
+                      : 'flex-row gap-2 items-center ml-4'
+                  }`}
+                >
                   <DifficultyTag
                     difficulty={challenge.difficulty}
                     size="sm"
                     animated={false}
                   />
+                  <PremiumBadge tier={challenge.tier} size="sm" />
                 </div>
               </div>
 
@@ -321,6 +375,22 @@ export default function ChallengesPageContent() {
                       }
                     />
                   </motion.div>
+
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ duration: 0.3, delay: 1.0 }}
+                  >
+                    <FilterDropdown
+                      value={showPremiumOnly}
+                      onValueChange={value =>
+                        setShowPremiumOnly(value as 'All' | 'Free' | 'Premium')
+                      }
+                      options={['All', 'Free', 'Premium']}
+                      placeholder="All Content"
+                      icon={<Crown className="h-4 w-4 text-muted-foreground" />}
+                    />
+                  </motion.div>
                 </motion.div>
 
                 {/* View Mode Toggle */}
@@ -423,6 +493,7 @@ export default function ChallengesPageContent() {
                       setSearchQuery('');
                       setSelectedCategory('All');
                       setSelectedDifficulty('All');
+                      setShowPremiumOnly('All');
                     }}
                     className="text-[--brand] hover:underline"
                     initial={{ opacity: 0, y: 10 }}

@@ -1,22 +1,31 @@
+import { clerkMiddleware, createRouteMatcher } from '@clerk/nextjs/server';
 import { NextResponse } from 'next/server';
-import type { NextRequest } from 'next/server';
 
-export function middleware(request: NextRequest) {
+const isProtectedRoute = createRouteMatcher(['/admin(.*)', '/dashboard(.*)']);
+
+export default clerkMiddleware(async (auth, req) => {
   // Block access to og-preview page in production
-  if (request.nextUrl.pathname.startsWith('/og-preview')) {
-    // Check if we're in production environment
+  if (req.nextUrl.pathname.startsWith('/og-preview')) {
     const isProduction = process.env.NODE_ENV === 'production';
-
     if (isProduction) {
-      // Return 404 response in production
       return new NextResponse(null, { status: 404 });
     }
   }
 
-  return NextResponse.next();
-}
+  // Protect admin/dashboard routes
+  if (isProtectedRoute(req)) {
+    const { userId } = await auth();
+    if (!userId) {
+      return NextResponse.redirect(new URL('/sign-in', req.url));
+    }
+  }
+});
 
 export const config = {
-  // Run middleware on og-preview routes
-  matcher: '/og-preview/:path*',
+  matcher: [
+    // Skip Next.js internals and all static files, unless found in search params
+    '/((?!_next|[^?]*\.(?:html?|css|js(?!on)|jpe?g|webp|png|gif|svg|ttf|woff2?|ico|csv|docx?|xlsx?|zip|webmanifest)).*)',
+    // Always run for API routes
+    '/(api|trpc)(.*)',
+  ],
 };
