@@ -279,10 +279,29 @@ function selectDiverseTestimonials(
     return testimonials;
   }
 
-  // Separate testimonials by tier
-  const freeTestimonials = testimonials.filter(t => t.tier === 'free');
+  // Separate testimonials by tier (handle both uppercase and lowercase)
+  const freeTestimonials = testimonials.filter(
+    t => t.tier === 'free' || t.tier === 'FREE'
+  );
   const premiumTestimonials = testimonials.filter(
-    t => t.tier === 'pro' || t.tier === 'team'
+    t =>
+      t.tier === 'pro' ||
+      t.tier === 'PRO' ||
+      t.tier === 'team' ||
+      t.tier === 'TEAM'
+  );
+
+  console.log(
+    'selectDiverseTestimonials - Total testimonials:',
+    testimonials.length
+  );
+  console.log(
+    'selectDiverseTestimonials - Free testimonials:',
+    freeTestimonials.length
+  );
+  console.log(
+    'selectDiverseTestimonials - Premium testimonials:',
+    premiumTestimonials.length
   );
 
   // Calculate ideal distribution (roughly 60% free, 40% premium)
@@ -384,14 +403,23 @@ export default function Testimonials() {
   useEffect(() => {
     if (!loading && !error && challenges.length > 0) {
       console.log('Loaded challenges:', challenges.length);
+      console.log(
+        'Challenge tiers:',
+        challenges.map(c => c.tier)
+      );
       const generatedTestimonials = generateTestimonials(challenges);
       console.log('Generated testimonials:', generatedTestimonials.length);
+      console.log(
+        'Testimonial tiers:',
+        generatedTestimonials.map(t => t.tier)
+      );
 
       // Limit the number of testimonials displayed to 6
       const limitedTestimonials = selectDiverseTestimonials(
         generatedTestimonials,
         6
       );
+      console.log('Limited testimonials:', limitedTestimonials.length);
       setTestimonialData(limitedTestimonials);
     } else if (!loading && (error || challenges.length === 0)) {
       console.error('Error loading challenges or no challenges found:', error);
