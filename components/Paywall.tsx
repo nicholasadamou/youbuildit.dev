@@ -5,6 +5,7 @@ import { useUser } from '@clerk/nextjs';
 import { CustomSignInButton } from '@/components/auth';
 import { Crown, ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { motion, AnimatePresence } from 'framer-motion';
 import {
   Card,
   CardContent,
@@ -13,6 +14,8 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { Switch } from '@/components/ui/switch';
+import { Label } from '@/components/ui/label';
 import PremiumBadge from './PremiumBadge';
 import Footer from '@/components/sections/Footer';
 import { Challenge } from '@/lib/mdx';
@@ -26,8 +29,22 @@ interface PaywallProps {
 export default function Paywall({ challenge }: PaywallProps) {
   const { isSignedIn } = useUser();
   const [isLoading, setIsLoading] = useState(false);
+  const [isYearly, setIsYearly] = useState(false);
 
-  const handleUpgrade = async (priceId: string) => {
+  // Price IDs for Pro tier
+  const STRIPE_PRICE_IDS = {
+    monthly:
+      process.env.NEXT_PUBLIC_STRIPE_PRO_MONTHLY_PRICE_ID ||
+      'price_1S7fQJFOUeuyFeHJ9M2UCk6D',
+    yearly:
+      process.env.NEXT_PUBLIC_STRIPE_PRO_YEARLY_PRICE_ID ||
+      'price_1S7fS7FOUeuyFeHJPY2Fmmqs',
+  };
+
+  const handleUpgrade = async () => {
+    const priceId = isYearly
+      ? STRIPE_PRICE_IDS.yearly
+      : STRIPE_PRICE_IDS.monthly;
     if (!isSignedIn) {
       // Will be handled by SignInButton
       return;
@@ -98,7 +115,31 @@ export default function Paywall({ challenge }: PaywallProps) {
                 </div>
               </div>
 
-              {/* Subscription Plans */}
+              {/* Billing Toggle */}
+              <div className="flex items-center justify-center space-x-3 mb-6">
+                <Label
+                  htmlFor="paywall-billing-toggle-main"
+                  className={!isYearly ? 'font-semibold' : ''}
+                >
+                  Monthly
+                </Label>
+                <Switch
+                  id="paywall-billing-toggle-main"
+                  checked={isYearly}
+                  onCheckedChange={setIsYearly}
+                />
+                <Label
+                  htmlFor="paywall-billing-toggle-main"
+                  className={isYearly ? 'font-semibold' : ''}
+                >
+                  Yearly
+                  <Badge className="ml-2 bg-green-500 text-white">
+                    Save 17%
+                  </Badge>
+                </Label>
+              </div>
+
+              {/* Subscription Plan */}
               <div className="max-w-md mx-auto">
                 {/* Pro Plan */}
                 <Card className="relative ring-2 ring-amber-500/50 border-amber-200 dark:border-amber-800 bg-gradient-to-b from-amber-50/50 to-background dark:from-amber-950/20">
@@ -111,14 +152,33 @@ export default function Paywall({ challenge }: PaywallProps) {
                     <CardTitle className="text-2xl mb-3">
                       Upgrade to Pro
                     </CardTitle>
-                    <div className="space-y-1">
-                      <div className="text-4xl font-bold text-amber-600 dark:text-amber-400">
-                        $9.99
-                      </div>
-                      <div className="text-sm text-muted-foreground">
-                        per month
-                      </div>
-                    </div>
+                    <AnimatePresence mode="wait">
+                      <motion.div
+                        key={`main-pro-price-${isYearly}`}
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -20 }}
+                        transition={{ duration: 0.3 }}
+                        className="space-y-1"
+                      >
+                        <div className="text-4xl font-bold text-amber-600 dark:text-amber-400">
+                          ${isYearly ? '99.99' : '9.99'}
+                        </div>
+                        <div className="text-sm text-muted-foreground">
+                          per {isYearly ? 'year' : 'month'}
+                        </div>
+                        {isYearly && (
+                          <motion.div
+                            className="text-sm text-muted-foreground"
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            transition={{ duration: 0.3, delay: 0.1 }}
+                          >
+                            $8.33/month billed annually
+                          </motion.div>
+                        )}
+                      </motion.div>
+                    </AnimatePresence>
                   </CardHeader>
                   <CardContent className="space-y-6">
                     <div className="text-center">
@@ -147,7 +207,7 @@ export default function Paywall({ challenge }: PaywallProps) {
                     <Button
                       className="w-full bg-amber-600 hover:bg-amber-700 text-white shadow-lg"
                       size="lg"
-                      onClick={() => handleUpgrade('price_pro_monthly')}
+                      onClick={handleUpgrade}
                       disabled={isLoading}
                     >
                       {isLoading ? (
@@ -158,7 +218,8 @@ export default function Paywall({ challenge }: PaywallProps) {
                       ) : (
                         <>
                           <Crown className="w-5 h-5 mr-2" />
-                          Upgrade to Pro - $9.99/mo
+                          Upgrade to Pro - $
+                          {isYearly ? '$99.99/yr' : '$9.99/mo'}
                         </>
                       )}
                     </Button>

@@ -9,7 +9,7 @@ import {
 import { getBaseUrl } from '@/lib/getBaseUrl';
 
 import { useState, useMemo, useEffect } from 'react';
-import { useSearchParams } from 'next/navigation';
+import { useSearchParams, useRouter, usePathname } from 'next/navigation';
 import Link from 'next/link';
 import type { ClientChallenge } from '@/types/challenge';
 import { useChallenges } from '@/hooks/useChallenges';
@@ -36,6 +36,8 @@ const difficulties = ['All', 'Beginner', 'Intermediate', 'Advanced'];
 export default function ChallengesPageContent() {
   const { challenges: allChallenges, loading } = useChallenges();
   const searchParams = useSearchParams();
+  const router = useRouter();
+  const pathname = usePathname();
 
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All');
@@ -56,9 +58,7 @@ export default function ChallengesPageContent() {
     } else if (
       tierParam?.toLowerCase() === 'premium' ||
       tierParam?.toLowerCase() === 'pro' ||
-      tierParam?.toUpperCase() === 'PRO' ||
-      tierParam?.toLowerCase() === 'team' ||
-      tierParam?.toUpperCase() === 'TEAM'
+      tierParam?.toUpperCase() === 'PRO'
     ) {
       setShowPremiumOnly('Premium');
     }
@@ -78,6 +78,23 @@ export default function ChallengesPageContent() {
       setSearchQuery(searchParam);
     }
   }, [searchParams]);
+
+  // Function to update URL parameters
+  const updateUrlParams = (newParams: Record<string, string | null>) => {
+    const current = new URLSearchParams(searchParams.toString());
+
+    Object.entries(newParams).forEach(([key, value]) => {
+      if (value === null || value === 'All' || value === '') {
+        current.delete(key);
+      } else {
+        current.set(key, value);
+      }
+    });
+
+    const search = current.toString();
+    const newUrl = search ? `${pathname}?${search}` : pathname;
+    router.replace(newUrl, { scroll: false });
+  };
 
   // Get unique categories for filtering
   const categories = Array.from(new Set(allChallenges.map(c => c.category)));
@@ -336,7 +353,10 @@ export default function ChallengesPageContent() {
                     type="text"
                     placeholder="Search challenges by title, description, or skills..."
                     value={searchQuery}
-                    onChange={e => setSearchQuery(e.target.value)}
+                    onChange={e => {
+                      setSearchQuery(e.target.value);
+                      updateUrlParams({ search: e.target.value });
+                    }}
                     className="w-full pl-10 pr-4 py-3 border border-input rounded-lg text-foreground bg-background placeholder-muted-foreground focus:ring-2 focus:ring-[--brand] focus:border-transparent"
                   />
                 </motion.div>
@@ -363,7 +383,10 @@ export default function ChallengesPageContent() {
                   >
                     <FilterDropdown
                       value={selectedCategory}
-                      onValueChange={setSelectedCategory}
+                      onValueChange={value => {
+                        setSelectedCategory(value);
+                        updateUrlParams({ category: value });
+                      }}
                       options={['All', ...categories]}
                       placeholder="All Categories"
                       icon={
@@ -379,7 +402,10 @@ export default function ChallengesPageContent() {
                   >
                     <FilterDropdown
                       value={selectedDifficulty}
-                      onValueChange={setSelectedDifficulty}
+                      onValueChange={value => {
+                        setSelectedDifficulty(value);
+                        updateUrlParams({ difficulty: value });
+                      }}
                       options={difficulties}
                       placeholder="All Difficulties"
                       icon={
@@ -395,9 +421,14 @@ export default function ChallengesPageContent() {
                   >
                     <FilterDropdown
                       value={showPremiumOnly}
-                      onValueChange={value =>
-                        setShowPremiumOnly(value as 'All' | 'Free' | 'Premium')
-                      }
+                      onValueChange={value => {
+                        const newValue = value as 'All' | 'Free' | 'Premium';
+                        setShowPremiumOnly(newValue);
+                        updateUrlParams({
+                          tier:
+                            newValue === 'All' ? null : newValue.toLowerCase(),
+                        });
+                      }}
                       options={['All', 'Free', 'Premium']}
                       placeholder="All Content"
                       icon={<Crown className="h-4 w-4 text-muted-foreground" />}
@@ -506,6 +537,12 @@ export default function ChallengesPageContent() {
                       setSelectedCategory('All');
                       setSelectedDifficulty('All');
                       setShowPremiumOnly('All');
+                      updateUrlParams({
+                        search: null,
+                        category: null,
+                        difficulty: null,
+                        tier: null,
+                      });
                     }}
                     className="text-[--brand] hover:underline"
                     initial={{ opacity: 0, y: 10 }}
