@@ -4,7 +4,7 @@ import { useUser } from '@clerk/nextjs';
 import { useState, useEffect } from 'react';
 
 export interface Subscription {
-  tier: 'FREE' | 'PRO' | 'TEAM';
+  tier: 'FREE' | 'PRO';
   status:
     | 'ACTIVE'
     | 'CANCELED'

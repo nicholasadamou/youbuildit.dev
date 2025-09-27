@@ -19,7 +19,6 @@ import {
   AlertCircle,
   Check,
   Crown,
-  Users,
 } from 'lucide-react';
 import { getSubscriptionBenefits } from '@/lib/subscription';
 
@@ -71,7 +70,7 @@ export function SubscriptionManager({
     }
   };
 
-  const handleUpgrade = async (tier: 'PRO' | 'TEAM') => {
+  const handleUpgrade = async (tier: 'PRO') => {
     if (!user) return;
 
     setIsLoadingUpgrade(true);
@@ -101,8 +100,6 @@ export function SubscriptionManager({
     switch (tier) {
       case 'PRO':
         return <Crown className="h-4 w-4" />;
-      case 'TEAM':
-        return <Users className="h-4 w-4" />;
       default:
         return <Check className="h-4 w-4" />;
     }
@@ -112,8 +109,6 @@ export function SubscriptionManager({
     switch (tier) {
       case 'PRO':
         return 'bg-amber-100 text-amber-900 border border-amber-300 dark:bg-amber-500/20 dark:text-amber-300 dark:border-amber-500/30 hover:bg-amber-100 dark:hover:bg-amber-500/20 pointer-events-none';
-      case 'TEAM':
-        return 'bg-purple-100 text-purple-900 border border-purple-300 dark:bg-purple-500/20 dark:text-purple-300 dark:border-purple-500/30 hover:bg-purple-100 dark:hover:bg-purple-500/20 pointer-events-none';
       default:
         return 'bg-green-100 text-green-900 border border-green-300 dark:bg-green-500/20 dark:text-green-300 dark:border-green-500/30 hover:bg-green-100 dark:hover:bg-green-500/20 pointer-events-none';
     }
@@ -302,62 +297,32 @@ export function SubscriptionManager({
           {/* Actions */}
           <div className="space-y-3">
             {subscription.tier === 'FREE' ? (
-              <>
-                <Button
-                  onClick={() => handleUpgrade('PRO')}
-                  className="w-full bg-[#37d388] hover:bg-[#2aa86b] text-white font-medium"
-                  disabled={isLoadingUpgrade}
-                >
-                  {isLoadingUpgrade && (
-                    <Loader2 className="h-4 w-4 animate-spin mr-2" />
-                  )}
-                  <Crown className="h-4 w-4 mr-2" />
-                  Upgrade to Pro
-                </Button>
-                <Button
-                  onClick={() => handleUpgrade('TEAM')}
-                  variant="outline"
-                  className="w-full border-[#37d388] text-[#37d388] hover:bg-[#37d388]/10 font-medium"
-                  disabled={isLoadingUpgrade}
-                >
-                  {isLoadingUpgrade && (
-                    <Loader2 className="h-4 w-4 animate-spin mr-2" />
-                  )}
-                  <Users className="h-4 w-4 mr-2" />
-                  Upgrade to Team
-                </Button>
-              </>
+              <Button
+                onClick={() => handleUpgrade('PRO')}
+                className="w-full bg-[#37d388] hover:bg-[#2aa86b] text-white font-medium"
+                disabled={isLoadingUpgrade}
+              >
+                {isLoadingUpgrade && (
+                  <Loader2 className="h-4 w-4 animate-spin mr-2" />
+                )}
+                <Crown className="h-4 w-4 mr-2" />
+                Upgrade to Pro
+              </Button>
             ) : (
-              <>
-                {subscription.tier === 'PRO' && (
-                  <Button
-                    onClick={() => handleUpgrade('TEAM')}
-                    className="w-full bg-[#37d388] hover:bg-[#2aa86b] text-white font-medium"
-                    disabled={isLoadingUpgrade}
-                  >
-                    {isLoadingUpgrade && (
-                      <Loader2 className="h-4 w-4 animate-spin mr-2" />
-                    )}
-                    <Users className="h-4 w-4 mr-2" />
-                    Upgrade to Team
-                  </Button>
-                )}
-
-                {subscription.stripeCustomerId && (
-                  <Button
-                    onClick={handleManageBilling}
-                    variant="outline"
-                    className="w-full font-medium"
-                    disabled={isLoadingPortal}
-                  >
-                    {isLoadingPortal && (
-                      <Loader2 className="h-4 w-4 animate-spin mr-2" />
-                    )}
-                    <CreditCard className="h-4 w-4 mr-2" />
-                    Manage Billing
-                  </Button>
-                )}
-              </>
+              subscription.stripeCustomerId && (
+                <Button
+                  onClick={handleManageBilling}
+                  variant="outline"
+                  className="w-full font-medium"
+                  disabled={isLoadingPortal}
+                >
+                  {isLoadingPortal && (
+                    <Loader2 className="h-4 w-4 animate-spin mr-2" />
+                  )}
+                  <CreditCard className="h-4 w-4 mr-2" />
+                  Manage Billing
+                </Button>
+              )
             )}
           </div>
         </div>

@@ -1,12 +1,12 @@
 'use client';
 
-import { Crown, Users, Lock } from 'lucide-react';
+import { Crown, Lock } from 'lucide-react';
 import { useTheme } from 'next-themes';
 import { useEffect, useState } from 'react';
 import { cn } from '@/lib/utils';
 
 interface PremiumBadgeProps {
-  tier: 'free' | 'pro' | 'team' | 'FREE' | 'PRO' | 'TEAM';
+  tier: 'free' | 'pro' | 'FREE' | 'PRO';
   className?: string;
   size?: 'sm' | 'md' | 'lg';
 }
@@ -24,7 +24,7 @@ export default function PremiumBadge({
   }, []);
 
   // Normalize tier to lowercase for comparison
-  const normalizedTier = tier.toLowerCase() as 'free' | 'pro' | 'team';
+  const normalizedTier = tier.toLowerCase() as 'free' | 'pro';
 
   if (normalizedTier === 'free') {
     return null; // Don't show badge for free challenges
@@ -49,11 +49,6 @@ export default function PremiumBadge({
         color: '#78350f', // amber-900
         borderColor: '#fcd34d', // amber-300
       },
-      team: {
-        backgroundColor: '#ede9fe', // purple-100
-        color: '#581c87', // purple-900
-        borderColor: '#c4b5fd', // purple-300
-      },
       premium: {
         backgroundColor: '#f3f4f6', // gray-100
         color: '#111827', // gray-900
@@ -67,11 +62,6 @@ export default function PremiumBadge({
         color: '#fcd34d', // amber-300
         borderColor: '#92400e', // amber-800
       },
-      team: {
-        backgroundColor: 'rgba(88, 28, 135, 0.2)', // purple-900/20
-        color: '#c4b5fd', // purple-300
-        borderColor: '#6b21a8', // purple-800
-      },
       premium: {
         backgroundColor: '#1e293b', // slate-800
         color: '#cbd5e1', // slate-300
@@ -80,8 +70,7 @@ export default function PremiumBadge({
     };
 
     const styles = isDark ? darkStyles : lightStyles;
-    const tierKey =
-      tier === 'pro' ? 'pro' : tier === 'team' ? 'team' : 'premium';
+    const tierKey = tier === 'pro' ? 'pro' : 'premium';
     const style = styles[tierKey];
 
     switch (tier) {
@@ -89,12 +78,6 @@ export default function PremiumBadge({
         return {
           icon: Crown,
           label: 'Pro',
-          style,
-        };
-      case 'team':
-        return {
-          icon: Users,
-          label: 'Team',
           style,
         };
       default:

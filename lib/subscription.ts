@@ -1,7 +1,7 @@
 import { Challenge } from './mdx';
 
-export type SubscriptionTier = 'FREE' | 'PRO' | 'TEAM';
-export type ChallengeTier = 'FREE' | 'PRO' | 'TEAM' | 'free' | 'pro' | 'team'; // Support both formats
+export type SubscriptionTier = 'FREE' | 'PRO';
+export type ChallengeTier = 'FREE' | 'PRO' | 'free' | 'pro'; // Support both formats
 
 export interface UserSubscription {
   subscriptionTier: SubscriptionTier;
@@ -10,8 +10,13 @@ export interface UserSubscription {
 }
 
 // Helper to normalize tier values
-function normalizeTier(tier: string): 'FREE' | 'PRO' | 'TEAM' {
-  return tier.toUpperCase() as 'FREE' | 'PRO' | 'TEAM';
+function normalizeTier(tier: string): 'FREE' | 'PRO' {
+  const normalized = tier.toUpperCase();
+  // Convert legacy TEAM tier to PRO
+  if (normalized === 'TEAM') {
+    return 'PRO';
+  }
+  return normalized as 'FREE' | 'PRO';
 }
 
 export function hasAccessToChallenge(
@@ -35,15 +40,7 @@ export function hasAccessToChallenge(
   }
 
   // Pro tier has access to pro challenges
-  if (
-    challengeTier === 'PRO' &&
-    (subscriptionTier === 'PRO' || subscriptionTier === 'TEAM')
-  ) {
-    return true;
-  }
-
-  // Team tier has access to team challenges
-  if (challengeTier === 'TEAM' && subscriptionTier === 'TEAM') {
+  if (challengeTier === 'PRO' && subscriptionTier === 'PRO') {
     return true;
   }
 
@@ -53,26 +50,12 @@ export function hasAccessToChallenge(
 export function getSubscriptionBenefits(tier: SubscriptionTier): string[] {
   switch (tier) {
     case 'FREE':
-      return [
-        'Access to 20+ beginner challenges',
-        'Community support',
-        'Basic progress tracking',
-      ];
+      return ['Access to 20+ beginner challenges', 'Community support'];
     case 'PRO':
       return [
         'Access to all challenges (50+)',
         'Premium challenges with detailed solutions',
         'Priority support',
-        'Advanced progress analytics',
-        'Challenge completion certificates',
-      ];
-    case 'TEAM':
-      return [
-        'Everything in Pro',
-        'Team dashboard and progress tracking',
-        'Custom challenge requests',
-        'Enterprise support',
-        'White-label options',
       ];
     default:
       return [];
@@ -88,8 +71,6 @@ export function getRequiredTierForChallenge(
       return 'FREE';
     case 'PRO':
       return 'PRO';
-    case 'TEAM':
-      return 'TEAM';
     default:
       return 'FREE';
   }
@@ -118,8 +99,6 @@ export function getUpgradeMessage(challenge: Challenge): string {
   switch (requiredTier) {
     case 'PRO':
       return 'Upgrade to Pro to access this premium challenge with detailed solutions and explanations.';
-    case 'TEAM':
-      return 'Upgrade to Team to access this exclusive team challenge and unlock advanced features.';
     default:
       return 'This challenge is available with your current subscription.';
   }

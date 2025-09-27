@@ -14,7 +14,7 @@ export interface Challenge {
   skills: string[];
   estimatedTime: string;
   content: string;
-  tier: 'FREE' | 'PRO' | 'TEAM';
+  tier: 'FREE' | 'PRO';
   premium?: boolean; // Backward compatibility
   source: 'file' | 'database'; // Track where content comes from
 }
