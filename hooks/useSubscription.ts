@@ -25,7 +25,7 @@ export function useSubscription() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    async function fetchSubscription() {
+    async function fetchSubscriptionWithRetry(retries = 3) {
       if (!isLoaded) return;
 
       if (!user) {
@@ -38,27 +38,62 @@ export function useSubscription() {
         return;
       }
 
-      try {
-        const response = await fetch('/api/subscriptions/status');
-        if (!response.ok) {
-          throw new Error('Failed to fetch subscription');
-        }
+      for (let attempt = 1; attempt <= retries; attempt++) {
+        try {
+          const response = await fetch('/api/subscriptions/status');
 
-        const subscriptionData = await response.json();
-        setSubscription(subscriptionData);
-      } catch (err) {
-        setError(err instanceof Error ? err.message : 'Unknown error');
-        // Fallback to free subscription on error
-        setSubscription({
-          tier: 'FREE',
-          status: 'FREE',
-        });
-      } finally {
-        setIsLoading(false);
+          if (!response.ok) {
+            throw new Error(
+              `Failed to fetch subscription (${response.status})`
+            );
+          }
+
+          const subscriptionData = await response.json();
+
+          // Check if the API returned a graceful error (database issues)
+          if (subscriptionData.error) {
+            console.warn('Subscription API warning:', subscriptionData.error);
+            setError(
+              'Temporarily showing free tier access due to server issues'
+            );
+          } else {
+            setError(null); // Clear any previous errors
+          }
+
+          setSubscription(subscriptionData);
+          setIsLoading(false);
+          return; // Success, exit retry loop
+        } catch (err) {
+          const errorMessage =
+            err instanceof Error ? err.message : 'Unknown error';
+          console.error(
+            `Subscription fetch error (attempt ${attempt}/${retries}):`,
+            errorMessage
+          );
+
+          // If this is the last attempt, handle the error
+          if (attempt === retries) {
+            setError(
+              `Unable to load subscription status after ${retries} attempts: ${errorMessage}`
+            );
+
+            // Fallback to free subscription on error
+            setSubscription({
+              tier: 'FREE',
+              status: 'FREE',
+            });
+            setIsLoading(false);
+          } else {
+            // Wait before retrying (exponential backoff)
+            await new Promise(resolve =>
+              setTimeout(resolve, Math.pow(2, attempt - 1) * 1000)
+            );
+          }
+        }
       }
     }
 
-    fetchSubscription();
+    fetchSubscriptionWithRetry();
   }, [isLoaded, user]);
 
   // Helper to check if user has an active subscription

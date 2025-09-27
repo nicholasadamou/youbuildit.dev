@@ -8,6 +8,7 @@ import PricingSection from '@/components/sections/PricingSection';
 import CallToAction from '@/components/sections/CallToAction';
 import Footer from '@/components/sections/Footer';
 import StructuredData from '@/components/StructuredData';
+import { SubscriptionStatusBanner } from '@/components/SubscriptionStatusBanner';
 import { useSubscription } from '@/hooks/useSubscription';
 import {
   generateWebsiteSchema,
@@ -19,7 +20,7 @@ import {
 import React from 'react';
 
 export default function Home() {
-  const { hasActiveSubscription, isLoading } = useSubscription();
+  const { hasActiveSubscription, isLoading, error } = useSubscription();
 
   // Generate structured data for the homepage
   const structuredData = combineSchemas([
@@ -33,6 +34,12 @@ export default function Home() {
     <>
       <StructuredData data={structuredData} />
       <HeroSection />
+
+      {/* Show subscription status banner if there are service issues */}
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+        {error && <SubscriptionStatusBanner error={error} />}
+      </div>
+
       <Features />
       <TrustedCompanies />
       <Testimonials />
