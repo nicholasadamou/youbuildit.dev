@@ -255,19 +255,21 @@ export default function ChallengePageContent({
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.4, delay: 1.4 }}
             >
+              {process.env.NEXT_PUBLIC_CODE_REPO_URL && (
+                <motion.a
+                  href={process.env.NEXT_PUBLIC_CODE_REPO_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center justify-center gap-2 px-6 py-2 bg-white text-[--brand] font-medium rounded-md hover:bg-gray-100 transition-colors"
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  <Github className="w-4 h-4" />
+                  View Examples
+                </motion.a>
+              )}
               <motion.a
-                href="https://github.com/youbuildit/challenges"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center justify-center gap-2 px-6 py-2 bg-white text-[--brand] font-medium rounded-md hover:bg-gray-100 transition-colors"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                <Github className="w-4 h-4" />
-                View on GitHub
-              </motion.a>
-              <motion.a
-                href={`https://github.com/youbuildit/challenges/issues/new?template=challenge-feedback.md&title=Feedback: ${encodeURIComponent(challenge.title)}`}
+                href={`${process.env.NEXT_PUBLIC_FEEDBACK_REPO_URL || 'https://github.com/youbuildit/youbuildit-feedback'}/issues/new?title=Feedback: ${encodeURIComponent(challenge.title)}&body=${encodeURIComponent(`**Challenge:** ${challenge.title}\n**Category:** ${challenge.category}\n**Difficulty:** ${challenge.difficulty}\n\n## Feedback\n\n<!-- Please share your feedback about this challenge -->\n\n## Suggestions\n\n<!-- Any suggestions for improvement? -->`)}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center justify-center gap-2 px-6 py-2 border border-green-200 text-white font-medium rounded-md hover:bg-green-600 transition-colors"
@@ -285,8 +287,8 @@ export default function ChallengePageContent({
               transition={{ duration: 0.4, delay: 1.5 }}
             >
               <p className="text-sm text-green-100">
-                💡 <strong>Tip:</strong> Fork the challenges repository to track
-                your progress and share your solutions with the community!
+                💡 <strong>Tip:</strong> Share your feedback and discuss
+                solutions with the community using the feedback link above!
               </p>
             </motion.div>
           </motion.div>
