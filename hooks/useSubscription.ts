@@ -53,9 +53,20 @@ export function useSubscription() {
           // Check if the API returned a graceful error (database issues)
           if (subscriptionData.error) {
             console.warn('Subscription API warning:', subscriptionData.error);
-            setError(
-              'Temporarily showing free tier access due to server issues'
-            );
+            // Only show error message if this is a service/database connectivity issue
+            // Don't show error for legitimate FREE tier users
+            if (
+              subscriptionData.error.includes(
+                'Database temporarily unavailable'
+              ) ||
+              subscriptionData.error.includes('Service temporarily unavailable')
+            ) {
+              setError(
+                'Temporarily showing free tier access due to server issues'
+              );
+            } else {
+              setError(null); // Clear any previous errors for legitimate users
+            }
           } else {
             setError(null); // Clear any previous errors
           }

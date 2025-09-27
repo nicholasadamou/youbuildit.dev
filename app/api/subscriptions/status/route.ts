@@ -22,18 +22,39 @@ export async function GET() {
     }
 
     // Get user subscription from database
-    const user = await prisma.user.findUnique({
-      where: { id: userId },
-      select: {
-        subscriptionTier: true,
-        subscriptionStatus: true,
-        stripeCurrentPeriodEnd: true,
-        stripeCustomerId: true,
-        stripeSubscriptionId: true,
-      },
-    });
+    let user;
+    try {
+      user = await prisma.user.findUnique({
+        where: { id: userId },
+        select: {
+          subscriptionTier: true,
+          subscriptionStatus: true,
+          stripeCurrentPeriodEnd: true,
+          stripeCustomerId: true,
+          stripeSubscriptionId: true,
+        },
+      });
+    } catch (dbError) {
+      console.error(
+        'Database connectivity error in subscription status:',
+        dbError
+      );
+      // This is a database connectivity issue - return error response
+      const errorResponse = NextResponse.json({
+        tier: 'FREE',
+        status: 'FREE',
+        error: 'Database temporarily unavailable, showing free tier access',
+      });
+      errorResponse.headers.set(
+        'Cache-Control',
+        'no-cache, no-store, must-revalidate'
+      );
+      return errorResponse;
+    }
 
     if (!user) {
+      // User is authenticated but not in our database yet (new user)
+      // This is normal and should not show any error messages
       const response = NextResponse.json({
         tier: 'FREE',
         status: 'FREE',
@@ -58,14 +79,14 @@ export async function GET() {
     response.headers.set('Cache-Control', 'public, max-age=300, s-maxage=300');
     return response;
   } catch (error) {
-    console.error('Error fetching subscription status:', error);
+    console.error('Unexpected error in subscription status endpoint:', error);
 
-    // Instead of returning 500, gracefully fallback to FREE tier
-    // This ensures the frontend can still function even if database is unavailable
+    // Handle unexpected errors (auth failures, etc.)
+    // Still fallback gracefully but with different error message
     const errorResponse = NextResponse.json({
       tier: 'FREE',
       status: 'FREE',
-      error: 'Database temporarily unavailable, showing free tier access',
+      error: 'Service temporarily unavailable, showing free tier access',
     });
 
     // Don't cache error responses
