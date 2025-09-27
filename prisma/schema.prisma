@@ -86,11 +86,18 @@ model Challenge {
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
 
+  // Solution fields
+  hasSolution   Boolean  @default(false)
+  solutionLanguage String?  // e.g., 'python', 'javascript'
+
   // Relations
   progress ChallengeProgress[]
+  solutions ChallengeSolution[]
+  solutionMetadata SolutionMetadata?
 
   @@index([tier, published])
   @@index([category, difficulty])
+  @@index([hasSolution])
 }
 
 // Challenge progress tracking
@@ -106,6 +113,38 @@ model ChallengeProgress {
   challenge Challenge @relation(fields: [challengeId], references: [id], onDelete: Cascade)
 
   @@unique([userId, challengeId])
+}
+
+// Solution files for challenges
+model ChallengeSolution {
+  id          String   @id @default(cuid())
+  challengeId String
+  fileName    String   // e.g., 'wc.py', 'test_wc.py', 'requirements.txt'
+  filePath    String   // e.g., 'src/wc.py', 'tests/test_wc.py'
+  fileContent String   @db.Text
+  fileType    SolutionFileType
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  challenge Challenge @relation(fields: [challengeId], references: [id], onDelete: Cascade)
+
+  @@unique([challengeId, filePath])
+  @@index([challengeId, fileType])
+}
+
+// Metadata about solutions
+model SolutionMetadata {
+  id                  String   @id @default(cuid())
+  challengeId         String   @unique
+  testCoverage        Float?   // e.g., 95.5
+  linesOfCode         Int?     // total lines in source files
+  keyFeatures         String[] // e.g., ['CLI', 'Error Handling', 'Type Hints']
+  implementationNotes String?  @db.Text
+  performanceNotes    String?  @db.Text
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  challenge Challenge @relation(fields: [challengeId], references: [id], onDelete: Cascade)
 }
 
 // Enums
@@ -129,4 +168,12 @@ enum Difficulty {
   BEGINNER
   INTERMEDIATE
   ADVANCED
+}
+
+enum SolutionFileType {
+  SOURCE     // Main implementation files (e.g., wc.py)
+  TEST       // Test files (e.g., test_wc.py)
+  CONFIG     // Configuration files (e.g., requirements.txt, setup.py)
+  README     // Documentation files (e.g., README.md)
+  FIXTURE    // Test data files (e.g., test-file.txt)
 }

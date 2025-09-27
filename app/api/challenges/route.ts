@@ -1,15 +1,31 @@
 import { NextResponse } from 'next/server';
 import { auth } from '@clerk/nextjs/server';
-import { getAllChallenges } from '@/lib/mdx';
 import { hasAccessToChallenge } from '@/lib/subscription';
-import { PrismaClient } from '@prisma/client';
-
-const prisma = new PrismaClient();
+import { prisma } from '@/lib/prisma';
 
 export async function GET() {
   try {
     const { userId } = await auth();
-    const challenges = await getAllChallenges();
+
+    // Fetch challenges from database
+    const challenges = await prisma.challenge.findMany({
+      where: { published: true },
+      select: {
+        slug: true,
+        title: true,
+        summary: true,
+        difficulty: true,
+        category: true,
+        skills: true,
+        estimatedTime: true,
+        tier: true,
+        hasSolution: true,
+        solutionLanguage: true,
+      },
+      orderBy: {
+        createdAt: 'desc',
+      },
+    });
 
     // Get user subscription status if authenticated
     let userSubscription = null;
@@ -30,23 +46,41 @@ export async function GET() {
       }
     }
 
+    // Helper function to convert difficulty to proper case
+    const formatDifficulty = (difficulty: string) => {
+      return (
+        difficulty.charAt(0).toUpperCase() + difficulty.slice(1).toLowerCase()
+      );
+    };
+
     // Return challenge data with access information
     const enrichedChallenges = challenges.map(challenge => {
       const hasAccess = userSubscription
-        ? hasAccessToChallenge(userSubscription, challenge)
+        ? hasAccessToChallenge(userSubscription, {
+            ...challenge,
+            content: '',
+            source: 'database' as const,
+            difficulty: formatDifficulty(challenge.difficulty) as
+              | 'Beginner'
+              | 'Intermediate'
+              | 'Advanced',
+            solutionLanguage: challenge.solutionLanguage || undefined,
+          })
         : challenge.tier === 'FREE';
 
       return {
         slug: challenge.slug,
         title: challenge.title,
         summary: challenge.summary,
-        difficulty: challenge.difficulty,
+        difficulty: formatDifficulty(challenge.difficulty),
         category: challenge.category,
         skills: challenge.skills,
         estimatedTime: challenge.estimatedTime,
         tier: challenge.tier,
         hasAccess,
-        premium: challenge.premium, // Legacy support
+        hasSolution: challenge.hasSolution,
+        solutionLanguage: challenge.solutionLanguage,
+        premium: challenge.tier === 'PRO', // Legacy support
       };
     });
 

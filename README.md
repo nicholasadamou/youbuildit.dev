@@ -145,6 +145,7 @@ The application uses environment variables for configuration. Copy `.env.example
 | `PRISMA_DATABASE_URL`                | Database connection string               | Yes      | -       |
 | `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY`  | Clerk publishable key for authentication | Yes      | -       |
 | `CLERK_SECRET_KEY`                   | Clerk secret key for server-side auth    | Yes      | -       |
+| `CLERK_WEBHOOK_SECRET`               | Clerk webhook secret for user sync       | Yes      | -       |
 | `STRIPE_SECRET_KEY`                  | Stripe secret key for payments           | Yes      | -       |
 | `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` | Stripe publishable key for client        | Yes      | -       |
 | `STRIPE_WEBHOOK_SECRET`              | Stripe webhook secret for verification   | Yes      | -       |
@@ -196,9 +197,47 @@ pnpm db:migrate
    - Copy the publishable key and secret key
 
 2. **Add to your `.env` file:**
+
    ```bash
    NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=pk_test_your_clerk_publishable_key
    CLERK_SECRET_KEY=sk_test_your_clerk_secret_key
+   ```
+
+3. **Set up Clerk Webhooks:**
+
+   Clerk webhooks are required to sync user data between Clerk and your database.
+
+   **For Local Development:**
+
+   Since Clerk needs to reach your local server, you'll need to use a tunneling service:
+
+   ```bash
+   # Install ngrok if you haven't already
+   brew install ngrok
+
+   # Sign up and get your authtoken from https://dashboard.ngrok.com/get-started/your-authtoken
+   ngrok config add-authtoken YOUR_AUTHTOKEN
+
+   # Start your development server
+   pnpm dev
+
+   # In another terminal, expose your local server
+   ngrok http 3000
+   ```
+
+   Copy the `https://` URL from ngrok (e.g., `https://abc123.ngrok.io`)
+
+   **Configure Webhook in Clerk Dashboard:**
+   1. Go to [Clerk Dashboard](https://dashboard.clerk.com/) → Configure → Webhooks
+   2. Click "Add Endpoint"
+   3. Set Endpoint URL to: `https://YOUR_NGROK_URL.ngrok.io/api/webhooks/clerk`
+   4. Subscribe to events: `user.created`, `user.updated`, `user.deleted`
+   5. Copy the signing secret from the webhook details
+
+   **Add webhook secret to your `.env` file:**
+
+   ```bash
+   CLERK_WEBHOOK_SECRET=whsec_your_webhook_signing_secret
    ```
 
 #### 3. Stripe Payment Setup
@@ -242,6 +281,7 @@ PRISMA_DATABASE_URL="file:./prisma/dev.db"
 # Authentication
 NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=pk_test_your_clerk_key
 CLERK_SECRET_KEY=sk_test_your_clerk_secret
+CLERK_WEBHOOK_SECRET=whsec_your_webhook_secret
 
 # Payments
 STRIPE_SECRET_KEY=sk_test_your_stripe_key
@@ -274,6 +314,7 @@ GITHUB_TOKEN=ghp_your_github_token
 - `GET /api/user/subscription` - Get current user subscription status
 - `POST /api/subscriptions/checkout` - Create Stripe checkout session
 - `POST /api/subscriptions/portal` - Access Stripe customer portal
+- `POST /api/webhooks/clerk` - Handle Clerk webhook events (user sync)
 - `POST /api/webhooks/stripe` - Handle Stripe webhook events
 - `POST /api/commit` - Track challenge completion and progress
 

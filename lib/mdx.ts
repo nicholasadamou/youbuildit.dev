@@ -1,6 +1,4 @@
-import { PrismaClient } from '@prisma/client';
-
-const prisma = new PrismaClient();
+import { prisma } from './prisma';
 
 // Helper to check if we're on the server
 const isServer = typeof window === 'undefined';
@@ -17,6 +15,8 @@ export interface Challenge {
   tier: 'FREE' | 'PRO';
   premium?: boolean; // Backward compatibility
   source: 'file' | 'database'; // Track where content comes from
+  hasSolution?: boolean; // Whether this challenge has a solution available
+  solutionLanguage?: string; // Programming language of the solution
 }
 
 export async function getAllChallenges(): Promise<Challenge[]> {
@@ -49,6 +49,8 @@ export async function getAllChallenges(): Promise<Challenge[]> {
     content: dbChallenge.content,
     tier: dbChallenge.tier,
     source: 'database' as const,
+    hasSolution: dbChallenge.hasSolution,
+    solutionLanguage: dbChallenge.solutionLanguage || undefined,
   }));
 }
 
@@ -86,6 +88,8 @@ export async function getChallengeBySlug(
         content: dbChallenge.content,
         tier: dbChallenge.tier,
         source: 'database' as const,
+        hasSolution: dbChallenge.hasSolution,
+        solutionLanguage: dbChallenge.solutionLanguage || undefined,
       };
     }
 
