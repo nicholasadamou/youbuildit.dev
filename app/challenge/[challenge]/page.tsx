@@ -15,7 +15,7 @@ interface ChallengePageProps {
 }
 
 export async function generateStaticParams() {
-  const slugs = getChallengesSlugs();
+  const slugs = await getChallengesSlugs();
   return slugs.map(slug => ({
     challenge: slug,
   }));

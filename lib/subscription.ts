@@ -1,7 +1,7 @@
 import { Challenge } from './mdx';
 
 export type SubscriptionTier = 'FREE' | 'PRO' | 'TEAM';
-export type ChallengeTier = 'free' | 'pro' | 'team';
+export type ChallengeTier = 'FREE' | 'PRO' | 'TEAM' | 'free' | 'pro' | 'team'; // Support both formats
 
 export interface UserSubscription {
   subscriptionTier: SubscriptionTier;
@@ -9,14 +9,20 @@ export interface UserSubscription {
   stripeCurrentPeriodEnd?: Date | null;
 }
 
+// Helper to normalize tier values
+function normalizeTier(tier: string): 'FREE' | 'PRO' | 'TEAM' {
+  return tier.toUpperCase() as 'FREE' | 'PRO' | 'TEAM';
+}
+
 export function hasAccessToChallenge(
   userSubscription: UserSubscription,
   challenge: Challenge
 ): boolean {
   const { subscriptionTier, subscriptionStatus } = userSubscription;
+  const challengeTier = normalizeTier(challenge.tier);
 
   // Everyone has access to free challenges
-  if (challenge.tier === 'free') {
+  if (challengeTier === 'FREE') {
     return true;
   }
 
@@ -30,14 +36,14 @@ export function hasAccessToChallenge(
 
   // Pro tier has access to pro challenges
   if (
-    challenge.tier === 'pro' &&
+    challengeTier === 'PRO' &&
     (subscriptionTier === 'PRO' || subscriptionTier === 'TEAM')
   ) {
     return true;
   }
 
   // Team tier has access to team challenges
-  if (challenge.tier === 'team' && subscriptionTier === 'TEAM') {
+  if (challengeTier === 'TEAM' && subscriptionTier === 'TEAM') {
     return true;
   }
 
@@ -76,12 +82,13 @@ export function getSubscriptionBenefits(tier: SubscriptionTier): string[] {
 export function getRequiredTierForChallenge(
   challenge: Challenge
 ): SubscriptionTier {
-  switch (challenge.tier) {
-    case 'free':
+  const challengeTier = normalizeTier(challenge.tier);
+  switch (challengeTier) {
+    case 'FREE':
       return 'FREE';
-    case 'pro':
+    case 'PRO':
       return 'PRO';
-    case 'team':
+    case 'TEAM':
       return 'TEAM';
     default:
       return 'FREE';

@@ -70,6 +70,29 @@ model VerificationToken {
   @@unique([identifier, token])
 }
 
+// Challenges stored in database (premium content)
+model Challenge {
+  id            String   @id @default(cuid())
+  slug          String   @unique
+  title         String
+  summary       String
+  difficulty    Difficulty
+  category      String
+  skills        String[] // Array of skills
+  estimatedTime String
+  content       String   @db.Text // Full MDX content
+  tier          SubscriptionTier @default(FREE)
+  published     Boolean  @default(true)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  // Relations
+  progress ChallengeProgress[]
+
+  @@index([tier, published])
+  @@index([category, difficulty])
+}
+
 // Challenge progress tracking
 model ChallengeProgress {
   id          String   @id @default(cuid())
@@ -79,7 +102,8 @@ model ChallengeProgress {
   startedAt   DateTime @default(now())
   completedAt DateTime?
 
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  challenge Challenge @relation(fields: [challengeId], references: [id], onDelete: Cascade)
 
   @@unique([userId, challengeId])
 }
@@ -100,4 +124,10 @@ enum SubscriptionTier {
   FREE
   PRO
   TEAM
+}
+
+enum Difficulty {
+  BEGINNER
+  INTERMEDIATE
+  ADVANCED
 }

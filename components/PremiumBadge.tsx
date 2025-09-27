@@ -6,7 +6,7 @@ import { useEffect, useState } from 'react';
 import { cn } from '@/lib/utils';
 
 interface PremiumBadgeProps {
-  tier: 'free' | 'pro' | 'team';
+  tier: 'free' | 'pro' | 'team' | 'FREE' | 'PRO' | 'TEAM';
   className?: string;
   size?: 'sm' | 'md' | 'lg';
 }
@@ -23,7 +23,10 @@ export default function PremiumBadge({
     setMounted(true);
   }, []);
 
-  if (tier === 'free') {
+  // Normalize tier to lowercase for comparison
+  const normalizedTier = tier.toLowerCase() as 'free' | 'pro' | 'team';
+
+  if (normalizedTier === 'free') {
     return null; // Don't show badge for free challenges
   }
 
@@ -120,7 +123,7 @@ export default function PremiumBadge({
   }
 
   const isDark = resolvedTheme === 'dark';
-  const config = getConfig(tier, isDark);
+  const config = getConfig(normalizedTier, isDark);
   const Icon = config.icon;
 
   return (

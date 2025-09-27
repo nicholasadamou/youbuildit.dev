@@ -38,17 +38,17 @@ export default function ChallengePageContent({
         },
         challenge
       )
-    : challenge.tier === 'free';
+    : challenge.tier === 'FREE';
 
   // Determine if content should be blurred for paywall
   const shouldBlurContent =
-    !isSubscriptionLoading && !hasAccess && challenge.tier !== 'free';
+    !isSubscriptionLoading && !hasAccess && challenge.tier !== 'FREE';
 
   // Handle escape key to navigate away from paywall
   const handleEscapeKey = useCallback(
     (event: KeyboardEvent) => {
       if (event.key === 'Escape' && shouldBlurContent) {
-        router.push('/challenges?tier=free'); // Navigate to challenges page with free filter on escape
+        router.push('/challenges?tier=FREE'); // Navigate to challenges page with free filter on escape
       }
     },
     [shouldBlurContent, router]

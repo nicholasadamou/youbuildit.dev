@@ -24,7 +24,7 @@ type TestimonialType = {
   rating: number;
   challenge: string;
   challenge_link: string;
-  tier: 'free' | 'pro' | 'team';
+  tier: 'free' | 'pro' | 'team' | 'FREE' | 'PRO' | 'TEAM';
   style?: string;
   industry?: string;
 };

@@ -78,7 +78,7 @@ export function useChallenges(
 
   const getRandomFreeChallenge = (): ClientChallenge | null => {
     const freeChallenges = challenges.filter(
-      challenge => challenge.tier === 'free'
+      challenge => challenge.tier.toUpperCase() === 'FREE'
     );
     if (freeChallenges.length === 0) return null;
     const randomIndex = Math.floor(Math.random() * freeChallenges.length);

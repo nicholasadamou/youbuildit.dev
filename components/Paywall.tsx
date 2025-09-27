@@ -68,8 +68,8 @@ export default function Paywall({ challenge }: PaywallProps) {
     }
   };
 
-  const isPro = challenge.tier === 'pro';
-  const isTeam = challenge.tier === 'team';
+  const isPro = challenge.tier.toUpperCase() === 'PRO';
+  const isTeam = challenge.tier.toUpperCase() === 'TEAM';
 
   return (
     <div className="min-h-screen bg-background">

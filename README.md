@@ -17,12 +17,15 @@ You Build It is an interactive coding challenges platform designed to help devel
 ### Key Features
 
 - 🔍 **Interactive Challenge Browser** - Browse challenges by difficulty, category, and required skills
-- 📚 **Rich Content Experience** - Challenges written in MDX with syntax highlighting and interactive elements
+- 📚 **Rich Content Experience** - Challenges stored in database with MDX content and syntax highlighting
 - 🎨 **Modern UI/UX** - Beautiful, responsive design with smooth animations
 - 🌙 **Dark Mode Support** - Seamless light/dark theme switching for comfortable coding sessions
 - 🔧 **Real-World Projects** - Build actual tools like Docker, grep, JSON parsers, web servers, and more
 - 📊 **Skill Tracking** - Track the technologies and concepts you learn
 - 🚀 **Progressive Difficulty** - From beginner-friendly to advanced challenges
+- 🔐 **User Authentication** - Secure authentication powered by Clerk
+- 💳 **Subscription Management** - Tiered access (FREE/PRO/TEAM) with Stripe integration
+- 📖 **Database-Driven Content** - Scalable challenge management with PostgreSQL
 
 ## 🚀 Quick Start
 
@@ -31,6 +34,7 @@ You Build It is an interactive coding challenges platform designed to help devel
 - **Node.js** 18.0 or higher
 - **pnpm** 9.0 or higher (package manager)
 - **Git** for version control
+- **PostgreSQL** (for production) or SQLite (for development)
 
 ### Installation
 
@@ -86,8 +90,9 @@ You Build It is an interactive coding challenges platform designed to help devel
 │   ├── mdx/              # MDX-specific components
 │   ├── sections/         # Page sections (Hero, Features, etc.)
 │   └── ui/               # Base UI components
-├── content/              # Challenge content (MDX files)
-│   └── challenges/       # Individual challenge files
+├── prisma/               # Database schema and migrations
+│   ├── schema.prisma     # Database schema definition
+│   └── migrations/       # Database migration files
 ├── lib/                  # Utility functions and configuration
 ├── public/               # Static assets
 ├── styles/               # Global styles and CSS
@@ -102,16 +107,18 @@ You Build It is an interactive coding challenges platform designed to help devel
 - **[TypeScript](https://www.typescriptlang.org/)** - Type-safe JavaScript
 - **[React 19.1.1](https://react.dev/)** - UI library
 - **[Tailwind CSS](https://tailwindcss.com/)** - Utility-first CSS framework
+- **[PostgreSQL](https://www.postgresql.org/)** - Primary database for production
+- **[Prisma](https://www.prisma.io/)** - Type-safe database client and ORM
 
 ### Key Libraries
 
 - **[Framer Motion](https://www.framer.com/motion/)** - Animations and transitions
 - **[shadcn/ui](https://ui.shadcn.com/)** - Copy-paste React components built on Radix UI
 - **[Radix UI](https://www.radix-ui.com/)** - Headless UI primitives
-- **[MDX](https://mdxjs.com/)** - Markdown with React components
-- **[React Markdown](https://github.com/remarkjs/react-markdown)** - Markdown rendering
+- **[Clerk](https://clerk.com/)** - User authentication and management
+- **[Stripe](https://stripe.com/)** - Payment processing and subscription management
+- **[React Markdown](https://github.com/remarkjs/react-markdown)** - Markdown rendering for challenge content
 - **[React Syntax Highlighter](https://github.com/react-syntax-highlighter/react-syntax-highlighter)** - Code syntax highlighting
-- **[Gray Matter](https://github.com/jonschlinkert/gray-matter)** - Front matter parsing
 - **[Lucide React](https://lucide.dev/)** - Icon library
 - **[Heroicons](https://heroicons.com/)** - Additional icon set
 - **[Axios](https://axios-http.com/)** - HTTP client for API requests
@@ -133,18 +140,87 @@ The application uses environment variables for configuration. Copy `.env.example
 
 ### Required Variables
 
-| Variable       | Description                                          | Required   | Default |
-| -------------- | ---------------------------------------------------- | ---------- | ------- |
-| `GITHUB_TOKEN` | GitHub personal access token for commit tracking API | Optional\* | -       |
+| Variable                             | Description                              | Required | Default |
+| ------------------------------------ | ---------------------------------------- | -------- | ------- |
+| `PRISMA_DATABASE_URL`                | Database connection string               | Yes      | -       |
+| `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY`  | Clerk publishable key for authentication | Yes      | -       |
+| `CLERK_SECRET_KEY`                   | Clerk secret key for server-side auth    | Yes      | -       |
+| `STRIPE_SECRET_KEY`                  | Stripe secret key for payments           | Yes      | -       |
+| `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` | Stripe publishable key for client        | Yes      | -       |
+| `STRIPE_WEBHOOK_SECRET`              | Stripe webhook secret for verification   | Yes      | -       |
+
+### Stripe Price IDs (Required for Subscriptions)
+
+| Variable                       | Description                      | Required | Default |
+| ------------------------------ | -------------------------------- | -------- | ------- |
+| `STRIPE_PRO_MONTHLY_PRICE_ID`  | Stripe price ID for Pro monthly  | Yes      | -       |
+| `STRIPE_PRO_YEARLY_PRICE_ID`   | Stripe price ID for Pro yearly   | Yes      | -       |
+| `STRIPE_TEAM_MONTHLY_PRICE_ID` | Stripe price ID for Team monthly | Yes      | -       |
+| `STRIPE_TEAM_YEARLY_PRICE_ID`  | Stripe price ID for Team yearly  | Yes      | -       |
 
 ### Optional Variables
 
-| Variable               | Description                  | Required | Default       |
-| ---------------------- | ---------------------------- | -------- | ------------- |
-| `NODE_ENV`             | Node environment             | No       | `development` |
-| `NEXT_PUBLIC_BASE_URL` | Base URL for the application | No       | Auto-detected |
+| Variable               | Description                          | Required | Default       |
+| ---------------------- | ------------------------------------ | -------- | ------------- |
+| `GITHUB_TOKEN`         | GitHub token for commit tracking API | No       | -             |
+| `NODE_ENV`             | Node environment                     | No       | `development` |
+| `NEXT_PUBLIC_BASE_URL` | Base URL for the application         | No       | Auto-detected |
 
-### Setting up GitHub Token
+### Setting up Authentication & Payments
+
+#### 1. Database Setup
+
+For **development** (SQLite):
+
+```bash
+# Use the default SQLite setup from .env.example
+PRISMA_DATABASE_URL="file:./prisma/dev.db"
+
+# Push the schema to create the database
+pnpm db:push
+```
+
+For **production** (PostgreSQL):
+
+```bash
+# Set up PostgreSQL connection string
+PRISMA_DATABASE_URL="postgresql://user:password@localhost:5432/youbuildit"
+
+# Run migrations
+pnpm db:migrate
+```
+
+#### 2. Clerk Authentication Setup
+
+1. **Create a Clerk application:**
+   - Go to [Clerk Dashboard](https://dashboard.clerk.com/)
+   - Create a new application
+   - Copy the publishable key and secret key
+
+2. **Add to your `.env` file:**
+   ```bash
+   NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=pk_test_your_clerk_publishable_key
+   CLERK_SECRET_KEY=sk_test_your_clerk_secret_key
+   ```
+
+#### 3. Stripe Payment Setup
+
+1. **Create a Stripe account:**
+   - Go to [Stripe Dashboard](https://dashboard.stripe.com/)
+   - Get your API keys from the Developers section
+   - Create products and prices for PRO/TEAM tiers
+   - Set up webhooks endpoint: `/api/webhooks/stripe`
+
+2. **Add to your `.env` file:**
+   ```bash
+   STRIPE_SECRET_KEY=sk_test_your_stripe_secret_key
+   NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=pk_test_your_stripe_publishable_key
+   STRIPE_WEBHOOK_SECRET=whsec_your_webhook_secret
+   STRIPE_PRO_MONTHLY_PRICE_ID=price_your_pro_monthly_price_id
+   # ... other price IDs
+   ```
+
+#### 4. GitHub Token (Optional)
 
 1. **Create a GitHub Personal Access Token:**
    - Go to [GitHub Settings > Developer settings > Personal access tokens](https://github.com/settings/tokens)
@@ -157,28 +233,52 @@ The application uses environment variables for configuration. Copy `.env.example
    GITHUB_TOKEN=ghp_your_token_here
    ```
 
-**Note:** The GitHub token is optional for local development but required for the commit tracking feature to work properly.
-
 ### Environment File Structure
 
 ```bash
 # .env
-GITHUB_TOKEN=your_github_personal_access_token_here
-NODE_ENV=development
+
+# Database
+PRISMA_DATABASE_URL="file:./prisma/dev.db"
+
+# Authentication
+NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=pk_test_your_clerk_key
+CLERK_SECRET_KEY=sk_test_your_clerk_secret
+
+# Payments
+STRIPE_SECRET_KEY=sk_test_your_stripe_key
+NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=pk_test_your_stripe_key
+STRIPE_WEBHOOK_SECRET=whsec_your_webhook_secret
+
+# Stripe Price IDs
+STRIPE_PRO_MONTHLY_PRICE_ID=price_your_pro_monthly_id
+STRIPE_PRO_YEARLY_PRICE_ID=price_your_pro_yearly_id
+STRIPE_TEAM_MONTHLY_PRICE_ID=price_your_team_monthly_id
+STRIPE_TEAM_YEARLY_PRICE_ID=price_your_team_yearly_id
+
+# Optional
+GITHUB_TOKEN=ghp_your_github_token
 ```
 
 ## ⚡ Features & Architecture
 
 ### Challenge System
 
-- **Dynamic Challenge Loading**: Challenges are dynamically loaded from MDX files in the `content/challenges/` directory
+- **Database-Driven Content**: Challenges are stored in PostgreSQL with full metadata and MDX content
+- **Tiered Access**: FREE challenges available to all, PRO/TEAM challenges require subscription
 - **Rich Metadata**: Each challenge includes difficulty, category, skills, estimated time, and more
-- **Interactive Content**: MDX allows for interactive code examples and embedded components
+- **Paywall Integration**: Non-subscribers see premium challenges with subscription prompts
 - **Search & Filtering**: Advanced filtering by difficulty, category, and skills
+- **Progress Tracking**: User challenge completion tracked in database
 
 ### API Endpoints
 
-- `GET /api/challenges` - Fetch all available challenges with metadata
+- `GET /api/challenges` - Fetch all challenges with access control and metadata
+- `GET /api/challenges/random` - Get random challenge (with tier filtering)
+- `GET /api/user/subscription` - Get current user subscription status
+- `POST /api/subscriptions/checkout` - Create Stripe checkout session
+- `POST /api/subscriptions/portal` - Access Stripe customer portal
+- `POST /api/webhooks/stripe` - Handle Stripe webhook events
 - `POST /api/commit` - Track challenge completion and progress
 
 ### UI Components
@@ -188,18 +288,31 @@ NODE_ENV=development
 - **Accessibility**: Built with semantic HTML and ARIA attributes
 - **Dark Mode Support**: Full dark mode implementation with automatic system preference detection and manual toggle
 
+### Subscription Tiers
+
+The platform offers three subscription tiers with different access levels:
+
+- **FREE Tier**: Access to 14+ basic challenges covering fundamental concepts
+- **PRO Tier**: Access to all FREE challenges plus 17+ advanced challenges and premium features
+- **TEAM Tier**: Everything in PRO plus team management and collaboration features
+
+All challenges are visible to users, but premium challenges show a subscription prompt for non-subscribers. This allows users to browse all content while maintaining a clear upgrade path.
+
 ### Content Management
 
-- **MDX Integration**: Challenges written in MDX for rich, interactive content
+- **Database Storage**: Challenge content stored in PostgreSQL with full-text search capabilities
+- **MDX Rendering**: Challenge content rendered from database-stored MDX with React components
+- **Subscription Control**: Content access controlled by user subscription tier
 - **Syntax Highlighting**: Automatic syntax highlighting for code blocks
-- **Table of Contents**: Auto-generated TOC for long-form content
-- **Reading Time**: Estimated reading time calculation
+- **Admin Interface**: Database-driven content management for scalable challenge creation
 
 ## 📜 Available Scripts
 
 - `pnpm dev` - Start development server
 - `pnpm build` - Build for production
 - `pnpm start` - Start production server
+- `pnpm db:push` - Push schema changes to database (development)
+- `pnpm db:migrate` - Deploy database migrations (production)
 - `pnpm lint` - Run ESLint
 - `pnpm lint:fix` - Run ESLint with auto-fix
 - `pnpm format` - Format code with Prettier
@@ -266,11 +379,12 @@ pnpm build
 - Clear `.next` cache: `rm -rf .next`
 - Restart development server: `pnpm dev`
 
-**MDX content not loading:**
+**Challenges not loading:**
 
-- Check file paths in `content/challenges/`
-- Verify MDX frontmatter format
-- Check for syntax errors in MDX files
+- Check database connection: `PRISMA_DATABASE_URL`
+- Verify database schema is up to date: `pnpm db:push` or `pnpm db:migrate`
+- Check authentication setup (Clerk keys)
+- Verify challenge data exists in database
 
 ### Getting Help
 
@@ -306,11 +420,11 @@ We welcome contributions! Here's how you can help:
 
 ### For Challenge Content
 
-Challenges are managed in a separate repository:
+Challenges are now managed through the database system:
 
-- **Repository**: [youbuildit/challenges](https://github.com/youbuildit/challenges)
-- **Content Issues**: Report typos, errors, or improvements
-- **New Challenges**: Submit new challenge ideas or implementations
+- **Challenge Issues**: Report typos, errors, or improvements in challenge content
+- **New Challenges**: Submit new challenge ideas through GitHub issues
+- **Content Management**: Challenge content is stored in PostgreSQL for better scalability
 
 ### Development Guidelines
 

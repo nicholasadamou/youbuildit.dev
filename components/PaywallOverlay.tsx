@@ -72,8 +72,8 @@ export default function PaywallOverlay({
     }
   };
 
-  const isPro = challenge.tier === 'pro';
-  const isTeam = challenge.tier === 'team';
+  const isPro = challenge.tier.toUpperCase() === 'PRO';
+  const isTeam = challenge.tier.toUpperCase() === 'TEAM';
 
   const handleGoHome = () => {
     router.push('/');

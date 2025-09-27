@@ -1,8 +1,6 @@
-import fs from 'fs';
-import path from 'path';
-import matter from 'gray-matter';
+import { PrismaClient } from '@prisma/client';
 
-const contentDirectory = path.join(process.cwd(), 'content');
+const prisma = new PrismaClient();
 
 // Helper to check if we're on the server
 const isServer = typeof window === 'undefined';
@@ -16,8 +14,9 @@ export interface Challenge {
   skills: string[];
   estimatedTime: string;
   content: string;
-  tier: 'free' | 'pro' | 'team';
+  tier: 'FREE' | 'PRO' | 'TEAM';
   premium?: boolean; // Backward compatibility
+  source: 'file' | 'database'; // Track where content comes from
 }
 
 export async function getAllChallenges(): Promise<Challenge[]> {
@@ -25,25 +24,35 @@ export async function getAllChallenges(): Promise<Challenge[]> {
     throw new Error('getAllChallenges can only be called on the server');
   }
 
-  const challengesDirectory = path.join(contentDirectory, 'challenges');
+  // Get ALL published challenges from database (paywall handled in frontend)
+  const dbChallenges = await prisma.challenge.findMany({
+    where: {
+      published: true,
+    },
+    orderBy: { createdAt: 'desc' },
+  });
 
-  if (!fs.existsSync(challengesDirectory)) {
-    return [];
-  }
-
-  const fileNames = fs.readdirSync(challengesDirectory);
-  const challenges = await Promise.all(
-    fileNames
-      .filter(name => name.endsWith('.mdx'))
-      .map(async fileName => {
-        const slug = fileName.replace(/\.mdx$/, '');
-        return await getChallengeBySlug(slug);
-      })
-  );
-
-  return challenges.filter(Boolean) as Challenge[];
+  // Convert database challenges to Challenge interface
+  return dbChallenges.map(dbChallenge => ({
+    slug: dbChallenge.slug,
+    title: dbChallenge.title,
+    summary: dbChallenge.summary,
+    difficulty: dbChallenge.difficulty
+      .toLowerCase()
+      .replace(/^\w/, c => c.toUpperCase()) as
+      | 'Beginner'
+      | 'Intermediate'
+      | 'Advanced',
+    category: dbChallenge.category,
+    skills: dbChallenge.skills,
+    estimatedTime: dbChallenge.estimatedTime,
+    content: dbChallenge.content,
+    tier: dbChallenge.tier,
+    source: 'database' as const,
+  }));
 }
 
+// Get challenge from database
 export async function getChallengeBySlug(
   slug: string
 ): Promise<Challenge | null> {
@@ -52,62 +61,60 @@ export async function getChallengeBySlug(
   }
 
   try {
-    const challengesDirectory = path.join(contentDirectory, 'challenges');
-    const fullPath = path.join(challengesDirectory, `${slug}.mdx`);
+    // Get ANY published challenge by slug (paywall handled in frontend)
+    const dbChallenge = await prisma.challenge.findFirst({
+      where: {
+        slug,
+        published: true,
+      },
+    });
 
-    if (!fs.existsSync(fullPath)) {
-      return null;
+    if (dbChallenge) {
+      return {
+        slug: dbChallenge.slug,
+        title: dbChallenge.title,
+        summary: dbChallenge.summary,
+        difficulty: dbChallenge.difficulty
+          .toLowerCase()
+          .replace(/^\w/, c => c.toUpperCase()) as
+          | 'Beginner'
+          | 'Intermediate'
+          | 'Advanced',
+        category: dbChallenge.category,
+        skills: dbChallenge.skills,
+        estimatedTime: dbChallenge.estimatedTime,
+        content: dbChallenge.content,
+        tier: dbChallenge.tier,
+        source: 'database' as const,
+      };
     }
 
-    const fileContents = fs.readFileSync(fullPath, 'utf8');
-    const { data, content } = matter(fileContents);
-
-    // Validate required fields
-    if (
-      !data.title ||
-      !data.summary ||
-      !data.difficulty ||
-      !data.category ||
-      !data.skills ||
-      !data.estimatedTime
-    ) {
-      console.warn(`Invalid frontmatter in ${slug}.mdx`);
-      return null;
-    }
-
-    return {
-      slug,
-      title: data.title,
-      summary: data.summary,
-      difficulty: data.difficulty,
-      category: data.category,
-      skills: Array.isArray(data.skills) ? data.skills : [],
-      estimatedTime: data.estimatedTime,
-      content,
-      tier: data.tier || (data.premium ? 'pro' : 'free'), // Support both new tier and legacy premium
-      premium: data.premium,
-    };
+    return null;
   } catch (error) {
-    console.error(`Error reading challenge ${slug}:`, error);
+    console.error(`Error reading challenge from database ${slug}:`, error);
     return null;
   }
 }
 
-export function getChallengesSlugs(): string[] {
+export async function getChallengesSlugs(): Promise<string[]> {
   if (!isServer) {
     throw new Error('getChallengesSlugs can only be called on the server');
   }
 
-  const challengesDirectory = path.join(contentDirectory, 'challenges');
+  try {
+    // Get ALL published challenge slugs (paywall handled in frontend)
+    const dbChallenges = await prisma.challenge.findMany({
+      where: {
+        published: true,
+      },
+      select: { slug: true },
+    });
 
-  if (!fs.existsSync(challengesDirectory)) {
+    return dbChallenges.map(challenge => challenge.slug);
+  } catch (error) {
+    console.error('Error getting challenges from database:', error);
     return [];
   }
-
-  return fs
-    .readdirSync(challengesDirectory)
-    .filter(name => name.endsWith('.mdx'))
-    .map(name => name.replace(/\.mdx$/, ''));
 }
 
 export async function getRelatedChallenges(

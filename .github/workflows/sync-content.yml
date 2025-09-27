@@ -1,0 +1,32 @@
+name: Trigger Rebuild
+
+# This workflow can be triggered when content is updated
+# to force a rebuild of the static pages with new database content
+on:
+  # Manual trigger
+  workflow_dispatch:
+
+  # Trigger from external webhook (when challenges are pushed to database)
+  repository_dispatch:
+    types: [content-updated]
+
+jobs:
+  trigger-rebuild:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Trigger Vercel Rebuild
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            console.log('Triggering Vercel rebuild after content update...');
+
+            // Option 1: Create an empty commit to trigger rebuild
+            await github.rest.repos.createDispatchEvent({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              event_type: 'rebuild-request'
+            });
+
+            console.log('Rebuild triggered successfully!');

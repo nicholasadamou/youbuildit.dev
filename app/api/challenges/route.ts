@@ -34,7 +34,7 @@ export async function GET() {
     const enrichedChallenges = challenges.map(challenge => {
       const hasAccess = userSubscription
         ? hasAccessToChallenge(userSubscription, challenge)
-        : challenge.tier === 'free';
+        : challenge.tier === 'FREE';
 
       return {
         slug: challenge.slug,
