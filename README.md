@@ -24,7 +24,7 @@ You Build It is an interactive coding challenges platform designed to help devel
 - 📊 **Skill Tracking** - Track the technologies and concepts you learn
 - 🚀 **Progressive Difficulty** - From beginner-friendly to advanced challenges
 - 🔐 **User Authentication** - Secure authentication powered by Clerk
-- 💳 **Subscription Management** - Tiered access (FREE/PRO/TEAM) with Stripe integration
+- 💳 **Subscription Management** - Tiered access (FREE/PRO) with Stripe integration
 - 📖 **Database-Driven Content** - Scalable challenge management with PostgreSQL
 
 ## 🚀 Quick Start
@@ -151,12 +151,10 @@ The application uses environment variables for configuration. Copy `.env.example
 
 ### Stripe Price IDs (Required for Subscriptions)
 
-| Variable                       | Description                      | Required | Default |
-| ------------------------------ | -------------------------------- | -------- | ------- |
-| `STRIPE_PRO_MONTHLY_PRICE_ID`  | Stripe price ID for Pro monthly  | Yes      | -       |
-| `STRIPE_PRO_YEARLY_PRICE_ID`   | Stripe price ID for Pro yearly   | Yes      | -       |
-| `STRIPE_TEAM_MONTHLY_PRICE_ID` | Stripe price ID for Team monthly | Yes      | -       |
-| `STRIPE_TEAM_YEARLY_PRICE_ID`  | Stripe price ID for Team yearly  | Yes      | -       |
+| Variable                      | Description                     | Required | Default |
+| ----------------------------- | ------------------------------- | -------- | ------- |
+| `STRIPE_PRO_MONTHLY_PRICE_ID` | Stripe price ID for Pro monthly | Yes      | -       |
+| `STRIPE_PRO_YEARLY_PRICE_ID`  | Stripe price ID for Pro yearly  | Yes      | -       |
 
 ### Optional Variables
 
@@ -208,7 +206,7 @@ pnpm db:migrate
 1. **Create a Stripe account:**
    - Go to [Stripe Dashboard](https://dashboard.stripe.com/)
    - Get your API keys from the Developers section
-   - Create products and prices for PRO/TEAM tiers
+   - Create products and prices for PRO tier
    - Set up webhooks endpoint: `/api/webhooks/stripe`
 
 2. **Add to your `.env` file:**
@@ -253,8 +251,6 @@ STRIPE_WEBHOOK_SECRET=whsec_your_webhook_secret
 # Stripe Price IDs
 STRIPE_PRO_MONTHLY_PRICE_ID=price_your_pro_monthly_id
 STRIPE_PRO_YEARLY_PRICE_ID=price_your_pro_yearly_id
-STRIPE_TEAM_MONTHLY_PRICE_ID=price_your_team_monthly_id
-STRIPE_TEAM_YEARLY_PRICE_ID=price_your_team_yearly_id
 
 # Optional
 GITHUB_TOKEN=ghp_your_github_token
@@ -265,7 +261,7 @@ GITHUB_TOKEN=ghp_your_github_token
 ### Challenge System
 
 - **Database-Driven Content**: Challenges are stored in PostgreSQL with full metadata and MDX content
-- **Tiered Access**: FREE challenges available to all, PRO/TEAM challenges require subscription
+- **Tiered Access**: FREE challenges available to all, PRO challenges require subscription
 - **Rich Metadata**: Each challenge includes difficulty, category, skills, estimated time, and more
 - **Paywall Integration**: Non-subscribers see premium challenges with subscription prompts
 - **Search & Filtering**: Advanced filtering by difficulty, category, and skills
@@ -290,11 +286,10 @@ GITHUB_TOKEN=ghp_your_github_token
 
 ### Subscription Tiers
 
-The platform offers three subscription tiers with different access levels:
+The platform offers two subscription tiers with different access levels:
 
 - **FREE Tier**: Access to 14+ basic challenges covering fundamental concepts
 - **PRO Tier**: Access to all FREE challenges plus 17+ advanced challenges and premium features
-- **TEAM Tier**: Everything in PRO plus team management and collaboration features
 
 All challenges are visible to users, but premium challenges show a subscription prompt for non-subscribers. This allows users to browse all content while maintaining a clear upgrade path.
 

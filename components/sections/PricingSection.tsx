@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { useUser } from '@clerk/nextjs';
 import { CustomSignInButton } from '@/components/auth';
 import { useRouter } from 'next/navigation';
-import { Crown, Users, Check, ArrowRight, Star, Zap } from 'lucide-react';
+import { Crown, Check, ArrowRight, Star, Zap } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -27,14 +27,6 @@ const STRIPE_PRICE_IDS = {
     yearly:
       process.env.NEXT_PUBLIC_STRIPE_PRO_YEARLY_PRICE_ID ||
       'price_1S7fS7FOUeuyFeHJPY2Fmmqs',
-  },
-  team: {
-    monthly:
-      process.env.NEXT_PUBLIC_STRIPE_TEAM_MONTHLY_PRICE_ID ||
-      'price_1S7fQdFOUeuyFeHJwBC9222W',
-    yearly:
-      process.env.NEXT_PUBLIC_STRIPE_TEAM_YEARLY_PRICE_ID ||
-      'price_1S7fRpFOUeuyFeHJ9mBmKvGs',
   },
 };
 
@@ -103,41 +95,22 @@ export default function PricingSection() {
     },
     {
       name: 'Pro',
-      description: 'For serious developers',
+      description: 'Unlock premium challenges',
       price: { monthly: 9.99, yearly: 99.99 },
       icon: Crown,
       color: 'text-amber-500',
       bgColor: 'bg-amber-500',
       features: [
         'Access to all 50+ challenges',
-        'Premium challenges with detailed solutions',
-        'Step-by-step explanations',
-        'Advanced progress analytics',
+        'Premium challenges',
+        'Detailed solutions & explanations',
+        'Priority support',
       ],
       cta: 'Upgrade to Pro',
       popular: true,
       priceId: {
         monthly: STRIPE_PRICE_IDS.pro.monthly,
         yearly: STRIPE_PRICE_IDS.pro.yearly,
-      },
-    },
-    {
-      name: 'Team',
-      description: 'For teams and organizations',
-      price: { monthly: 29.99, yearly: 299.99 },
-      icon: Users,
-      color: 'text-purple-500',
-      bgColor: 'bg-purple-500',
-      features: [
-        'Everything in Pro',
-        'Team dashboard and progress tracking',
-        'Advanced analytics and reporting',
-      ],
-      cta: 'Upgrade to Team',
-      popular: false,
-      priceId: {
-        monthly: STRIPE_PRICE_IDS.team.monthly,
-        yearly: STRIPE_PRICE_IDS.team.yearly,
       },
     },
   ];
@@ -203,7 +176,7 @@ export default function PricingSection() {
         </motion.div>
 
         {/* Pricing Cards */}
-        <div className="flex flex-col md:flex-row gap-6 max-w-6xl mx-auto items-end justify-center md:py-4 mt-2">
+        <div className="flex flex-col md:flex-row gap-6 max-w-4xl mx-auto items-stretch justify-center md:py-4 mt-2">
           {plans.map((plan, index) => {
             const Icon = plan.icon;
             const currentPrice = isYearly
@@ -218,11 +191,7 @@ export default function PricingSection() {
             return (
               <motion.div
                 key={plan.name}
-                className={`relative flex-1 max-w-sm ${
-                  plan.popular
-                    ? 'md:-mt-12 md:scale-110' // Elevate and slightly scale the popular plan
-                    : 'md:mt-12' // Lower the side plans
-                }`}
+                className="relative flex-1 max-w-sm"
                 initial={{ opacity: 0, y: 30, scale: 0.9 }}
                 whileInView={{ opacity: 1, y: 0, scale: 1 }}
                 transition={{

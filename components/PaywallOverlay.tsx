@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { useUser } from '@clerk/nextjs';
 import { CustomSignInButton } from '@/components/auth';
-import { Crown, Users, ArrowRight, Star, X, Home, List } from 'lucide-react';
+import { Crown, ArrowRight, X, Home, List } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import {
@@ -71,9 +71,6 @@ export default function PaywallOverlay({
       setIsLoading(false);
     }
   };
-
-  const isPro = challenge.tier.toUpperCase() === 'PRO';
-  const isTeam = challenge.tier.toUpperCase() === 'TEAM';
 
   const handleGoHome = () => {
     router.push('/');
@@ -156,7 +153,7 @@ export default function PaywallOverlay({
 
           {/* Subscription Plans - Compact Version */}
           <motion.div
-            className="grid md:grid-cols-2 gap-3"
+            className="max-w-md mx-auto"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.5, duration: 0.4 }}
@@ -172,41 +169,40 @@ export default function PaywallOverlay({
                 transition: { duration: 0.2 },
               }}
             >
-              <Card
-                className={`relative ${isPro ? 'ring-2 ring-amber-500' : ''}`}
-              >
-                {isPro && (
-                  <div className="absolute -top-2 left-1/2 transform -translate-x-1/2">
-                    <Badge className="bg-amber-500 text-white text-xs">
-                      <Star className="w-3 h-3 mr-1" />
-                      Recommended
-                    </Badge>
-                  </div>
-                )}
+              <Card className="relative ring-2 ring-amber-500/50 border-amber-200 dark:border-amber-800 bg-gradient-to-b from-amber-50/50 to-background dark:from-amber-950/20">
                 <CardHeader className="text-center pb-3">
-                  <div className="flex items-center justify-center gap-2">
-                    <Crown className="w-4 h-4 text-amber-500" />
-                    <CardTitle className="text-lg">Pro</CardTitle>
+                  <div className="flex items-center justify-center gap-2 mb-2">
+                    <div className="p-2 bg-amber-100 dark:bg-amber-900/30 rounded-full">
+                      <Crown className="w-5 h-5 text-amber-600 dark:text-amber-400" />
+                    </div>
                   </div>
+                  <CardTitle className="text-xl mb-2">Upgrade to Pro</CardTitle>
                   <div>
-                    <div className="text-2xl font-bold">$9.99</div>
-                    <div className="text-xs text-muted-foreground">
+                    <div className="text-3xl font-bold text-amber-600 dark:text-amber-400">
+                      $9.99
+                    </div>
+                    <div className="text-sm text-muted-foreground">
                       per month
                     </div>
                   </div>
                 </CardHeader>
-                <CardContent className="space-y-3 pt-0">
-                  <ul className="space-y-1 text-xs">
+                <CardContent className="space-y-4 pt-0">
+                  <div className="text-center mb-4">
+                    <p className="text-sm text-muted-foreground">
+                      Unlock this premium challenge and get access to:
+                    </p>
+                  </div>
+                  <ul className="space-y-2 text-sm">
                     <li className="flex items-center gap-2">
-                      <ArrowRight className="w-3 h-3 text-green-500 flex-shrink-0" />
+                      <ArrowRight className="w-4 h-4 text-green-500 flex-shrink-0" />
                       Access to all 50+ challenges
                     </li>
                     <li className="flex items-center gap-2">
-                      <ArrowRight className="w-3 h-3 text-green-500 flex-shrink-0" />
-                      Detailed solutions
+                      <ArrowRight className="w-4 h-4 text-green-500 flex-shrink-0" />
+                      Detailed solutions & explanations
                     </li>
                     <li className="flex items-center gap-2">
-                      <ArrowRight className="w-3 h-3 text-green-500 flex-shrink-0" />
+                      <ArrowRight className="w-4 h-4 text-green-500 flex-shrink-0" />
                       Priority support
                     </li>
                   </ul>
@@ -215,79 +211,30 @@ export default function PaywallOverlay({
                     whileTap={{ scale: 0.95 }}
                   >
                     <Button
-                      className="w-full"
-                      size="sm"
+                      className="w-full bg-amber-600 hover:bg-amber-700 text-white shadow-lg"
+                      size="lg"
                       onClick={() => handleUpgrade('price_pro_monthly')}
                       disabled={isLoading}
                     >
-                      {isLoading ? 'Loading...' : 'Upgrade to Pro'}
-                    </Button>
-                  </motion.div>
-                </CardContent>
-              </Card>
-            </motion.div>
-
-            {/* Team Plan */}
-            <motion.div
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.7, duration: 0.4 }}
-              whileHover={{
-                scale: 1.03,
-                y: -5,
-                transition: { duration: 0.2 },
-              }}
-            >
-              <Card
-                className={`relative ${isTeam ? 'ring-2 ring-purple-500' : ''}`}
-              >
-                {isTeam && (
-                  <div className="absolute -top-2 left-1/2 transform -translate-x-1/2">
-                    <Badge className="bg-purple-500 text-white text-xs">
-                      <Users className="w-3 h-3 mr-1" />
-                      Required
-                    </Badge>
-                  </div>
-                )}
-                <CardHeader className="text-center pb-3">
-                  <div className="flex items-center justify-center gap-2">
-                    <Users className="w-4 h-4 text-purple-500" />
-                    <CardTitle className="text-lg">Team</CardTitle>
-                  </div>
-                  <div>
-                    <div className="text-2xl font-bold">$29.99</div>
-                    <div className="text-xs text-muted-foreground">
-                      per month
-                    </div>
-                  </div>
-                </CardHeader>
-                <CardContent className="space-y-3 pt-0">
-                  <ul className="space-y-1 text-xs">
-                    <li className="flex items-center gap-2">
-                      <ArrowRight className="w-3 h-3 text-green-500 flex-shrink-0" />
-                      Everything in Pro
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <ArrowRight className="w-3 h-3 text-green-500 flex-shrink-0" />
-                      Team dashboard
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <ArrowRight className="w-3 h-3 text-green-500 flex-shrink-0" />
-                      Enterprise support
-                    </li>
-                  </ul>
-                  <motion.div
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                  >
-                    <Button
-                      className="w-full"
-                      variant="outline"
-                      size="sm"
-                      onClick={() => handleUpgrade('price_team_monthly')}
-                      disabled={isLoading}
-                    >
-                      {isLoading ? 'Loading...' : 'Upgrade to Team'}
+                      {isLoading ? (
+                        <div className="flex items-center gap-2">
+                          <motion.div
+                            className="w-4 h-4 border-2 border-white border-t-transparent rounded-full"
+                            animate={{ rotate: 360 }}
+                            transition={{
+                              duration: 1,
+                              repeat: Infinity,
+                              ease: 'linear',
+                            }}
+                          />
+                          Processing...
+                        </div>
+                      ) : (
+                        <>
+                          <Crown className="w-4 h-4 mr-2" />
+                          Upgrade to Pro - $9.99/mo
+                        </>
+                      )}
                     </Button>
                   </motion.div>
                 </CardContent>

@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { useUser } from '@clerk/nextjs';
 import { CustomSignInButton } from '@/components/auth';
-import { Crown, Users, ArrowRight, Star } from 'lucide-react';
+import { Crown, ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -68,9 +68,6 @@ export default function Paywall({ challenge }: PaywallProps) {
     }
   };
 
-  const isPro = challenge.tier.toUpperCase() === 'PRO';
-  const isTeam = challenge.tier.toUpperCase() === 'TEAM';
-
   return (
     <div className="min-h-screen bg-background">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
@@ -102,112 +99,68 @@ export default function Paywall({ challenge }: PaywallProps) {
               </div>
 
               {/* Subscription Plans */}
-              <div className="grid md:grid-cols-2 gap-4">
+              <div className="max-w-md mx-auto">
                 {/* Pro Plan */}
-                <Card
-                  className={`relative ${isPro ? 'ring-2 ring-amber-500' : ''}`}
-                >
-                  {isPro && (
-                    <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
-                      <Badge className="bg-amber-500 text-white">
-                        <Star className="w-3 h-3 mr-1" />
-                        Recommended
-                      </Badge>
-                    </div>
-                  )}
+                <Card className="relative ring-2 ring-amber-500/50 border-amber-200 dark:border-amber-800 bg-gradient-to-b from-amber-50/50 to-background dark:from-amber-950/20">
                   <CardHeader className="text-center">
-                    <div className="flex items-center justify-center gap-2">
-                      <Crown className="w-5 h-5 text-amber-500" />
-                      <CardTitle>Pro</CardTitle>
+                    <div className="flex items-center justify-center gap-2 mb-4">
+                      <div className="p-3 bg-amber-100 dark:bg-amber-900/30 rounded-full">
+                        <Crown className="w-6 h-6 text-amber-600 dark:text-amber-400" />
+                      </div>
                     </div>
+                    <CardTitle className="text-2xl mb-3">
+                      Upgrade to Pro
+                    </CardTitle>
                     <div className="space-y-1">
-                      <div className="text-3xl font-bold">$9.99</div>
+                      <div className="text-4xl font-bold text-amber-600 dark:text-amber-400">
+                        $9.99
+                      </div>
                       <div className="text-sm text-muted-foreground">
                         per month
                       </div>
                     </div>
                   </CardHeader>
-                  <CardContent className="space-y-4">
-                    <ul className="space-y-2 text-sm">
-                      <li className="flex items-center gap-2">
-                        <ArrowRight className="w-4 h-4 text-green-500" />
+                  <CardContent className="space-y-6">
+                    <div className="text-center">
+                      <p className="text-muted-foreground mb-4">
+                        Unlock this premium challenge and get access to:
+                      </p>
+                    </div>
+                    <ul className="space-y-3 text-sm">
+                      <li className="flex items-center gap-3">
+                        <ArrowRight className="w-4 h-4 text-green-500 flex-shrink-0" />
                         Access to all 50+ challenges
                       </li>
-                      <li className="flex items-center gap-2">
-                        <ArrowRight className="w-4 h-4 text-green-500" />
+                      <li className="flex items-center gap-3">
+                        <ArrowRight className="w-4 h-4 text-green-500 flex-shrink-0" />
                         Detailed solutions & explanations
                       </li>
-                      <li className="flex items-center gap-2">
-                        <ArrowRight className="w-4 h-4 text-green-500" />
+                      <li className="flex items-center gap-3">
+                        <ArrowRight className="w-4 h-4 text-green-500 flex-shrink-0" />
                         Priority support
                       </li>
-                      <li className="flex items-center gap-2">
-                        <ArrowRight className="w-4 h-4 text-green-500" />
+                      <li className="flex items-center gap-3">
+                        <ArrowRight className="w-4 h-4 text-green-500 flex-shrink-0" />
                         Progress analytics
                       </li>
                     </ul>
                     <Button
-                      className="w-full"
+                      className="w-full bg-amber-600 hover:bg-amber-700 text-white shadow-lg"
+                      size="lg"
                       onClick={() => handleUpgrade('price_pro_monthly')}
                       disabled={isLoading}
                     >
-                      {isLoading ? 'Loading...' : 'Upgrade to Pro'}
-                    </Button>
-                  </CardContent>
-                </Card>
-
-                {/* Team Plan */}
-                <Card
-                  className={`relative ${
-                    isTeam ? 'ring-2 ring-purple-500' : ''
-                  }`}
-                >
-                  {isTeam && (
-                    <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
-                      <Badge className="bg-purple-500 text-white">
-                        <Users className="w-3 h-3 mr-1" />
-                        Required
-                      </Badge>
-                    </div>
-                  )}
-                  <CardHeader className="text-center">
-                    <div className="flex items-center justify-center gap-2">
-                      <Users className="w-5 h-5 text-purple-500" />
-                      <CardTitle>Team</CardTitle>
-                    </div>
-                    <div className="space-y-1">
-                      <div className="text-3xl font-bold">$29.99</div>
-                      <div className="text-sm text-muted-foreground">
-                        per month
-                      </div>
-                    </div>
-                  </CardHeader>
-                  <CardContent className="space-y-4">
-                    <ul className="space-y-2 text-sm">
-                      <li className="flex items-center gap-2">
-                        <ArrowRight className="w-4 h-4 text-green-500" />
-                        Everything in Pro
-                      </li>
-                      <li className="flex items-center gap-2">
-                        <ArrowRight className="w-4 h-4 text-green-500" />
-                        Team dashboard
-                      </li>
-                      <li className="flex items-center gap-2">
-                        <ArrowRight className="w-4 h-4 text-green-500" />
-                        Custom challenge requests
-                      </li>
-                      <li className="flex items-center gap-2">
-                        <ArrowRight className="w-4 h-4 text-green-500" />
-                        Enterprise support
-                      </li>
-                    </ul>
-                    <Button
-                      className="w-full"
-                      variant="outline"
-                      onClick={() => handleUpgrade('price_team_monthly')}
-                      disabled={isLoading}
-                    >
-                      {isLoading ? 'Loading...' : 'Upgrade to Team'}
+                      {isLoading ? (
+                        <div className="flex items-center gap-2">
+                          <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                          Processing...
+                        </div>
+                      ) : (
+                        <>
+                          <Crown className="w-5 h-5 mr-2" />
+                          Upgrade to Pro - $9.99/mo
+                        </>
+                      )}
                     </Button>
                   </CardContent>
                 </Card>
