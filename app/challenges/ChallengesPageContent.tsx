@@ -48,9 +48,18 @@ export default function ChallengesPageContent() {
   // Set initial filters based on URL parameters
   useEffect(() => {
     const tierParam = searchParams.get('tier');
-    if (tierParam === 'free') {
+    if (
+      tierParam?.toLowerCase() === 'free' ||
+      tierParam?.toUpperCase() === 'FREE'
+    ) {
       setShowPremiumOnly('Free');
-    } else if (tierParam === 'premium') {
+    } else if (
+      tierParam?.toLowerCase() === 'premium' ||
+      tierParam?.toLowerCase() === 'pro' ||
+      tierParam?.toUpperCase() === 'PRO' ||
+      tierParam?.toLowerCase() === 'team' ||
+      tierParam?.toUpperCase() === 'TEAM'
+    ) {
       setShowPremiumOnly('Premium');
     }
 
@@ -90,8 +99,11 @@ export default function ChallengesPageContent() {
         challenge.difficulty === selectedDifficulty;
       const matchesPremiumFilter =
         showPremiumOnly === 'All' ||
-        (showPremiumOnly === 'Free' && challenge.tier === 'free') ||
-        (showPremiumOnly === 'Premium' && challenge.tier !== 'free');
+        (showPremiumOnly === 'Free' &&
+          (challenge.tier === 'free' || challenge.tier === 'FREE')) ||
+        (showPremiumOnly === 'Premium' &&
+          challenge.tier !== 'free' &&
+          challenge.tier !== 'FREE');
 
       return (
         matchesSearch &&
