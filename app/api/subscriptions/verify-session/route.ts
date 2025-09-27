@@ -65,11 +65,6 @@ export async function GET(req: NextRequest) {
       priceId === process.env.STRIPE_PRO_YEARLY_PRICE_ID
     ) {
       tier = 'PRO';
-    } else if (
-      priceId === process.env.STRIPE_TEAM_MONTHLY_PRICE_ID ||
-      priceId === process.env.STRIPE_TEAM_YEARLY_PRICE_ID
-    ) {
-      tier = 'TEAM';
     }
 
     // Update user subscription in database
@@ -120,7 +115,7 @@ export async function GET(req: NextRequest) {
           | 'PAST_DUE'
           | 'TRIALING'
           | 'UNPAID',
-        subscriptionTier: tier as 'FREE' | 'PRO' | 'TEAM',
+        subscriptionTier: tier as 'FREE' | 'PRO',
       },
     });
 

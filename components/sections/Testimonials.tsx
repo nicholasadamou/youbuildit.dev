@@ -24,7 +24,7 @@ type TestimonialType = {
   rating: number;
   challenge: string;
   challenge_link: string;
-  tier: 'free' | 'pro' | 'team' | 'FREE' | 'PRO' | 'TEAM';
+  tier: 'free' | 'pro' | 'FREE' | 'PRO';
   style?: string;
   industry?: string;
 };
@@ -284,11 +284,7 @@ function selectDiverseTestimonials(
     t => t.tier === 'free' || t.tier === 'FREE'
   );
   const premiumTestimonials = testimonials.filter(
-    t =>
-      t.tier === 'pro' ||
-      t.tier === 'PRO' ||
-      t.tier === 'team' ||
-      t.tier === 'TEAM'
+    t => t.tier === 'pro' || t.tier === 'PRO'
   );
 
   // Calculate ideal distribution (roughly 60% free, 40% premium)
@@ -461,11 +457,11 @@ export default function Testimonials() {
           role: 'Team Lead',
           company: 'Enterprise Solutions',
           quote:
-            'Team challenges are perfect for our engineering team. The collaborative aspects and enterprise patterns are exactly what we needed.',
+            'The Pro challenges are perfect for our engineering team. The advanced patterns and detailed solutions are exactly what we needed.',
           rating: 5,
           challenge: 'Microservices Architecture',
           challenge_link: 'microservices-architecture',
-          tier: 'team' as const,
+          tier: 'pro' as const,
         },
       ];
       setTestimonialData(fallbackTestimonials);

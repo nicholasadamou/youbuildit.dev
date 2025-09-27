@@ -155,15 +155,12 @@ async function handlePaymentFailed(invoice: Stripe.Invoice) {
   });
 }
 
-function getSubscriptionTier(priceId: string): 'FREE' | 'PRO' | 'TEAM' {
+function getSubscriptionTier(priceId: string): 'FREE' | 'PRO' {
   if (
     priceId === process.env.STRIPE_PRO_MONTHLY_PRICE_ID ||
     priceId === process.env.STRIPE_PRO_YEARLY_PRICE_ID
   ) {
     return 'PRO';
-  }
-  if (priceId === process.env.STRIPE_TEAM_MONTHLY_PRICE_ID) {
-    return 'TEAM';
   }
   return 'FREE';
 }

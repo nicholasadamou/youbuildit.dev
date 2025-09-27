@@ -166,15 +166,11 @@ export async function getSubscriptionAnalytics(days: number = 30) {
 
     // Calculate MRR (Monthly Recurring Revenue)
     const proPricing = 9.99;
-    const teamPricing = 29.99;
 
     const proCount =
       activeSubscribers.find(s => s.subscriptionTier === 'PRO')?._count.id || 0;
-    const teamCount =
-      activeSubscribers.find(s => s.subscriptionTier === 'TEAM')?._count.id ||
-      0;
 
-    const mrr = proCount * proPricing + teamCount * teamPricing;
+    const mrr = proCount * proPricing;
 
     return {
       activeSubscribers: activeSubscribers.reduce(
