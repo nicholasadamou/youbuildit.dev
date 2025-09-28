@@ -66,7 +66,7 @@ export default function SolutionPaywallOverlay({
 
   return (
     <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/70 to-transparent flex items-center justify-center overflow-hidden">
-      <div className="text-center p-4 max-w-sm mx-4">
+      <div className="text-center p-4 max-w-md mx-4">
         <div className="mb-4">
           <div className="w-12 h-12 mx-auto mb-3 bg-gradient-to-r from-[--brand] to-green-500 rounded-full flex items-center justify-center">
             <svg
