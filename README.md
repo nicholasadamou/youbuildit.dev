@@ -246,9 +246,39 @@ pnpm db:migrate
    - Go to [Stripe Dashboard](https://dashboard.stripe.com/)
    - Get your API keys from the Developers section
    - Create products and prices for PRO tier
-   - Set up webhooks endpoint: `/api/webhooks/stripe`
 
-2. **Add to your `.env` file:**
+2. **Set up Stripe Webhooks:**
+
+   Stripe webhooks are required to sync subscription and payment data between Stripe and your database.
+
+   **For Local Development:**
+
+   Like Clerk webhooks, Stripe needs to reach your local server, so you'll need to use ngrok:
+
+   ```bash
+   # Make sure ngrok is installed and configured (see Clerk setup above)
+   # Start your development server
+   pnpm dev
+
+   # In another terminal, expose your local server
+   ngrok http 3000
+   ```
+
+   Copy the `https://` URL from ngrok (e.g., `https://abc123.ngrok.io`)
+
+   **Configure Webhook in Stripe Dashboard:**
+   1. Go to [Stripe Dashboard](https://dashboard.stripe.com/) → Developers → Webhooks
+   2. Click "Add endpoint"
+   3. Set Endpoint URL to: `https://YOUR_NGROK_URL.ngrok.io/api/webhooks/stripe`
+   4. Select events to listen for:
+      - `customer.subscription.created`
+      - `customer.subscription.updated`
+      - `customer.subscription.deleted`
+      - `invoice.payment_succeeded`
+      - `invoice.payment_failed`
+   5. Copy the webhook signing secret from the webhook details
+
+3. **Add to your `.env` file:**
    ```bash
    STRIPE_SECRET_KEY=sk_test_your_stripe_secret_key
    NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=pk_test_your_stripe_publishable_key
@@ -314,9 +344,11 @@ GITHUB_TOKEN=ghp_your_github_token
 - `GET /api/user/subscription` - Get current user subscription status
 - `POST /api/subscriptions/checkout` - Create Stripe checkout session
 - `POST /api/subscriptions/portal` - Access Stripe customer portal
-- `POST /api/webhooks/clerk` - Handle Clerk webhook events (user sync)
-- `POST /api/webhooks/stripe` - Handle Stripe webhook events
+- `POST /api/webhooks/clerk` - Handle Clerk webhook events (user sync) \*
+- `POST /api/webhooks/stripe` - Handle Stripe webhook events (subscription sync) \*
 - `POST /api/commit` - Track challenge completion and progress
+
+\*_Webhook endpoints require ngrok for local development to receive external webhook events._
 
 ### UI Components
 
