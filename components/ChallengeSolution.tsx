@@ -81,21 +81,23 @@ export default function ChallengeSolution({
 
   // Auto-select README when solution data is loaded
   useEffect(() => {
-    if (solutionData?.files) {
+    if (solutionData?.files && !selectedFile) {
       const readmeFile = solutionData.files.find(f => f.type === 'README');
-      if (readmeFile && !selectedFile) {
+      if (readmeFile) {
+        console.log('Auto-selecting README file:', readmeFile.filename);
         setSelectedFile(readmeFile);
         setShowMarkdownPreview(true);
       }
     }
-  }, [solutionData, selectedFile]);
+  }, [solutionData, selectedFile]); // Include selectedFile to fix React Hook warning
 
-  // Reset markdown preview state when switching files
+  // Reset markdown preview state when switching to README files
   useEffect(() => {
     if (selectedFile?.type === 'README') {
+      console.log('Switching to README, enabling preview mode');
       setShowMarkdownPreview(true);
     }
-  }, [selectedFile]);
+  }, [selectedFile?.type, selectedFile?.relativePath]); // Include type to fix React Hook warning
 
   useEffect(() => {
     const fetchSolution = async () => {
@@ -261,11 +263,6 @@ export default function ChallengeSolution({
     }
   };
 
-  const getFileTypeColor = () => {
-    // Use the same styling as skill tags in ChallengeCard
-    return 'bg-secondary text-secondary-foreground';
-  };
-
   // Always show the component, but with different behavior based on access
 
   if (loading) {
@@ -341,97 +338,182 @@ export default function ChallengeSolution({
 
   return (
     <motion.div
-      className={`mt-8 relative overflow-hidden rounded-lg border border-border transition-all duration-200 ${
-        hasAccess ? 'p-6 bg-card' : 'bg-card'
-      }`}
+      className="mt-8 relative overflow-hidden rounded-xl bg-gradient-to-br from-secondary/40 via-secondary/30 to-secondary/20 backdrop-blur-sm shadow-lg"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay: 0.2 }}
     >
+      {/* Subtle gradient overlay */}
+      <div className="absolute inset-0 bg-gradient-to-br from-[--brand]/5 via-transparent to-blue-500/5 pointer-events-none" />
+      {/* Subtle inner glow */}
+      <div className="absolute inset-0 rounded-xl shadow-inner opacity-20" />
+
       {/* Solution Content */}
-      <div className="p-6">
-        <div className="flex items-center justify-between mb-6">
-          <div className="flex items-center gap-3">
-            <div className="p-2 bg-emerald-900/30 rounded-lg">
-              <Code2 className="h-5 w-5 text-emerald-300" />
+      <div className="relative p-6">
+        {/* Enhanced Header */}
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
+          <div className="flex items-center gap-4">
+            <div className="relative">
+              <div className="absolute inset-0 bg-[--brand]/20 rounded-xl blur-md" />
+              <div className="relative p-3 bg-gradient-to-br from-[--brand]/10 to-[--brand]/20 rounded-xl">
+                <Code2 className="h-6 w-6 text-[--brand]" />
+              </div>
             </div>
             <div>
-              <h3 className="text-lg font-semibold text-card-foreground">
+              <h3 className="text-xl font-bold text-card-foreground flex items-center gap-2">
                 Complete Solution
+                <div className="px-2 py-1 bg-[--brand]/10 rounded-md">
+                  <span className="text-xs font-medium text-[--brand] uppercase tracking-wide">
+                    {solutionData.language}
+                  </span>
+                </div>
               </h3>
-              <p className="text-sm text-muted-foreground">
-                {solutionData.language} implementation with tests
+              <p className="text-sm text-muted-foreground mt-1">
+                Professional implementation with comprehensive tests and
+                documentation
               </p>
             </div>
           </div>
-          <div className="flex gap-2">
+
+          {/* Action Buttons */}
+          <div className="flex gap-3 shrink-0">
             <motion.button
               onClick={() => setShowPreview(!showPreview)}
-              className="px-4 py-2 text-sm font-medium text-emerald-400 bg-transparent border border-emerald-500 rounded-lg hover:bg-emerald-500 hover:text-white transition-colors"
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
+              className="group relative px-4 py-2 text-sm font-medium bg-secondary/80 hover:bg-secondary rounded-lg transition-all duration-200 overflow-hidden shadow-md hover:shadow-lg"
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
             >
-              <Eye className="h-4 w-4 mr-2 inline" />
-              {showPreview ? 'Hide' : 'Preview'}
+              <div className="absolute inset-0 bg-gradient-to-r from-[--brand]/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+              <div className="relative flex items-center gap-2">
+                <Eye className="h-4 w-4 text-muted-foreground group-hover:text-[--brand] transition-colors" />
+                <span className="text-muted-foreground group-hover:text-card-foreground transition-colors">
+                  {showPreview ? 'Hide Preview' : 'Show Preview'}
+                </span>
+              </div>
             </motion.button>
+
             <motion.button
               onClick={handleDownload}
-              className="px-4 py-2 text-sm font-medium bg-emerald-500 text-white rounded-lg hover:bg-emerald-400 transition-colors"
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
+              className="group relative px-4 py-2 text-sm font-medium bg-[--brand] hover:bg-[--brand-dark] text-white rounded-lg transition-all duration-200 overflow-hidden shadow-lg hover:shadow-[--brand]/25"
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
             >
-              <Download className="h-4 w-4 mr-2 inline" />
-              Download
+              <div className="absolute inset-0 bg-gradient-to-r from-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+              <div className="relative flex items-center gap-2">
+                <Download className="h-4 w-4 transition-transform group-hover:translate-y-0.5" />
+                <span>Download</span>
+              </div>
             </motion.button>
           </div>
         </div>
 
         {/* Solution Stats */}
         {metadata && (
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-6">
-            <div className="text-center p-4 bg-gray-800 border border-gray-700 rounded-lg shadow-sm">
-              <div className="text-2xl font-bold text-white">
-                {metadata.linesOfCode}
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+            <motion.div
+              className="group relative p-5 bg-secondary/40 hover:bg-secondary/60 rounded-xl transition-all duration-300 overflow-hidden shadow-md hover:shadow-lg"
+              whileHover={{ y: -2 }}
+              transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+            >
+              <div className="absolute inset-0 bg-gradient-to-br from-[--brand]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+              <div className="relative text-center">
+                <div className="text-2xl font-bold text-card-foreground mb-1 flex items-center justify-center gap-2">
+                  <Code2 className="h-5 w-5 text-[--brand] opacity-70" />
+                  {metadata.linesOfCode}
+                </div>
+                <div className="text-xs text-muted-foreground uppercase tracking-wide font-medium">
+                  Lines of Code
+                </div>
               </div>
-              <div className="text-xs text-gray-400 mt-1">Lines of Code</div>
-            </div>
-            <div className="text-center p-4 bg-gray-800 border border-gray-700 rounded-lg shadow-sm">
-              <div className="text-2xl font-bold text-white">
-                {sourceFiles.length}
+            </motion.div>
+
+            <motion.div
+              className="group relative p-5 bg-secondary/40 hover:bg-secondary/60 rounded-xl transition-all duration-300 overflow-hidden shadow-md hover:shadow-lg"
+              whileHover={{ y: -2 }}
+              transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+            >
+              <div className="absolute inset-0 bg-gradient-to-br from-[--brand]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+              <div className="relative text-center">
+                <div className="text-2xl font-bold text-card-foreground mb-1 flex items-center justify-center gap-2">
+                  <FileText className="h-5 w-5 text-[--brand] opacity-70" />
+                  {sourceFiles.length}
+                </div>
+                <div className="text-xs text-muted-foreground uppercase tracking-wide font-medium">
+                  Source Files
+                </div>
               </div>
-              <div className="text-xs text-gray-400 mt-1">Source Files</div>
-            </div>
-            <div className="text-center p-4 bg-gray-800 border border-gray-700 rounded-lg shadow-sm">
-              <div className="text-2xl font-bold text-white">
-                {testFiles.length}
+            </motion.div>
+
+            <motion.div
+              className="group relative p-5 bg-secondary/40 hover:bg-secondary/60 rounded-xl transition-all duration-300 overflow-hidden shadow-md hover:shadow-lg"
+              whileHover={{ y: -2 }}
+              transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+            >
+              <div className="absolute inset-0 bg-gradient-to-br from-[--brand]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+              <div className="relative text-center">
+                <div className="text-2xl font-bold text-card-foreground mb-1 flex items-center justify-center gap-2">
+                  <TestTube className="h-5 w-5 text-[--brand] opacity-70" />
+                  {testFiles.length}
+                </div>
+                <div className="text-xs text-muted-foreground uppercase tracking-wide font-medium">
+                  Test Files
+                </div>
               </div>
-              <div className="text-xs text-gray-400 mt-1">Test Files</div>
-            </div>
-            <div className="text-center p-4 bg-gray-800 border border-gray-700 rounded-lg shadow-sm">
-              <div className="flex items-center justify-center gap-1 text-2xl font-bold text-white">
-                {metadata.testCoverage}%
-                <Gauge className="h-5 w-5" />
+            </motion.div>
+
+            <motion.div
+              className="group relative p-5 bg-secondary/40 hover:bg-secondary/60 rounded-xl transition-all duration-300 overflow-hidden shadow-md hover:shadow-lg"
+              whileHover={{ y: -2 }}
+              transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+            >
+              <div className="absolute inset-0 bg-gradient-to-br from-[--brand]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+              <div className="relative text-center">
+                <div className="text-2xl font-bold text-card-foreground mb-1 flex items-center justify-center gap-2">
+                  {metadata.testCoverage}%
+                  <Gauge className="h-5 w-5 text-[--brand] opacity-70" />
+                </div>
+                <div className="text-xs text-muted-foreground uppercase tracking-wide font-medium">
+                  Test Coverage
+                </div>
               </div>
-              <div className="text-xs text-gray-400 mt-1">Est. Coverage</div>
-            </div>
+            </motion.div>
           </div>
         )}
 
         {/* Key Features */}
         {metadata?.keyFeatures && metadata.keyFeatures.length > 0 && (
-          <div className="mb-6">
-            <h4 className="text-sm font-medium text-card-foreground mb-3 flex items-center gap-2">
-              <CheckCircle className="h-4 w-4 text-green-600" />
-              Key Features Implemented
-            </h4>
-            <div className="flex flex-wrap gap-2">
+          <div className="mb-8">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="p-2 bg-[--brand]/10 rounded-lg">
+                <CheckCircle className="h-4 w-4 text-[--brand]" />
+              </div>
+              <h4 className="text-base font-semibold text-card-foreground">
+                Key Features Implemented
+              </h4>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
               {metadata.keyFeatures.map((feature, index) => (
-                <span
+                <motion.div
                   key={index}
-                  className="px-3 py-1 text-xs font-medium bg-gradient-to-r from-emerald-500 to-emerald-600 text-white rounded-full shadow-sm"
+                  className="group relative p-3 bg-gradient-to-br from-[--brand]/5 to-[--brand]/10 rounded-lg transition-all duration-200 overflow-hidden shadow-sm hover:shadow-md"
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{
+                    delay: index * 0.1,
+                    type: 'spring',
+                    stiffness: 300,
+                    damping: 20,
+                  }}
+                  whileHover={{ scale: 1.02 }}
                 >
-                  {feature}
-                </span>
+                  <div className="absolute inset-0 bg-gradient-to-r from-[--brand]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                  <div className="relative flex items-center gap-2">
+                    <div className="w-1.5 h-1.5 bg-[--brand] rounded-full" />
+                    <span className="text-xs font-medium text-card-foreground">
+                      {feature}
+                    </span>
+                  </div>
+                </motion.div>
               ))}
             </div>
           </div>
@@ -443,108 +525,224 @@ export default function ChallengeSolution({
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
-            className="border-t border-border/50 pt-6"
+            className="border-t border-secondary/30 pt-6"
           >
             <div className="flex flex-col lg:flex-row gap-6">
               {/* File List */}
               <div className="lg:w-1/3">
-                <h4 className="text-sm font-medium text-gray-100 mb-3 font-semibold">
-                  Solution Files ({files.length})
-                </h4>
-                <div className="space-y-2 max-h-96 overflow-y-auto">
-                  {files.map((file, index) => (
-                    <button
-                      key={index}
-                      onClick={() => setSelectedFile(file)}
-                      className={`w-full p-3 text-left rounded-lg border transition-colors ${
-                        selectedFile?.relativePath === file.relativePath
-                          ? 'border-emerald-400 bg-emerald-900/20'
-                          : 'border-border hover:border-border/80 hover:bg-secondary/50'
-                      }`}
-                    >
-                      <div className="flex items-center gap-2 mb-1">
-                        {getFileIcon(file.type)}
-                        <span className="text-sm font-medium truncate text-gray-100">
-                          {file.filename}
-                        </span>
-                      </div>
-                      <div className="flex items-center justify-between">
-                        <span
-                          className={`text-xs px-2 py-1 rounded ${getFileTypeColor()}`}
-                        >
-                          {file.type.toLowerCase()}
-                        </span>
-                        <span className="text-xs text-gray-300">
-                          {file.content.split('\n').length} lines
-                        </span>
-                      </div>
-                    </button>
-                  ))}
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="p-2 bg-[--brand]/10 rounded-lg">
+                    <FileText className="h-4 w-4 text-[--brand]" />
+                  </div>
+                  <h4 className="text-base font-semibold text-card-foreground">
+                    Solution Files ({files.length})
+                  </h4>
+                </div>
+                <div className="space-y-2 max-h-96 overflow-y-auto pr-2">
+                  {files
+                    .sort((a, b) => {
+                      // README files first
+                      if (a.type === 'README' && b.type !== 'README') return -1;
+                      if (b.type === 'README' && a.type !== 'README') return 1;
+                      // Then SOURCE files
+                      if (
+                        a.type === 'SOURCE' &&
+                        b.type !== 'SOURCE' &&
+                        b.type !== 'README'
+                      )
+                        return -1;
+                      if (
+                        b.type === 'SOURCE' &&
+                        a.type !== 'SOURCE' &&
+                        a.type !== 'README'
+                      )
+                        return 1;
+                      // Then TEST files
+                      if (
+                        a.type === 'TEST' &&
+                        b.type !== 'TEST' &&
+                        b.type !== 'README' &&
+                        b.type !== 'SOURCE'
+                      )
+                        return -1;
+                      if (
+                        b.type === 'TEST' &&
+                        a.type !== 'TEST' &&
+                        a.type !== 'README' &&
+                        a.type !== 'SOURCE'
+                      )
+                        return 1;
+                      // Finally alphabetical by filename
+                      return a.filename.localeCompare(b.filename);
+                    })
+                    .map((file, index) => (
+                      <button
+                        key={`file-${index}-${file.relativePath}`}
+                        onClick={e => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          console.log('Selecting file:', file.filename);
+                          setSelectedFile(file);
+                        }}
+                        className={`group w-full p-4 text-left rounded-xl transition-all duration-200 ${
+                          selectedFile?.relativePath === file.relativePath
+                            ? 'bg-secondary/40 shadow-md'
+                            : 'hover:bg-secondary/40 shadow-sm hover:shadow-md'
+                        }`}
+                      >
+                        <div className="relative">
+                          <div className="flex items-center gap-3 mb-2">
+                            <div
+                              className={`p-1.5 rounded-lg ${
+                                selectedFile?.relativePath === file.relativePath
+                                  ? 'bg-[--brand]/20'
+                                  : 'bg-secondary/50 group-hover:bg-[--brand]/10'
+                              }`}
+                            >
+                              {getFileIcon(file.type)}
+                            </div>
+                            <div className="flex-1 min-w-0">
+                              <span className="text-sm font-medium truncate text-card-foreground block">
+                                {file.filename}
+                              </span>
+                              <span className="text-xs text-muted-foreground">
+                                {file.relativePath}
+                              </span>
+                            </div>
+                          </div>
+                          <div className="flex items-center justify-between">
+                            <span
+                              className={`text-xs px-2 py-1 rounded-md ${
+                                selectedFile?.relativePath === file.relativePath
+                                  ? 'bg-[--brand]/10 text-[--brand]'
+                                  : 'bg-secondary/50 text-muted-foreground'
+                              }`}
+                            >
+                              {file.type.toLowerCase()}
+                            </span>
+                            <span className="text-xs text-muted-foreground font-mono">
+                              {file.content.split('\n').length} lines
+                            </span>
+                          </div>
+                        </div>
+                      </button>
+                    ))}
                 </div>
               </div>
 
               {/* File Content */}
               <div className="lg:w-2/3">
                 {selectedFile ? (
-                  <div className="bg-gray-900 rounded-lg border border-gray-700 overflow-hidden">
-                    <div className="px-4 py-2 bg-gray-800 border-b border-gray-700 flex items-center justify-between">
-                      <span className="text-sm font-medium text-gray-100">
-                        {selectedFile.relativePath}
-                      </span>
-                      <div className="flex items-center gap-2">
+                  <div className="bg-secondary/20 rounded-xl overflow-hidden shadow-lg">
+                    {/* File Header */}
+                    <div className="px-6 py-4 bg-secondary/40 border-b border-secondary/60 flex items-center justify-between">
+                      <div className="flex items-center gap-3">
+                        <div className="p-1.5 bg-[--brand]/10 rounded-lg">
+                          {getFileIcon(selectedFile.type)}
+                        </div>
+                        <div>
+                          <span className="text-sm font-medium text-card-foreground block">
+                            {selectedFile.filename}
+                          </span>
+                          <span className="text-xs text-muted-foreground">
+                            {selectedFile.relativePath}
+                          </span>
+                        </div>
+                      </div>
+
+                      <div className="flex items-center gap-3">
                         {selectedFile.type === 'README' && (
-                          <div className="flex items-center gap-1">
+                          <div className="flex items-center bg-secondary/60 rounded-lg p-1">
                             <button
-                              onClick={() => setShowMarkdownPreview(false)}
-                              className={`px-2 py-1 text-xs rounded transition-colors ${
+                              onClick={e => {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                console.log(
+                                  'Code button clicked, setting showMarkdownPreview to false'
+                                );
+                                setShowMarkdownPreview(false);
+                              }}
+                              className={`group px-3 py-1.5 text-xs font-medium rounded-md transition-all duration-200 flex items-center gap-2 ${
                                 !showMarkdownPreview
-                                  ? 'bg-emerald-500 text-white'
-                                  : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
+                                  ? 'bg-[--brand] text-white shadow-sm'
+                                  : 'text-muted-foreground hover:text-card-foreground hover:bg-secondary/50'
                               }`}
                               title="Show raw markdown"
                             >
                               <FileCode className="h-3 w-3" />
+                              <span>Code</span>
                             </button>
                             <button
-                              onClick={() => setShowMarkdownPreview(true)}
-                              className={`px-2 py-1 text-xs rounded transition-colors ${
+                              onClick={e => {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                console.log(
+                                  'Preview button clicked, setting showMarkdownPreview to true'
+                                );
+                                setShowMarkdownPreview(true);
+                              }}
+                              className={`group px-3 py-1.5 text-xs font-medium rounded-md transition-all duration-200 flex items-center gap-2 ${
                                 showMarkdownPreview
-                                  ? 'bg-emerald-500 text-white'
-                                  : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
+                                  ? 'bg-[--brand] text-white shadow-sm'
+                                  : 'text-muted-foreground hover:text-card-foreground hover:bg-secondary/50'
                               }`}
                               title="Show preview"
                             >
                               <BookOpen className="h-3 w-3" />
+                              <span>Preview</span>
                             </button>
                           </div>
                         )}
-                        <span
-                          className={`text-xs px-2 py-1 rounded ${getFileTypeColor()}`}
-                        >
-                          {selectedFile.type.toLowerCase()}
-                        </span>
+
+                        <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                          <span className="px-2 py-1 bg-[--brand]/10 rounded-md text-[--brand] font-medium">
+                            {selectedFile.type.toLowerCase()}
+                          </span>
+                          <span className="font-mono">
+                            {selectedFile.content.split('\n').length} lines
+                          </span>
+                        </div>
                       </div>
                     </div>
-                    {selectedFile.type === 'README' && showMarkdownPreview ? (
-                      <div className="p-6 text-sm max-h-96 overflow-y-auto bg-card">
+
+                    {/* File Content */}
+                    {(() => {
+                      console.log('Rendering content:', {
+                        fileType: selectedFile.type,
+                        showMarkdownPreview,
+                        shouldShowPreview:
+                          selectedFile.type === 'README' && showMarkdownPreview,
+                      });
+                      return (
+                        selectedFile.type === 'README' && showMarkdownPreview
+                      );
+                    })() ? (
+                      <div className="p-6 text-sm max-h-96 overflow-y-auto bg-card/50">
                         <ReactMarkdown components={MDXComponents}>
                           {selectedFile.content}
                         </ReactMarkdown>
                       </div>
                     ) : (
-                      <pre className="p-4 text-sm overflow-x-auto max-h-96 overflow-y-auto bg-gray-900">
-                        <code className="text-gray-200">
-                          {selectedFile.content}
-                        </code>
-                      </pre>
+                      <div className="relative">
+                        <pre className="p-6 text-sm overflow-x-auto max-h-96 overflow-y-auto bg-secondary/10 text-card-foreground font-mono leading-relaxed">
+                          <code className="whitespace-pre-wrap">
+                            {selectedFile.content}
+                          </code>
+                        </pre>
+                      </div>
                     )}
                   </div>
                 ) : (
-                  <div className="flex items-center justify-center h-64 bg-secondary/30 rounded-lg border-2 border-dashed border-border">
+                  <div className="flex items-center justify-center h-80 bg-secondary/20 rounded-xl border-2 border-dashed border-secondary/40">
                     <div className="text-center">
-                      <Code2 className="h-8 w-8 text-muted-foreground mx-auto mb-2" />
+                      <div className="p-4 bg-[--brand]/5 rounded-xl w-fit mx-auto mb-4">
+                        <Code2 className="h-8 w-8 text-[--brand] mx-auto" />
+                      </div>
+                      <h3 className="text-base font-medium text-card-foreground mb-2">
+                        Select a File
+                      </h3>
                       <p className="text-sm text-muted-foreground">
-                        Select a file to preview its contents
+                        Choose a file from the list to preview its contents
                       </p>
                     </div>
                   </div>
@@ -557,15 +755,31 @@ export default function ChallengeSolution({
         {/* Implementation Notes */}
         {metadata?.implementationNotes &&
           metadata.implementationNotes.length > 0 && (
-            <div className="mt-6 pt-4 border-t border-border/50">
-              <h4 className="text-sm font-medium text-card-foreground mb-2">
-                Implementation Details
-              </h4>
-              <ul className="text-sm text-muted-foreground space-y-1">
-                {metadata.implementationNotes.map((note, index) => (
-                  <li key={index}>• {note}</li>
-                ))}
-              </ul>
+            <div className="mt-8 pt-6 border-t border-secondary/30">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="p-2 bg-blue-500/10 border border-blue-500/20 rounded-lg">
+                  <AlertCircle className="h-4 w-4 text-blue-400" />
+                </div>
+                <h4 className="text-base font-semibold text-card-foreground">
+                  Implementation Details
+                </h4>
+              </div>
+              <div className="bg-secondary/20 rounded-xl p-5 shadow-inner">
+                <ul className="space-y-3">
+                  {metadata.implementationNotes.map((note, index) => (
+                    <motion.li
+                      key={index}
+                      className="flex items-start gap-3 text-sm text-card-foreground"
+                      initial={{ opacity: 0, x: -10 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: index * 0.1 }}
+                    >
+                      <div className="w-1.5 h-1.5 bg-blue-400 rounded-full mt-2 shrink-0" />
+                      <span>{note}</span>
+                    </motion.li>
+                  ))}
+                </ul>
+              </div>
             </div>
           )}
       </div>
