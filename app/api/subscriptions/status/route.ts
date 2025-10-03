@@ -75,8 +75,8 @@ export async function GET() {
       stripeSubscriptionId: user.stripeSubscriptionId,
     });
 
-    // Add cache headers for successful responses (cache for 5 minutes)
-    response.headers.set('Cache-Control', 'public, max-age=300, s-maxage=300');
+    // Short cache for better responsiveness after subscription changes (1 minute)
+    response.headers.set('Cache-Control', 'public, max-age=60, s-maxage=60');
     return response;
   } catch (error) {
     console.error('Unexpected error in subscription status endpoint:', error);

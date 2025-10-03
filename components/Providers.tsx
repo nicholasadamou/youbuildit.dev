@@ -14,12 +14,13 @@ export function Providers({ children }: ProvidersProps) {
     <ClerkProvider>
       <NextThemesProvider
         attribute="class"
-        defaultTheme="system"
-        enableSystem
-        themes={['light', 'dark']}
+        defaultTheme="dark"
+        enableSystem={false}
+        themes={['dark']}
+        forcedTheme="dark"
       >
         {children}
-        <Toaster theme="system" richColors closeButton position="top-right" />
+        <Toaster theme="dark" richColors closeButton position="top-right" />
       </NextThemesProvider>
     </ClerkProvider>
   );

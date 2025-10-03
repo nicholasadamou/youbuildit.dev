@@ -639,20 +639,6 @@ function SuccessContent() {
                     color: 'text-emerald-600',
                     bgColor: 'bg-emerald-500/10',
                   },
-                  {
-                    icon: Star,
-                    title: 'Progress Tracking',
-                    description: 'Advanced analytics to monitor your growth',
-                    color: 'text-purple-500',
-                    bgColor: 'bg-purple-500/10',
-                  },
-                  {
-                    icon: Shield,
-                    title: 'Priority Support',
-                    description: 'Direct access to our engineering team',
-                    color: 'text-blue-500',
-                    bgColor: 'bg-blue-500/10',
-                  },
                 ].map((feature, index) => (
                   <motion.div
                     key={feature.title}

@@ -104,7 +104,6 @@ export default function PricingSection() {
         'Access to all 50+ challenges',
         'Premium challenges',
         'Detailed solutions & explanations',
-        'Priority support',
       ],
       cta: 'Upgrade to Pro',
       popular: true,

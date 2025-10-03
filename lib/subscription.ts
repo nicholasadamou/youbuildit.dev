@@ -55,7 +55,6 @@ export function getSubscriptionBenefits(tier: SubscriptionTier): string[] {
       return [
         'Access to all challenges (50+)',
         'Premium challenges with detailed solutions',
-        'Priority support',
       ];
     default:
       return [];

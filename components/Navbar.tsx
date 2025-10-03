@@ -20,7 +20,6 @@ import {
 import { Button } from '@/components/ui/button';
 import Logo from '@/components/Logo';
 import CommandSearch, { useCommandSearch } from '@/components/CommandSearch';
-import ThemeToggle from '@/components/ThemeToggle';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { useState, useEffect, useRef } from 'react';
 
@@ -95,20 +94,11 @@ export default function Navbar() {
                 </Link>
               </motion.div>
               <div className="hidden md:flex items-center space-x-3">
-                {/* Theme Toggle */}
-                <motion.div
-                  initial={{ opacity: 0, y: -20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: 0.1 }}
-                >
-                  <ThemeToggle />
-                </motion.div>
-
                 {/* Search Button */}
                 <motion.div
                   initial={{ opacity: 0, y: -20 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: 0.2 }}
+                  transition={{ duration: 0.5, delay: 0.1 }}
                 >
                   <Button
                     variant="outline"
@@ -130,7 +120,7 @@ export default function Navbar() {
                 <motion.div
                   initial={{ opacity: 0, y: -20 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: 0.3 }}
+                  transition={{ duration: 0.5, delay: 0.2 }}
                 >
                   <ExploreChallengesButton
                     variant="default"
@@ -143,7 +133,7 @@ export default function Navbar() {
                   className="flex items-center h-8"
                   initial={{ opacity: 0, y: -20 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: 0.4 }}
+                  transition={{ duration: 0.5, delay: 0.3 }}
                 >
                   <CustomSignedOut>
                     <CustomSignInButton
@@ -166,9 +156,6 @@ export default function Navbar() {
                 </motion.div>
               </div>
               <div className="md:hidden flex items-center space-x-2">
-                {/* Mobile Theme Toggle */}
-                <ThemeToggle />
-
                 {/* Mobile Search Button */}
                 <Button
                   variant="ghost"

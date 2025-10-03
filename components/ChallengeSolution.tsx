@@ -12,7 +12,11 @@ import {
   Eye,
   Loader2,
   AlertCircle,
+  BookOpen,
+  FileCode,
 } from 'lucide-react';
+import ReactMarkdown from 'react-markdown';
+import MDXComponents from '@/components/mdx/MDXComponents';
 import { useSubscription } from '@/hooks/useSubscription';
 import { hasAccessToChallenge } from '@/lib/subscription';
 
@@ -56,6 +60,7 @@ export default function ChallengeSolution({
   const [error, setError] = useState<string | null>(null);
   const [selectedFile, setSelectedFile] = useState<SolutionFile | null>(null);
   const [showPreview, setShowPreview] = useState(false);
+  const [showMarkdownPreview, setShowMarkdownPreview] = useState(true); // Default to preview for README
 
   // Check if user has access - use external access state if provided, otherwise compute internally
   const hasAccess =
@@ -73,6 +78,24 @@ export default function ChallengeSolution({
             { tier: challengeTier } as never // Minimal challenge object - hasAccessToChallenge normalizes tier internally
           )
         : challengeTier.toUpperCase() !== 'PRO';
+
+  // Auto-select README when solution data is loaded
+  useEffect(() => {
+    if (solutionData?.files) {
+      const readmeFile = solutionData.files.find(f => f.type === 'README');
+      if (readmeFile && !selectedFile) {
+        setSelectedFile(readmeFile);
+        setShowMarkdownPreview(true);
+      }
+    }
+  }, [solutionData, selectedFile]);
+
+  // Reset markdown preview state when switching files
+  useEffect(() => {
+    if (selectedFile?.type === 'README') {
+      setShowMarkdownPreview(true);
+    }
+  }, [selectedFile]);
 
   useEffect(() => {
     const fetchSolution = async () => {
@@ -238,17 +261,9 @@ export default function ChallengeSolution({
     }
   };
 
-  const getFileTypeColor = (type: string) => {
-    switch (type) {
-      case 'SOURCE':
-        return 'text-blue-600 bg-blue-50 dark:text-blue-400 dark:bg-blue-900/30';
-      case 'TEST':
-        return 'text-green-600 bg-green-50 dark:text-green-400 dark:bg-green-900/30';
-      case 'README':
-        return 'text-purple-600 bg-purple-50 dark:text-purple-400 dark:bg-purple-900/30';
-      default:
-        return 'text-gray-600 bg-gray-50 dark:text-gray-400 dark:bg-gray-900/30';
-    }
+  const getFileTypeColor = () => {
+    // Use the same styling as skill tags in ChallengeCard
+    return 'bg-secondary text-secondary-foreground';
   };
 
   // Always show the component, but with different behavior based on access
@@ -298,8 +313,8 @@ export default function ChallengeSolution({
         >
           <div className="p-6">
             <div className="flex items-center gap-3 mb-6">
-              <div className="p-2 bg-[--brand]/10 rounded-lg">
-                <Code2 className="h-5 w-5 text-[--brand]" />
+              <div className="p-2 bg-emerald-900/30 rounded-lg">
+                <Code2 className="h-5 w-5 text-emerald-300" />
               </div>
               <div>
                 <h3 className="text-lg font-semibold text-card-foreground">
@@ -326,7 +341,7 @@ export default function ChallengeSolution({
 
   return (
     <motion.div
-      className={`mt-8 relative overflow-hidden rounded-lg border border-border hover:border-[--brand] transition-all duration-200 ${
+      className={`mt-8 relative overflow-hidden rounded-lg border border-border transition-all duration-200 ${
         hasAccess ? 'p-6 bg-card' : 'bg-card'
       }`}
       initial={{ opacity: 0, y: 20 }}
@@ -337,8 +352,8 @@ export default function ChallengeSolution({
       <div className="p-6">
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center gap-3">
-            <div className="p-2 bg-[--brand]/10 rounded-lg">
-              <Code2 className="h-5 w-5 text-[--brand]" />
+            <div className="p-2 bg-emerald-900/30 rounded-lg">
+              <Code2 className="h-5 w-5 text-emerald-300" />
             </div>
             <div>
               <h3 className="text-lg font-semibold text-card-foreground">
@@ -352,7 +367,7 @@ export default function ChallengeSolution({
           <div className="flex gap-2">
             <motion.button
               onClick={() => setShowPreview(!showPreview)}
-              className="px-4 py-2 text-sm font-medium text-[--brand] bg-white border border-[--brand] rounded-lg hover:bg-[--brand] hover:text-white transition-colors"
+              className="px-4 py-2 text-sm font-medium text-emerald-400 bg-transparent border border-emerald-500 rounded-lg hover:bg-emerald-500 hover:text-white transition-colors"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
@@ -361,7 +376,7 @@ export default function ChallengeSolution({
             </motion.button>
             <motion.button
               onClick={handleDownload}
-              className="px-4 py-2 text-sm font-medium bg-[--brand] text-white rounded-lg hover:bg-[--brand]/90 transition-colors"
+              className="px-4 py-2 text-sm font-medium bg-emerald-500 text-white rounded-lg hover:bg-emerald-400 transition-colors"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
@@ -374,30 +389,30 @@ export default function ChallengeSolution({
         {/* Solution Stats */}
         {metadata && (
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-6">
-            <div className="text-center p-3 bg-white/50 dark:bg-gray-800/50 rounded-lg">
-              <div className="text-2xl font-bold text-card-foreground">
+            <div className="text-center p-4 bg-gray-800 border border-gray-700 rounded-lg shadow-sm">
+              <div className="text-2xl font-bold text-white">
                 {metadata.linesOfCode}
               </div>
-              <div className="text-xs text-muted-foreground">Lines of Code</div>
+              <div className="text-xs text-gray-400 mt-1">Lines of Code</div>
             </div>
-            <div className="text-center p-3 bg-white/50 dark:bg-gray-800/50 rounded-lg">
-              <div className="text-2xl font-bold text-card-foreground">
+            <div className="text-center p-4 bg-gray-800 border border-gray-700 rounded-lg shadow-sm">
+              <div className="text-2xl font-bold text-white">
                 {sourceFiles.length}
               </div>
-              <div className="text-xs text-muted-foreground">Source Files</div>
+              <div className="text-xs text-gray-400 mt-1">Source Files</div>
             </div>
-            <div className="text-center p-3 bg-white/50 dark:bg-gray-800/50 rounded-lg">
-              <div className="text-2xl font-bold text-card-foreground">
+            <div className="text-center p-4 bg-gray-800 border border-gray-700 rounded-lg shadow-sm">
+              <div className="text-2xl font-bold text-white">
                 {testFiles.length}
               </div>
-              <div className="text-xs text-muted-foreground">Test Files</div>
+              <div className="text-xs text-gray-400 mt-1">Test Files</div>
             </div>
-            <div className="text-center p-3 bg-white/50 dark:bg-gray-800/50 rounded-lg">
-              <div className="flex items-center justify-center gap-1 text-2xl font-bold text-card-foreground">
+            <div className="text-center p-4 bg-gray-800 border border-gray-700 rounded-lg shadow-sm">
+              <div className="flex items-center justify-center gap-1 text-2xl font-bold text-white">
                 {metadata.testCoverage}%
                 <Gauge className="h-5 w-5" />
               </div>
-              <div className="text-xs text-muted-foreground">Est. Coverage</div>
+              <div className="text-xs text-gray-400 mt-1">Est. Coverage</div>
             </div>
           </div>
         )}
@@ -413,7 +428,7 @@ export default function ChallengeSolution({
               {metadata.keyFeatures.map((feature, index) => (
                 <span
                   key={index}
-                  className="px-3 py-1 text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300 rounded-full"
+                  className="px-3 py-1 text-xs font-medium bg-gradient-to-r from-emerald-500 to-emerald-600 text-white rounded-full shadow-sm"
                 >
                   {feature}
                 </span>
@@ -433,7 +448,7 @@ export default function ChallengeSolution({
             <div className="flex flex-col lg:flex-row gap-6">
               {/* File List */}
               <div className="lg:w-1/3">
-                <h4 className="text-sm font-medium text-card-foreground mb-3">
+                <h4 className="text-sm font-medium text-gray-100 mb-3 font-semibold">
                   Solution Files ({files.length})
                 </h4>
                 <div className="space-y-2 max-h-96 overflow-y-auto">
@@ -443,23 +458,23 @@ export default function ChallengeSolution({
                       onClick={() => setSelectedFile(file)}
                       className={`w-full p-3 text-left rounded-lg border transition-colors ${
                         selectedFile?.relativePath === file.relativePath
-                          ? 'border-[--brand] bg-[--brand]/5'
+                          ? 'border-emerald-400 bg-emerald-900/20'
                           : 'border-border hover:border-border/80 hover:bg-secondary/50'
                       }`}
                     >
                       <div className="flex items-center gap-2 mb-1">
                         {getFileIcon(file.type)}
-                        <span className="text-sm font-medium text-card-foreground truncate">
+                        <span className="text-sm font-medium truncate text-gray-100">
                           {file.filename}
                         </span>
                       </div>
                       <div className="flex items-center justify-between">
                         <span
-                          className={`text-xs px-2 py-1 rounded ${getFileTypeColor(file.type)}`}
+                          className={`text-xs px-2 py-1 rounded ${getFileTypeColor()}`}
                         >
                           {file.type.toLowerCase()}
                         </span>
-                        <span className="text-xs text-muted-foreground">
+                        <span className="text-xs text-gray-300">
                           {file.content.split('\n').length} lines
                         </span>
                       </div>
@@ -471,22 +486,58 @@ export default function ChallengeSolution({
               {/* File Content */}
               <div className="lg:w-2/3">
                 {selectedFile ? (
-                  <div className="bg-white dark:bg-gray-900 rounded-lg border border-border overflow-hidden">
-                    <div className="px-4 py-2 bg-secondary border-b border-border flex items-center justify-between">
-                      <span className="text-sm font-medium text-card-foreground">
+                  <div className="bg-gray-900 rounded-lg border border-gray-700 overflow-hidden">
+                    <div className="px-4 py-2 bg-gray-800 border-b border-gray-700 flex items-center justify-between">
+                      <span className="text-sm font-medium text-gray-100">
                         {selectedFile.relativePath}
                       </span>
-                      <span
-                        className={`text-xs px-2 py-1 rounded ${getFileTypeColor(selectedFile.type)}`}
-                      >
-                        {selectedFile.type.toLowerCase()}
-                      </span>
+                      <div className="flex items-center gap-2">
+                        {selectedFile.type === 'README' && (
+                          <div className="flex items-center gap-1">
+                            <button
+                              onClick={() => setShowMarkdownPreview(false)}
+                              className={`px-2 py-1 text-xs rounded transition-colors ${
+                                !showMarkdownPreview
+                                  ? 'bg-emerald-500 text-white'
+                                  : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
+                              }`}
+                              title="Show raw markdown"
+                            >
+                              <FileCode className="h-3 w-3" />
+                            </button>
+                            <button
+                              onClick={() => setShowMarkdownPreview(true)}
+                              className={`px-2 py-1 text-xs rounded transition-colors ${
+                                showMarkdownPreview
+                                  ? 'bg-emerald-500 text-white'
+                                  : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
+                              }`}
+                              title="Show preview"
+                            >
+                              <BookOpen className="h-3 w-3" />
+                            </button>
+                          </div>
+                        )}
+                        <span
+                          className={`text-xs px-2 py-1 rounded ${getFileTypeColor()}`}
+                        >
+                          {selectedFile.type.toLowerCase()}
+                        </span>
+                      </div>
                     </div>
-                    <pre className="p-4 text-sm overflow-x-auto max-h-96 overflow-y-auto">
-                      <code className="text-card-foreground">
-                        {selectedFile.content}
-                      </code>
-                    </pre>
+                    {selectedFile.type === 'README' && showMarkdownPreview ? (
+                      <div className="p-6 text-sm max-h-96 overflow-y-auto bg-card">
+                        <ReactMarkdown components={MDXComponents}>
+                          {selectedFile.content}
+                        </ReactMarkdown>
+                      </div>
+                    ) : (
+                      <pre className="p-4 text-sm overflow-x-auto max-h-96 overflow-y-auto bg-gray-900">
+                        <code className="text-gray-200">
+                          {selectedFile.content}
+                        </code>
+                      </pre>
+                    )}
                   </div>
                 ) : (
                   <div className="flex items-center justify-center h-64 bg-secondary/30 rounded-lg border-2 border-dashed border-border">

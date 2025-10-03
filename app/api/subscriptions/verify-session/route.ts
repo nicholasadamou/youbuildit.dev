@@ -68,10 +68,9 @@ export async function GET(req: NextRequest) {
     }
 
     // Update user subscription in database
-    // Validate and convert the timestamp
-    const currentPeriodEndTimestamp = (
-      subscription as Stripe.Subscription & { current_period_end: number }
-    ).current_period_end;
+    // Validate and convert the timestamp - get it from the subscription item
+    const currentPeriodEndTimestamp =
+      subscription.items.data[0]?.current_period_end;
     console.log('📅 Raw period end from Stripe:', currentPeriodEndTimestamp);
     console.log('📅 Type:', typeof currentPeriodEndTimestamp);
 
