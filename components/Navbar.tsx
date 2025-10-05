@@ -5,6 +5,7 @@ import { Menu, Zap, Github, Search, Command } from 'lucide-react';
 import {
   CustomUserButton,
   CustomSignInButton,
+  CustomSignUpButton,
   CustomSignedIn,
   CustomSignedOut,
 } from '@/components/auth';
@@ -15,17 +16,18 @@ import {
   SheetTrigger,
   SheetTitle,
   SheetDescription,
-  SheetClose,
 } from '@/components/ui/sheet';
 import { Button } from '@/components/ui/button';
 import Logo from '@/components/Logo';
 import CommandSearch, { useCommandSearch } from '@/components/CommandSearch';
+import { useSheetControl } from '@/hooks/useSheetControl';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { useState, useEffect, useRef } from 'react';
 
 export default function Navbar() {
   const { scrollY } = useScroll();
   const { isOpen, openSearch, closeSearch } = useCommandSearch();
+  const { isSheetOpen, openSheet, closeSheet } = useSheetControl();
   const [isFixed, setIsFixed] = useState(false);
   const navRef = useRef<HTMLElement>(null);
 
@@ -136,13 +138,22 @@ export default function Navbar() {
                   transition={{ duration: 0.5, delay: 0.3 }}
                 >
                   <CustomSignedOut>
-                    <CustomSignInButton
-                      variant="outline"
-                      className="flex items-center space-x-2 h-8"
-                      mode="modal"
-                    >
-                      Sign In
-                    </CustomSignInButton>
+                    <div className="flex items-center space-x-2">
+                      <CustomSignInButton
+                        variant="outline"
+                        className="flex items-center space-x-2 h-8"
+                        mode="modal"
+                      >
+                        Sign In
+                      </CustomSignInButton>
+                      <CustomSignUpButton
+                        variant="default"
+                        className="flex items-center space-x-2 h-8 bg-[--brand] hover:bg-[--brand-dark] text-white"
+                        mode="modal"
+                      >
+                        Sign Up
+                      </CustomSignUpButton>
+                    </div>
                   </CustomSignedOut>
                   <CustomSignedIn>
                     <div className="flex items-center justify-center h-8">
@@ -168,7 +179,10 @@ export default function Navbar() {
                 </Button>
 
                 {/* Mobile Menu */}
-                <Sheet>
+                <Sheet
+                  open={isSheetOpen}
+                  onOpenChange={open => (open ? openSheet() : closeSheet())}
+                >
                   <SheetTrigger asChild>
                     <motion.div
                       whileHover={{ scale: 1.1 }}
@@ -179,6 +193,7 @@ export default function Navbar() {
                         size="icon"
                         aria-label="Open main menu"
                         className="text-muted-foreground hover:text-foreground hover:bg-accent"
+                        onClick={openSheet}
                       >
                         <Menu className="h-6 w-6" />
                       </Button>
@@ -206,22 +221,23 @@ export default function Navbar() {
                       <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-3">
                         Search
                       </h3>
-                      <SheetClose asChild>
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={openSearch}
-                          className="w-full flex items-center gap-3 justify-start px-3 py-2 text-sm text-muted-foreground border-border hover:bg-accent hover:text-accent-foreground"
-                        >
-                          <Search className="h-4 w-4" />
-                          <span>Search challenges</span>
-                          <div className="ml-auto flex items-center gap-0.5">
-                            <kbd className="inline-flex h-5 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium text-muted-foreground">
-                              <Command className="h-3 w-3" />K
-                            </kbd>
-                          </div>
-                        </Button>
-                      </SheetClose>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => {
+                          closeSheet();
+                          openSearch();
+                        }}
+                        className="w-full flex items-center gap-3 justify-start px-3 py-2 text-sm text-muted-foreground border-border hover:bg-accent hover:text-accent-foreground"
+                      >
+                        <Search className="h-4 w-4" />
+                        <span>Search challenges</span>
+                        <div className="ml-auto flex items-center gap-0.5">
+                          <kbd className="inline-flex h-5 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium text-muted-foreground">
+                            <Command className="h-3 w-3" />K
+                          </kbd>
+                        </div>
+                      </Button>
                     </div>
 
                     {/* Navigation */}
@@ -234,50 +250,48 @@ export default function Navbar() {
                           whileHover={{ scale: 1.02 }}
                           whileTap={{ scale: 0.98 }}
                         >
-                          <SheetClose asChild>
-                            <Link
-                              href="/"
-                              className="flex items-center space-x-3 p-3 rounded-lg hover:bg-accent transition-colors group"
-                            >
-                              <div className="w-8 h-8 bg-muted rounded-lg flex items-center justify-center group-hover:bg-accent transition-colors">
-                                <span className="text-sm font-semibold text-muted-foreground">
-                                  🏠
-                                </span>
-                              </div>
-                              <div>
-                                <span className="font-medium text-foreground">
-                                  Home
-                                </span>
-                                <p className="text-xs text-muted-foreground">
-                                  Back to homepage
-                                </p>
-                              </div>
-                            </Link>
-                          </SheetClose>
+                          <Link
+                            href="/"
+                            onClick={closeSheet}
+                            className="flex items-center space-x-3 p-3 rounded-lg hover:bg-accent transition-colors group"
+                          >
+                            <div className="w-8 h-8 bg-muted rounded-lg flex items-center justify-center group-hover:bg-accent transition-colors">
+                              <span className="text-sm font-semibold text-muted-foreground">
+                                🏠
+                              </span>
+                            </div>
+                            <div>
+                              <span className="font-medium text-foreground">
+                                Home
+                              </span>
+                              <p className="text-xs text-muted-foreground">
+                                Back to homepage
+                              </p>
+                            </div>
+                          </Link>
                         </motion.div>
 
                         <motion.div
                           whileHover={{ scale: 1.02 }}
                           whileTap={{ scale: 0.98 }}
                         >
-                          <SheetClose asChild>
-                            <Link
-                              href="/challenges"
-                              className="flex items-center space-x-3 p-3 rounded-lg hover:bg-accent transition-colors group"
-                            >
-                              <div className="w-8 h-8 bg-[--brand]/10 rounded-lg flex items-center justify-center group-hover:bg-[--brand]/20 transition-colors">
-                                <Zap className="h-4 w-4 text-[--brand]" />
-                              </div>
-                              <div>
-                                <span className="font-medium text-foreground">
-                                  Explore Challenges
-                                </span>
-                                <p className="text-xs text-muted-foreground">
-                                  Browse all coding challenges
-                                </p>
-                              </div>
-                            </Link>
-                          </SheetClose>
+                          <Link
+                            href="/challenges"
+                            onClick={closeSheet}
+                            className="flex items-center space-x-3 p-3 rounded-lg hover:bg-accent transition-colors group"
+                          >
+                            <div className="w-8 h-8 bg-[--brand]/10 rounded-lg flex items-center justify-center group-hover:bg-[--brand]/20 transition-colors">
+                              <Zap className="h-4 w-4 text-[--brand]" />
+                            </div>
+                            <div>
+                              <span className="font-medium text-foreground">
+                                Explore Challenges
+                              </span>
+                              <p className="text-xs text-muted-foreground">
+                                Browse all coding challenges
+                              </p>
+                            </div>
+                          </Link>
                         </motion.div>
                       </div>
                     </nav>
@@ -288,15 +302,24 @@ export default function Navbar() {
                         Account
                       </h3>
                       <CustomSignedOut>
-                        <SheetClose asChild>
+                        <div className="space-y-3">
                           <CustomSignInButton
                             variant="outline"
                             className="w-full flex items-center space-x-2"
                             mode="modal"
+                            onModalOpen={closeSheet}
                           >
                             Sign In
                           </CustomSignInButton>
-                        </SheetClose>
+                          <CustomSignUpButton
+                            variant="default"
+                            className="w-full flex items-center space-x-2 bg-[--brand] hover:bg-[--brand-dark] text-white"
+                            mode="modal"
+                            onModalOpen={closeSheet}
+                          >
+                            Sign Up
+                          </CustomSignUpButton>
+                        </div>
                       </CustomSignedOut>
                       <CustomSignedIn>
                         <div className="flex items-center space-x-3">
@@ -323,20 +346,19 @@ export default function Navbar() {
                         Connect with us
                       </h3>
                       <div className="flex space-x-4">
-                        <SheetClose asChild>
-                          <motion.a
-                            whileHover={{ scale: 1.2 }}
-                            whileTap={{ scale: 0.9 }}
-                            href="https://github.com/youbuildit"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="flex items-center space-x-2 text-muted-foreground hover:text-foreground transition-colors"
-                            aria-label="You Build It on GitHub"
-                          >
-                            <Github className="h-5 w-5" />
-                            <span className="text-sm font-medium">GitHub</span>
-                          </motion.a>
-                        </SheetClose>
+                        <motion.a
+                          whileHover={{ scale: 1.2 }}
+                          whileTap={{ scale: 0.9 }}
+                          href="https://github.com/youbuildit"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          onClick={closeSheet}
+                          className="flex items-center space-x-2 text-muted-foreground hover:text-foreground transition-colors"
+                          aria-label="You Build It on GitHub"
+                        >
+                          <Github className="h-5 w-5" />
+                          <span className="text-sm font-medium">GitHub</span>
+                        </motion.a>
                       </div>
                     </div>
                   </SheetContent>

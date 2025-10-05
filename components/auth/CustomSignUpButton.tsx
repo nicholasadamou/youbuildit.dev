@@ -2,11 +2,11 @@
 
 import { useClerk } from '@clerk/nextjs';
 import { Button } from '@/components/ui/button';
-import { User } from 'lucide-react';
+import { UserPlus } from 'lucide-react';
 import { motion } from 'framer-motion';
 import React from 'react';
 
-interface CustomSignInButtonProps {
+interface CustomSignUpButtonProps {
   className?: string;
   variant?:
     | 'default'
@@ -24,9 +24,9 @@ interface CustomSignInButtonProps {
   onModalOpen?: () => void;
 }
 
-export default function CustomSignInButton({
+export default function CustomSignUpButton({
   className = '',
-  variant = 'outline',
+  variant = 'default',
   size = 'default',
   children,
   redirectUrl,
@@ -34,20 +34,20 @@ export default function CustomSignInButton({
   showIcon = true,
   iconOnly = false,
   onModalOpen,
-}: CustomSignInButtonProps) {
-  const { openSignIn } = useClerk();
+}: CustomSignUpButtonProps) {
+  const { openSignUp } = useClerk();
 
-  const handleSignIn = () => {
+  const handleSignUp = () => {
     if (mode === 'modal') {
       // Close any open mobile sheets before opening the modal
       onModalOpen?.();
-      openSignIn({
+      openSignUp({
         fallbackRedirectUrl: redirectUrl || window.location.href,
       });
     } else {
-      // For redirect mode, you would typically use router.push to a sign-in page
-      // or use Clerk's buildSignInUrl() for a custom redirect
-      window.location.href = '/sign-in';
+      // For redirect mode, you would typically use router.push to a sign-up page
+      // or use Clerk's buildSignUpUrl() for a custom redirect
+      window.location.href = '/sign-up';
     }
   };
 
@@ -56,12 +56,12 @@ export default function CustomSignInButton({
       <Button
         variant={variant}
         size="icon"
-        onClick={handleSignIn}
+        onClick={handleSignUp}
         className={`transition-all hover:scale-105 ${className}`}
-        aria-label="Sign in to your account"
+        aria-label="Sign up for an account"
       >
         <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
-          <User className="h-4 w-4" />
+          <UserPlus className="h-4 w-4" />
         </motion.div>
       </Button>
     );
@@ -71,7 +71,7 @@ export default function CustomSignInButton({
     <Button
       variant={variant}
       size={size}
-      onClick={handleSignIn}
+      onClick={handleSignUp}
       className={`transition-all hover:scale-105 ${className}`}
     >
       <motion.div
@@ -79,8 +79,8 @@ export default function CustomSignInButton({
         whileHover={{ scale: 1.02 }}
         whileTap={{ scale: 0.98 }}
       >
-        {showIcon && <User className="h-4 w-4" />}
-        {children || <span>Sign In</span>}
+        {showIcon && <UserPlus className="h-4 w-4" />}
+        {children || <span>Sign Up</span>}
       </motion.div>
     </Button>
   );
