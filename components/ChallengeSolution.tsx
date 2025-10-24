@@ -19,6 +19,12 @@ import ReactMarkdown from 'react-markdown';
 import MDXComponents from '@/components/mdx/MDXComponents';
 import { useSubscription } from '@/hooks/useSubscription';
 import { hasAccessToChallenge } from '@/lib/subscription';
+import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
+import {
+  vscDarkPlus,
+  vs,
+} from 'react-syntax-highlighter/dist/esm/styles/prism';
+import { useTheme } from 'next-themes';
 
 interface SolutionFile {
   type: 'SOURCE' | 'TEST' | 'FIXTURE' | 'README' | 'CONFIG';
@@ -55,6 +61,7 @@ export default function ChallengeSolution({
   hasAccess: externalHasAccess,
 }: ChallengeSolutionProps) {
   const { subscription } = useSubscription();
+  const { theme, systemTheme } = useTheme();
   const [solutionData, setSolutionData] = useState<SolutionData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -261,6 +268,42 @@ export default function ChallengeSolution({
       default:
         return <FileText className="h-4 w-4" />;
     }
+  };
+
+  // Helper function to detect language from filename
+  const getLanguageFromFilename = (filename: string): string => {
+    const ext = filename.split('.').pop()?.toLowerCase();
+    const languageMap: Record<string, string> = {
+      js: 'javascript',
+      jsx: 'jsx',
+      ts: 'typescript',
+      tsx: 'tsx',
+      py: 'python',
+      rb: 'ruby',
+      java: 'java',
+      cpp: 'cpp',
+      c: 'c',
+      cs: 'csharp',
+      go: 'go',
+      rs: 'rust',
+      php: 'php',
+      swift: 'swift',
+      kt: 'kotlin',
+      scala: 'scala',
+      sh: 'bash',
+      bash: 'bash',
+      yml: 'yaml',
+      yaml: 'yaml',
+      json: 'json',
+      xml: 'xml',
+      html: 'html',
+      css: 'css',
+      scss: 'scss',
+      sql: 'sql',
+      md: 'markdown',
+      txt: 'text',
+    };
+    return languageMap[ext || ''] || 'text';
   };
 
   // Always show the component, but with different behavior based on access
@@ -723,12 +766,31 @@ export default function ChallengeSolution({
                         </ReactMarkdown>
                       </div>
                     ) : (
-                      <div className="relative">
-                        <pre className="p-6 text-sm overflow-x-auto max-h-96 overflow-y-auto bg-secondary/10 text-card-foreground font-mono leading-relaxed">
-                          <code className="whitespace-pre-wrap">
-                            {selectedFile.content}
-                          </code>
-                        </pre>
+                      <div className="relative max-h-96 overflow-y-auto">
+                        <SyntaxHighlighter
+                          style={
+                            ((
+                              theme === 'system'
+                                ? systemTheme === 'dark'
+                                : theme === 'dark'
+                            )
+                              ? vscDarkPlus
+                              : vs) as any
+                          }
+                          language={getLanguageFromFilename(
+                            selectedFile.filename
+                          )}
+                          PreTag="div"
+                          customStyle={{
+                            margin: 0,
+                            borderRadius: 0,
+                            fontSize: '0.875rem',
+                            lineHeight: '1.5',
+                          }}
+                          showLineNumbers
+                        >
+                          {selectedFile.content}
+                        </SyntaxHighlighter>
                       </div>
                     )}
                   </div>

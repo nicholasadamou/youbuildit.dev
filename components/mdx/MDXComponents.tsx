@@ -3,8 +3,8 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import {
-  oneLight,
-  oneDark,
+  vs,
+  vscDarkPlus,
 } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import { useTheme } from 'next-themes';
 import { Components } from 'react-markdown';
@@ -149,7 +149,7 @@ function CodeComponent({
     return (
       <SyntaxHighlighter
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        style={(isDark ? oneDark : oneLight) as any}
+        style={(isDark ? vscDarkPlus : vs) as any}
         language={match[1]}
         PreTag="div"
         className="rounded-lg mb-6"
