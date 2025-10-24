@@ -1,7 +1,6 @@
 'use client';
 
 import React from 'react';
-import Link from 'next/link';
 import { HeadingData } from '@/lib/toc-utils';
 
 interface TableOfContentsProps {
@@ -9,6 +8,26 @@ interface TableOfContentsProps {
 }
 
 export default function TableOfContents({ headings }: TableOfContentsProps) {
+  const handleClick = (e: React.MouseEvent<HTMLAnchorElement>, id: string) => {
+    e.preventDefault();
+
+    const element = document.getElementById(id);
+    if (element) {
+      const offset = 136; // Offset for fixed navbar
+      const elementPosition =
+        element.getBoundingClientRect().top + window.scrollY;
+      const offsetPosition = elementPosition - offset;
+
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: 'smooth',
+      });
+
+      // Update URL without triggering navigation
+      window.history.pushState(null, '', `#${id}`);
+    }
+  };
+
   if (headings.length === 0) {
     return (
       <div className="my-6 p-4 bg-secondary border border-border rounded-lg">
@@ -28,12 +47,13 @@ export default function TableOfContents({ headings }: TableOfContentsProps) {
 
           return (
             <div key={index} className={`${indentClass}`}>
-              <Link
+              <a
                 href={`#${heading.id}`}
-                className="text-[--brand] hover:text-green-600 transition-colors hover:underline text-sm block py-1"
+                onClick={e => handleClick(e, heading.id)}
+                className="text-[--brand] hover:text-green-600 transition-colors hover:underline text-sm block py-1 cursor-pointer"
               >
                 {heading.text}
-              </Link>
+              </a>
             </div>
           );
         })}
