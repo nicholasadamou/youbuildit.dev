@@ -20,11 +20,7 @@ import MDXComponents from '@/components/mdx/MDXComponents';
 import { useSubscription } from '@/hooks/useSubscription';
 import { hasAccessToChallenge } from '@/lib/subscription';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
-import {
-  vscDarkPlus,
-  vs,
-} from 'react-syntax-highlighter/dist/esm/styles/prism';
-import { useTheme } from 'next-themes';
+import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
 
 interface SolutionFile {
   type: 'SOURCE' | 'TEST' | 'FIXTURE' | 'README' | 'CONFIG';
@@ -61,7 +57,6 @@ export default function ChallengeSolution({
   hasAccess: externalHasAccess,
 }: ChallengeSolutionProps) {
   const { subscription } = useSubscription();
-  const { theme, systemTheme } = useTheme();
   const [solutionData, setSolutionData] = useState<SolutionData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -768,15 +763,8 @@ export default function ChallengeSolution({
                     ) : (
                       <div className="relative max-h-96 overflow-y-auto">
                         <SyntaxHighlighter
-                          style={
-                            ((
-                              theme === 'system'
-                                ? systemTheme === 'dark'
-                                : theme === 'dark'
-                            )
-                              ? vscDarkPlus
-                              : vs) as any
-                          }
+                          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                          style={vscDarkPlus as any}
                           language={getLanguageFromFilename(
                             selectedFile.filename
                           )}

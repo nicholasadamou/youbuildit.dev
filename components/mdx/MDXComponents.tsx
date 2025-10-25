@@ -2,11 +2,7 @@ import React, { ReactNode } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
-import {
-  vs,
-  vscDarkPlus,
-} from 'react-syntax-highlighter/dist/esm/styles/prism';
-import { useTheme } from 'next-themes';
+import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import { Components } from 'react-markdown';
 import { useToc } from './TocContext';
 import TableOfContents from './TableOfContents';
@@ -139,17 +135,12 @@ function CodeComponent({
   ...props
 }: React.ComponentProps<'code'>) {
   const match = /language-(\w+)/.exec(className || '');
-  const { theme, systemTheme } = useTheme();
-
-  // Determine if we should use dark theme
-  const effectiveTheme = theme === 'system' ? systemTheme : theme;
-  const isDark = effectiveTheme === 'dark';
 
   if (match) {
     return (
       <SyntaxHighlighter
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        style={(isDark ? vscDarkPlus : vs) as any}
+        style={vscDarkPlus as any}
         language={match[1]}
         PreTag="div"
         className="rounded-lg mb-6"
