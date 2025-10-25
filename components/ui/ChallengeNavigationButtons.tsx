@@ -76,9 +76,7 @@ export function RandomFreeChallengeButton({
       <div className="inline-flex items-center space-x-2">
         {iconPosition === 'left' && (
           <div
-            className={`${
-              isLoading ? 'animate-spin' : 'group-hover:rotate-180'
-            } transition-transform duration-300`}
+            className={`${isLoading ? 'animate-spin' : ''} transition-transform duration-300`}
           >
             {icon}
           </div>
@@ -86,9 +84,7 @@ export function RandomFreeChallengeButton({
         <span>{isLoading ? loadingText : children}</span>
         {iconPosition === 'right' && (
           <div
-            className={`${
-              isLoading ? 'animate-spin' : 'group-hover:rotate-180'
-            } transition-transform duration-300`}
+            className={`${isLoading ? 'animate-spin' : ''} transition-transform duration-300`}
           >
             {icon}
           </div>
