@@ -321,6 +321,7 @@ export default function PaywallOverlay({
                   size="sm"
                   mode="modal"
                   showIcon={false}
+                  className="hover:bg-card hover:text-card-foreground"
                 >
                   Sign in to get started
                 </CustomSignInButton>
