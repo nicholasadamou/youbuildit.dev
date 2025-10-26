@@ -3,7 +3,6 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { useTheme } from 'next-themes';
 import { InfiniteCarousel } from '@/components/InfiniteCarousel';
 
 type CompanyConfig = {
@@ -39,12 +38,9 @@ const BASE_LOGO_CLASSES =
   'transition-all duration-300 ease-in-out filter grayscale hover:grayscale-0 opacity-70 hover:opacity-100';
 
 export default function TrustedCompanies() {
-  const { resolvedTheme } = useTheme();
-
   const getLogoSrc = (company: CompanyConfig): string => {
     const { name, hasDarkVariant } = company;
-    const isDark = resolvedTheme === 'dark';
-    const suffix = hasDarkVariant && isDark ? '-dark' : '';
+    const suffix = hasDarkVariant ? '-dark' : '';
     return `/logos/${name}${suffix}.svg`;
   };
 

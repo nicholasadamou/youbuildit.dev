@@ -33,10 +33,10 @@ export default function RootLayout({
       >
         <Providers>
           <WebVitals />
-          <Navbar />
-          <main className="bg-background text-foreground min-h-screen">
-            {children}
-          </main>
+          <div className="bg-background text-foreground min-h-screen">
+            <Navbar />
+            <main>{children}</main>
+          </div>
         </Providers>
         {/* Only render analytics in production or when deployment ID is available */}
         {process.env.NODE_ENV === 'production' && <Analytics />}
