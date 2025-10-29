@@ -1,5 +1,6 @@
 # You Build It 🛠️
 
+![Unit Tests](https://github.com/youbuildit/youbuildit.dev/actions/workflows/test.yml/badge.svg)
 ![Next.js](https://img.shields.io/badge/-Next.js-000000?style=flat-square&logo=next.js&logoColor=white)
 ![TypeScript](https://img.shields.io/badge/-TypeScript-007ACC?style=flat-square&logo=typescript&logoColor=white)
 ![Tailwind CSS](https://img.shields.io/badge/-Tailwind%20CSS-06B6D4?style=flat-square&logo=tailwindcss&logoColor=white)
@@ -75,6 +76,44 @@ You Build It is an interactive coding challenges platform designed to help devel
 5. **Open your browser:**
    Navigate to [http://localhost:3000](http://localhost:3000) to see the application.
 
+## 🧪 Testing
+
+This project includes a comprehensive unit test suite using [Vitest](https://vitest.dev/).
+
+### Running Tests
+
+```bash
+# Run all tests once
+pnpm test
+
+# Run tests in watch mode
+pnpm test:watch
+
+# Run tests with UI
+pnpm test:ui
+
+# Run tests with coverage report
+pnpm test:coverage
+```
+
+### Test Coverage
+
+The test suite covers:
+
+- **Utility functions** (`lib/`) - Date formatting, URL generation, subscriptions, TOC parsing, structured data
+- **Components** (`components/`) - DifficultyTag and other UI components
+- **Hooks** (`hooks/`) - useChallenges and other custom React hooks
+
+For more details, see [tests/README.md](tests/README.md).
+
+### CI/CD Integration
+
+Tests automatically run on:
+
+- Push to `main` or `develop` branches
+- Pull requests to `main` or `develop`
+- Runs on Node.js 18.x and 20.x
+
 ## 🏗️ Project Structure
 
 ```
@@ -127,6 +166,8 @@ You Build It is an interactive coding challenges platform designed to help devel
 
 ### Development Tools
 
+- **[Vitest](https://vitest.dev/)** - Unit testing framework
+- **[React Testing Library](https://testing-library.com/react)** - Component testing utilities
 - **[ESLint](https://eslint.org/)** - Code linting with Next.js and Prettier integration
 - **[Prettier](https://prettier.io/)** - Code formatting
 - **[Husky](https://typicode.github.io/husky/)** - Git hooks for pre-commit validation
