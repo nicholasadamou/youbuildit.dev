@@ -19,7 +19,14 @@ vi.mock('next/navigation', () => ({
     asPath: '/',
   })),
   usePathname: vi.fn(() => '/'),
-  useSearchParams: vi.fn(() => new URLSearchParams()),
+  useSearchParams: vi.fn(() => {
+    // Return a simple mock object that behaves like URLSearchParams
+    return {
+      get: vi.fn(() => null),
+      has: vi.fn(() => false),
+      toString: vi.fn(() => ''),
+    };
+  }),
 }));
 
 // Mock environment variables
