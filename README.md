@@ -20,7 +20,6 @@ You Build It is an interactive coding challenges platform designed to help devel
 - 🔍 **Interactive Challenge Browser** - Browse challenges by difficulty, category, and required skills
 - 📚 **Rich Content Experience** - Challenges stored in database with MDX content and syntax highlighting
 - 🎨 **Modern UI/UX** - Beautiful, responsive design with smooth animations
-- 🌙 **Dark Mode Support** - Seamless light/dark theme switching for comfortable coding sessions
 - 🔧 **Real-World Projects** - Build actual tools like Docker, grep, JSON parsers, web servers, and more
 - 📊 **Skill Tracking** - Track the technologies and concepts you learn
 - 🚀 **Progressive Difficulty** - From beginner-friendly to advanced challenges
