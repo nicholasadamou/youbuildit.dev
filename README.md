@@ -41,7 +41,7 @@ You Build It is an interactive coding challenges platform designed to help devel
 1. **Clone the repository with submodules:**
 
    ```bash
-   git clone --recurse-submodules https://github.com/youbuildit/youbuildit.dev.git
+   git clone --recurse-submodules https://github.com/nicholasadamou/youbuildit.dev.git
    cd youbuildit.dev
    ```
 
@@ -111,7 +111,7 @@ Tests automatically run on:
 
 - Push to `main` or `develop` branches
 - Pull requests to `main` or `develop`
-- Runs on Node.js 18.x and 20.x
+- Runs on Node.js 20.x and 22.x
 
 ## 🏗️ Project Structure
 

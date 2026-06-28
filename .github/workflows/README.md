@@ -10,7 +10,7 @@ Runs the unit test suite on every push and pull request to `main` and `develop` 
 
 **What it does:**
 
-- Runs on Node.js 18.x and 20.x (matrix strategy)
+- Runs on Node.js 20.x and 22.x (matrix strategy)
 - Installs dependencies with pnpm
 - Runs ESLint for code quality checks
 - Runs unit tests with Vitest
@@ -124,7 +124,7 @@ This badge will show:
 
 **Common causes:**
 
-- Different Node.js versions (CI tests on 18.x and 20.x)
+- Different Node.js versions (CI tests on 20.x and 22.x)
 - Missing environment variables
 - Timezone differences (ensure tests use UTC or relative dates)
 - Race conditions in async tests
