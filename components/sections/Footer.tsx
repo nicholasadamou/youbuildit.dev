@@ -2,7 +2,8 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { GitCommit, Github, FileText } from 'lucide-react';
+import { GitCommit, FileText } from 'lucide-react';
+import GithubIcon from '@/components/icons/GithubIcon';
 import { motion } from 'framer-motion';
 
 import {
@@ -170,7 +171,7 @@ export default function Footer({ bgColor = 'bg-card' }: FooterProps) {
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  <Github className="w-4 h-4" />
+                  <GithubIcon className="w-4 h-4" />
                 </Link>
               </motion.div>
             </motion.nav>
@@ -226,7 +227,7 @@ export default function Footer({ bgColor = 'bg-card' }: FooterProps) {
                   rel="noopener noreferrer"
                   className="text-muted-foreground transition-colors hover:text-card-foreground flex items-center gap-2"
                 >
-                  <Github className="w-4 h-4" />
+                  <GithubIcon className="w-4 h-4" />
                   GitHub
                 </a>
               </motion.li>
