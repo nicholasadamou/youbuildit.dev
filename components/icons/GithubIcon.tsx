@@ -1,20 +1,12 @@
+import type { SVGProps } from 'react';
 import { siGithub } from 'simple-icons';
 
-interface GithubIconProps {
-  className?: string;
-}
-
 // lucide-react 1.x removed brand icons, so the GitHub mark is rendered from
-// simple-icons (already a dependency) instead.
-export default function GithubIcon({ className }: GithubIconProps) {
+// simple-icons (already a dependency) instead. Decorative by default
+// (aria-hidden) since it sits next to a text label; callers can override.
+export default function GithubIcon(props: SVGProps<SVGSVGElement>) {
   return (
-    <svg
-      role="img"
-      viewBox="0 0 24 24"
-      className={className}
-      fill="currentColor"
-      aria-hidden="true"
-    >
+    <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" {...props}>
       <path d={siGithub.path} />
     </svg>
   );
