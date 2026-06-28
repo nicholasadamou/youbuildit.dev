@@ -2,13 +2,6 @@
 
 import Link from 'next/link';
 import { Menu, Zap, Github, Search, Command } from 'lucide-react';
-import {
-  CustomUserButton,
-  CustomSignInButton,
-  CustomSignUpButton,
-  CustomSignedIn,
-  CustomSignedOut,
-} from '@/components/auth';
 import { ExploreChallengesButton } from '@/components/ui/ChallengeNavigationButtons';
 import {
   Sheet,
@@ -52,37 +45,6 @@ const NavItems = memo(function NavItems({
         variant="default"
         className="bg-[--brand] hover:bg-[--brand-dark] text-white"
       />
-
-      {/* Authentication */}
-      <div className="flex items-center h-8">
-        <CustomSignedOut>
-          <div className="flex items-center space-x-2">
-            <CustomSignInButton
-              variant="outline"
-              className="flex items-center space-x-2 h-8"
-              mode="modal"
-            >
-              Sign In
-            </CustomSignInButton>
-            <CustomSignUpButton
-              variant="default"
-              className="flex items-center space-x-2 h-8 bg-[--brand] hover:bg-[--brand-dark] text-white"
-              mode="modal"
-            >
-              Sign Up
-            </CustomSignUpButton>
-          </div>
-        </CustomSignedOut>
-        <CustomSignedIn>
-          <div className="flex items-center justify-center h-8">
-            <CustomUserButton
-              size="sm"
-              afterSignOutUrl="/"
-              className="h-8 w-8"
-            />
-          </div>
-        </CustomSignedIn>
-      </div>
     </div>
   );
 });
@@ -228,50 +190,6 @@ export default function Navbar() {
                           </Link>
                         </div>
                       </nav>
-
-                      {/* Authentication Section */}
-                      <div className="mb-6">
-                        <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-3">
-                          Account
-                        </h3>
-                        <CustomSignedOut>
-                          <div className="space-y-3">
-                            <CustomSignInButton
-                              variant="outline"
-                              className="w-full flex items-center space-x-2"
-                              mode="modal"
-                              onModalOpen={closeSheet}
-                            >
-                              Sign In
-                            </CustomSignInButton>
-                            <CustomSignUpButton
-                              variant="default"
-                              className="w-full flex items-center space-x-2 bg-[--brand] hover:bg-[--brand-dark] text-white"
-                              mode="modal"
-                              onModalOpen={closeSheet}
-                            >
-                              Sign Up
-                            </CustomSignUpButton>
-                          </div>
-                        </CustomSignedOut>
-                        <CustomSignedIn>
-                          <div className="flex items-center space-x-3">
-                            <CustomUserButton
-                              size="md"
-                              afterSignOutUrl="/"
-                              className="h-10 w-10"
-                            />
-                            <div className="flex flex-col">
-                              <span className="text-sm font-medium text-foreground">
-                                Account
-                              </span>
-                              <span className="text-xs text-muted-foreground">
-                                Manage profile & billing
-                              </span>
-                            </div>
-                          </div>
-                        </CustomSignedIn>
-                      </div>
 
                       {/* Footer */}
                       <div className="mt-8 pb-6 border-t border-border pt-6">

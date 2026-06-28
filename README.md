@@ -24,8 +24,7 @@ You Build It is an interactive coding challenges platform designed to help devel
 - 🔧 **Real-World Projects** - Build actual tools like Docker, grep, JSON parsers, web servers, and more
 - 📊 **Skill Tracking** - Track the technologies and concepts you learn
 - 🚀 **Progressive Difficulty** - From beginner-friendly to advanced challenges
-- 🔐 **User Authentication** - Secure authentication powered by Clerk
-- 💳 **Subscription Management** - Tiered access (FREE/PRO) with Stripe integration
+- 🆓 **Free & Open** - All challenges and solutions are free, with no account required
 - 📖 **Database-Driven Content** - Scalable challenge management with PostgreSQL
 
 ## 🚀 Quick Start
@@ -100,7 +99,7 @@ pnpm test:coverage
 
 The test suite covers:
 
-- **Utility functions** (`lib/`) - Date formatting, URL generation, subscriptions, TOC parsing, structured data
+- **Utility functions** (`lib/`) - Date formatting, URL generation, TOC parsing, structured data
 - **Components** (`components/`) - DifficultyTag and other UI components
 - **Hooks** (`hooks/`) - useChallenges and other custom React hooks
 
@@ -154,8 +153,6 @@ Tests automatically run on:
 - **[Framer Motion](https://www.framer.com/motion/)** - Animations and transitions
 - **[shadcn/ui](https://ui.shadcn.com/)** - Copy-paste React components built on Radix UI
 - **[Radix UI](https://www.radix-ui.com/)** - Headless UI primitives
-- **[Clerk](https://clerk.com/)** - User authentication and management
-- **[Stripe](https://stripe.com/)** - Payment processing and subscription management
 - **[React Markdown](https://github.com/remarkjs/react-markdown)** - Markdown rendering for challenge content
 - **[React Syntax Highlighter](https://github.com/react-syntax-highlighter/react-syntax-highlighter)** - Code syntax highlighting
 - **[Lucide React](https://lucide.dev/)** - Icon library
@@ -181,32 +178,21 @@ The application uses environment variables for configuration. Copy `.env.example
 
 ### Required Variables
 
-| Variable                             | Description                              | Required | Default |
-| ------------------------------------ | ---------------------------------------- | -------- | ------- |
-| `PRISMA_DATABASE_URL`                | Database connection string               | Yes      | -       |
-| `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY`  | Clerk publishable key for authentication | Yes      | -       |
-| `CLERK_SECRET_KEY`                   | Clerk secret key for server-side auth    | Yes      | -       |
-| `CLERK_WEBHOOK_SECRET`               | Clerk webhook secret for user sync       | Yes      | -       |
-| `STRIPE_SECRET_KEY`                  | Stripe secret key for payments           | Yes      | -       |
-| `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` | Stripe publishable key for client        | Yes      | -       |
-| `STRIPE_WEBHOOK_SECRET`              | Stripe webhook secret for verification   | Yes      | -       |
-
-### Stripe Price IDs (Required for Subscriptions)
-
-| Variable                      | Description                     | Required | Default |
-| ----------------------------- | ------------------------------- | -------- | ------- |
-| `STRIPE_PRO_MONTHLY_PRICE_ID` | Stripe price ID for Pro monthly | Yes      | -       |
-| `STRIPE_PRO_YEARLY_PRICE_ID`  | Stripe price ID for Pro yearly  | Yes      | -       |
+| Variable              | Description                | Required | Default |
+| --------------------- | -------------------------- | -------- | ------- |
+| `PRISMA_DATABASE_URL` | Database connection string | Yes      | -       |
 
 ### Optional Variables
 
-| Variable               | Description                          | Required | Default       |
-| ---------------------- | ------------------------------------ | -------- | ------------- |
-| `GITHUB_TOKEN`         | GitHub token for commit tracking API | No       | -             |
-| `NODE_ENV`             | Node environment                     | No       | `development` |
-| `NEXT_PUBLIC_BASE_URL` | Base URL for the application         | No       | Auto-detected |
+| Variable                        | Description                          | Required | Default       |
+| ------------------------------- | ------------------------------------ | -------- | ------------- |
+| `GITHUB_TOKEN`                  | GitHub token for commit tracking API | No       | -             |
+| `NEXT_PUBLIC_CODE_REPO_URL`     | Public repo for code examples        | No       | -             |
+| `NEXT_PUBLIC_FEEDBACK_REPO_URL` | Public repo for community feedback   | No       | -             |
+| `NODE_ENV`                      | Node environment                     | No       | `development` |
+| `NEXT_PUBLIC_BASE_URL`          | Base URL for the application         | No       | Auto-detected |
 
-### Setting up Authentication & Payments
+### Setting up the Database
 
 #### 1. Database Setup
 
@@ -230,105 +216,7 @@ PRISMA_DATABASE_URL="postgresql://user:password@localhost:5432/youbuildit"
 pnpm db:migrate
 ```
 
-#### 2. Clerk Authentication Setup
-
-1. **Create a Clerk application:**
-   - Go to [Clerk Dashboard](https://dashboard.clerk.com/)
-   - Create a new application
-   - Copy the publishable key and secret key
-
-2. **Add to your `.env` file:**
-
-   ```bash
-   NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=pk_test_your_clerk_publishable_key
-   CLERK_SECRET_KEY=sk_test_your_clerk_secret_key
-   ```
-
-3. **Set up Clerk Webhooks:**
-
-   Clerk webhooks are required to sync user data between Clerk and your database.
-
-   **For Local Development:**
-
-   Since Clerk needs to reach your local server, you'll need to use a tunneling service:
-
-   ```bash
-   # Install ngrok if you haven't already
-   brew install ngrok
-
-   # Sign up and get your authtoken from https://dashboard.ngrok.com/get-started/your-authtoken
-   ngrok config add-authtoken YOUR_AUTHTOKEN
-
-   # Start your development server
-   pnpm dev
-
-   # In another terminal, expose your local server
-   ngrok http 3000
-   ```
-
-   Copy the `https://` URL from ngrok (e.g., `https://abc123.ngrok.io`)
-
-   **Configure Webhook in Clerk Dashboard:**
-   1. Go to [Clerk Dashboard](https://dashboard.clerk.com/) → Configure → Webhooks
-   2. Click "Add Endpoint"
-   3. Set Endpoint URL to: `https://YOUR_NGROK_URL.ngrok.io/api/webhooks/clerk`
-   4. Subscribe to events: `user.created`, `user.updated`, `user.deleted`
-   5. Copy the signing secret from the webhook details
-
-   **Add webhook secret to your `.env` file:**
-
-   ```bash
-   CLERK_WEBHOOK_SECRET=whsec_your_webhook_signing_secret
-   ```
-
-#### 3. Stripe Payment Setup
-
-1. **Create a Stripe account:**
-   - Go to [Stripe Dashboard](https://dashboard.stripe.com/)
-   - Get your API keys from the Developers section
-   - Create products and prices for PRO tier
-
-2. **Set up Stripe Webhooks:**
-
-   Stripe webhooks are required to sync subscription and payment data between Stripe and your database.
-
-   **For Local Development:**
-
-   Like Clerk webhooks, Stripe needs to reach your local server, so you'll need to use ngrok:
-
-   ```bash
-   # Make sure ngrok is installed and configured (see Clerk setup above)
-   # Start your development server
-   pnpm dev
-
-   # In another terminal, expose your local server
-   ngrok http 3000
-   ```
-
-   Copy the `https://` URL from ngrok (e.g., `https://abc123.ngrok.io`)
-
-   **Configure Webhook in Stripe Dashboard:**
-   1. Go to [Stripe Dashboard](https://dashboard.stripe.com/) → Developers → Webhooks
-   2. Click "Add endpoint"
-   3. Set Endpoint URL to: `https://YOUR_NGROK_URL.ngrok.io/api/webhooks/stripe`
-   4. Select events to listen for:
-      - `customer.subscription.created`
-      - `customer.subscription.updated`
-      - `customer.subscription.deleted`
-      - `invoice.payment_succeeded`
-      - `invoice.payment_failed`
-   5. Copy the webhook signing secret from the webhook details
-
-3. **Add to your `.env` file:**
-   ```bash
-   STRIPE_SECRET_KEY=sk_test_your_stripe_secret_key
-   NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=pk_test_your_stripe_publishable_key
-   STRIPE_WEBHOOK_SECRET=whsec_your_webhook_secret
-   STRIPE_PRO_MONTHLY_PRICE_ID=price_your_pro_monthly_price_id
-   # ... other price IDs
-   ```
-
-#### 4. GitHub Token (Optional)
+#### 2. GitHub Token (Optional)
 
 1. **Create a GitHub Personal Access Token:**
    - Go to [GitHub Settings > Developer settings > Personal access tokens](https://github.com/settings/tokens)
@@ -349,22 +237,10 @@ pnpm db:migrate
 # Database
 PRISMA_DATABASE_URL="file:./prisma/dev.db"
 
-# Authentication
-NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=pk_test_your_clerk_key
-CLERK_SECRET_KEY=sk_test_your_clerk_secret
-CLERK_WEBHOOK_SECRET=whsec_your_webhook_secret
-
-# Payments
-STRIPE_SECRET_KEY=sk_test_your_stripe_key
-NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=pk_test_your_stripe_key
-STRIPE_WEBHOOK_SECRET=whsec_your_webhook_secret
-
-# Stripe Price IDs
-STRIPE_PRO_MONTHLY_PRICE_ID=price_your_pro_monthly_id
-STRIPE_PRO_YEARLY_PRICE_ID=price_your_pro_yearly_id
-
 # Optional
 GITHUB_TOKEN=ghp_your_github_token
+NEXT_PUBLIC_CODE_REPO_URL=https://github.com/youbuildit/youbuildit-examples
+NEXT_PUBLIC_FEEDBACK_REPO_URL=https://github.com/youbuildit/youbuildit-feedback
 ```
 
 ## ⚡ Features & Architecture
@@ -372,46 +248,32 @@ GITHUB_TOKEN=ghp_your_github_token
 ### Challenge System
 
 - **Database-Driven Content**: Challenges are stored in PostgreSQL with full metadata and MDX content
-- **Tiered Access**: FREE challenges available to all, PRO challenges require subscription
+- **Free & Open Access**: Every challenge and solution is free — no account or subscription required
 - **Rich Metadata**: Each challenge includes difficulty, category, skills, estimated time, and more
-- **Paywall Integration**: Non-subscribers see premium challenges with subscription prompts
 - **Search & Filtering**: Advanced filtering by difficulty, category, and skills
-- **Progress Tracking**: User challenge completion tracked in database
 
 ### API Endpoints
 
-- `GET /api/challenges` - Fetch all challenges with access control and metadata
-- `GET /api/challenges/random` - Get random challenge (with tier filtering)
-- `GET /api/user/subscription` - Get current user subscription status
-- `POST /api/subscriptions/checkout` - Create Stripe checkout session
-- `POST /api/subscriptions/portal` - Access Stripe customer portal
-- `POST /api/webhooks/clerk` - Handle Clerk webhook events (user sync) \*
-- `POST /api/webhooks/stripe` - Handle Stripe webhook events (subscription sync) \*
-- `POST /api/commit` - Track challenge completion and progress
-
-\*_Webhook endpoints require ngrok for local development to receive external webhook events._
+- `GET /api/challenges` - Fetch all challenges with metadata
+- `GET /api/challenges/random` - Get a random challenge
+- `GET /api/challenges/[slug]/solution` - Fetch a challenge's solution
+- `GET /api/challenges/[slug]/solution/download` - Download a challenge's solution as a ZIP
+- `POST /api/commit` - Commit-tracking helper
 
 ### UI Components
 
 - **Responsive Design**: Mobile-first approach with Tailwind CSS
 - **Animation System**: Smooth page transitions and micro-interactions with Framer Motion
 - **Accessibility**: Built with semantic HTML and ARIA attributes
-- **Dark Mode Support**: Full dark mode implementation with automatic system preference detection and manual toggle
 
-### Subscription Tiers
+### Access
 
-The platform offers two subscription tiers with different access levels:
-
-- **FREE Tier**: Access to 14+ basic challenges covering fundamental concepts
-- **PRO Tier**: Access to all FREE challenges plus 17+ advanced challenges and premium features
-
-All challenges are visible to users, but premium challenges show a subscription prompt for non-subscribers. This allows users to browse all content while maintaining a clear upgrade path.
+All challenges and their solutions are completely free and require no account or sign-in. Browse, read, and download anything.
 
 ### Content Management
 
 - **Database Storage**: Challenge content stored in PostgreSQL with full-text search capabilities
 - **MDX Rendering**: Challenge content rendered from database-stored MDX with React components
-- **Subscription Control**: Content access controlled by user subscription tier
 - **Syntax Highlighting**: Automatic syntax highlighting for code blocks
 - **Admin Interface**: Database-driven content management for scalable challenge creation
 
@@ -492,7 +354,6 @@ pnpm build
 
 - Check database connection: `PRISMA_DATABASE_URL`
 - Verify database schema is up to date: `pnpm db:push` or `pnpm db:migrate`
-- Check authentication setup (Clerk keys)
 - Verify challenge data exists in database
 
 ### Getting Help

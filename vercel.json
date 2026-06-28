@@ -3,14 +3,6 @@
   "outputDirectory": ".next",
   "installCommand": "pnpm install",
   "framework": "nextjs",
-  "functions": {
-    "app/api/webhooks/stripe/route.ts": {
-      "maxDuration": 10
-    },
-    "app/api/stripe/**.ts": {
-      "maxDuration": 10
-    }
-  },
   "env": {
     "SKIP_ENV_VALIDATION": "1"
   }

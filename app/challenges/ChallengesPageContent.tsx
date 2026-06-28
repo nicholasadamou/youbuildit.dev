@@ -26,10 +26,8 @@ import {
   Grid,
   List,
   Target,
-  Crown,
 } from 'lucide-react';
 import { FilterDropdown } from '@/components/ui/FilterDropdown';
-import PremiumBadge from '@/components/PremiumBadge';
 
 const difficulties = ['All', 'Beginner', 'Intermediate', 'Advanced'];
 
@@ -42,27 +40,10 @@ export default function ChallengesPageContent() {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [selectedDifficulty, setSelectedDifficulty] = useState('All');
-  const [showPremiumOnly, setShowPremiumOnly] = useState<
-    'All' | 'Free' | 'Premium'
-  >('All');
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
 
   // Set initial filters based on URL parameters
   useEffect(() => {
-    const tierParam = searchParams.get('tier');
-    if (
-      tierParam?.toLowerCase() === 'free' ||
-      tierParam?.toUpperCase() === 'FREE'
-    ) {
-      setShowPremiumOnly('Free');
-    } else if (
-      tierParam?.toLowerCase() === 'premium' ||
-      tierParam?.toLowerCase() === 'pro' ||
-      tierParam?.toUpperCase() === 'PRO'
-    ) {
-      setShowPremiumOnly('Premium');
-    }
-
     const categoryParam = searchParams.get('category');
     if (categoryParam && categoryParam !== 'All') {
       setSelectedCategory(categoryParam);
@@ -114,28 +95,10 @@ export default function ChallengesPageContent() {
       const matchesDifficulty =
         selectedDifficulty === 'All' ||
         challenge.difficulty === selectedDifficulty;
-      const matchesPremiumFilter =
-        showPremiumOnly === 'All' ||
-        (showPremiumOnly === 'Free' &&
-          (challenge.tier === 'free' || challenge.tier === 'FREE')) ||
-        (showPremiumOnly === 'Premium' &&
-          challenge.tier !== 'free' &&
-          challenge.tier !== 'FREE');
 
-      return (
-        matchesSearch &&
-        matchesCategory &&
-        matchesDifficulty &&
-        matchesPremiumFilter
-      );
+      return matchesSearch && matchesCategory && matchesDifficulty;
     });
-  }, [
-    allChallenges,
-    searchQuery,
-    selectedCategory,
-    selectedDifficulty,
-    showPremiumOnly,
-  ]);
+  }, [allChallenges, searchQuery, selectedCategory, selectedDifficulty]);
 
   if (loading) {
     return (
@@ -198,7 +161,6 @@ export default function ChallengesPageContent() {
                     size="sm"
                     animated={false}
                   />
-                  <PremiumBadge tier={challenge.tier} size="sm" />
                 </div>
               </div>
 
@@ -413,27 +375,6 @@ export default function ChallengesPageContent() {
                       }
                     />
                   </motion.div>
-
-                  <motion.div
-                    initial={{ opacity: 0, scale: 0.9 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    transition={{ duration: 0.3, delay: 1.0 }}
-                  >
-                    <FilterDropdown
-                      value={showPremiumOnly}
-                      onValueChange={value => {
-                        const newValue = value as 'All' | 'Free' | 'Premium';
-                        setShowPremiumOnly(newValue);
-                        updateUrlParams({
-                          tier:
-                            newValue === 'All' ? null : newValue.toLowerCase(),
-                        });
-                      }}
-                      options={['All', 'Free', 'Premium']}
-                      placeholder="All Content"
-                      icon={<Crown className="h-4 w-4 text-muted-foreground" />}
-                    />
-                  </motion.div>
                 </motion.div>
 
                 {/* View Mode Toggle */}
@@ -536,11 +477,11 @@ export default function ChallengesPageContent() {
                       setSearchQuery('');
                       setSelectedCategory('All');
                       setSelectedDifficulty('All');
-                      setShowPremiumOnly('All');
                       updateUrlParams({
                         search: null,
                         category: null,
                         difficulty: null,
+                        // Clear legacy tier param from old shared URLs
                         tier: null,
                       });
                     }}

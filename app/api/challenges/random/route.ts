@@ -1,28 +1,26 @@
 import { NextResponse } from 'next/server';
-import { getAllChallenges } from '@/lib/mdx';
+import { prisma } from '@/lib/prisma';
 
-export async function GET(request: Request) {
+export async function GET() {
   try {
-    const { searchParams } = new URL(request.url);
-    const tier = searchParams.get('tier');
-
-    const allChallenges = await getAllChallenges();
-
-    if (allChallenges.length === 0) {
-      return NextResponse.json(
-        { error: 'No challenges available' },
-        { status: 404 }
-      );
-    }
-
-    // Filter challenges by tier if specified
-    const challenges = tier
-      ? allChallenges.filter(challenge => challenge.tier === tier)
-      : allChallenges;
+    // Lightweight projection — only the summary fields are needed here,
+    // so avoid materializing the full MDX content of every challenge.
+    const challenges = await prisma.challenge.findMany({
+      where: { published: true },
+      select: {
+        slug: true,
+        title: true,
+        summary: true,
+        difficulty: true,
+        category: true,
+        skills: true,
+        estimatedTime: true,
+      },
+    });
 
     if (challenges.length === 0) {
       return NextResponse.json(
-        { error: `No ${tier || ''} challenges available` },
+        { error: 'No challenges available' },
         { status: 404 }
       );
     }
@@ -31,18 +29,18 @@ export async function GET(request: Request) {
     const randomIndex = Math.floor(Math.random() * challenges.length);
     const randomChallenge = challenges[randomIndex];
 
-    // Return simplified challenge data
-    const simplifiedChallenge = {
+    const formatDifficulty = (difficulty: string) =>
+      difficulty.charAt(0).toUpperCase() + difficulty.slice(1).toLowerCase();
+
+    return NextResponse.json({
       slug: randomChallenge.slug,
       title: randomChallenge.title,
       summary: randomChallenge.summary,
-      difficulty: randomChallenge.difficulty,
+      difficulty: formatDifficulty(randomChallenge.difficulty),
       category: randomChallenge.category,
       skills: randomChallenge.skills,
       estimatedTime: randomChallenge.estimatedTime,
-    };
-
-    return NextResponse.json(simplifiedChallenge);
+    });
   } catch (error) {
     console.error('Error fetching random challenge:', error);
     return NextResponse.json(

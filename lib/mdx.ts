@@ -12,8 +12,6 @@ export interface Challenge {
   skills: string[];
   estimatedTime: string;
   content: string;
-  tier: 'FREE' | 'PRO';
-  premium?: boolean; // Backward compatibility
   source: 'file' | 'database'; // Track where content comes from
   hasSolution?: boolean; // Whether this challenge has a solution available
   solutionLanguage?: string; // Programming language of the solution
@@ -47,7 +45,6 @@ export async function getAllChallenges(): Promise<Challenge[]> {
     skills: dbChallenge.skills,
     estimatedTime: dbChallenge.estimatedTime,
     content: dbChallenge.content,
-    tier: dbChallenge.tier,
     source: 'database' as const,
     hasSolution: dbChallenge.hasSolution,
     solutionLanguage: dbChallenge.solutionLanguage || undefined,
@@ -86,7 +83,6 @@ export async function getChallengeBySlug(
         skills: dbChallenge.skills,
         estimatedTime: dbChallenge.estimatedTime,
         content: dbChallenge.content,
-        tier: dbChallenge.tier,
         source: 'database' as const,
         hasSolution: dbChallenge.hasSolution,
         solutionLanguage: dbChallenge.solutionLanguage || undefined,

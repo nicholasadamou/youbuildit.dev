@@ -1,44 +1,17 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { auth } from '@clerk/nextjs/server';
-import { hasAccessToChallenge } from '@/lib/subscription';
-import { PrismaClient } from '@prisma/client';
+import { prisma } from '@/lib/prisma';
 import JSZip from 'jszip';
-
-const prisma = new PrismaClient();
 
 export async function GET(
   request: NextRequest,
   { params }: { params: Promise<{ slug: string }> }
 ) {
   try {
-    const { userId } = await auth();
-
-    if (!userId) {
-      return NextResponse.json(
-        { error: 'Authentication required' },
-        { status: 401 }
-      );
-    }
-
     const { slug } = await params;
 
-    // Get user subscription status
-    const user = await prisma.user.findUnique({
-      where: { id: userId },
-      select: {
-        subscriptionTier: true,
-        subscriptionStatus: true,
-        stripeCurrentPeriodEnd: true,
-      },
-    });
-
-    if (!user) {
-      return NextResponse.json({ error: 'User not found' }, { status: 404 });
-    }
-
-    // Get challenge with solution
-    const challenge = await prisma.challenge.findUnique({
-      where: { slug },
+    // Get challenge with solution (published challenges only)
+    const challenge = await prisma.challenge.findFirst({
+      where: { slug, published: true },
       include: {
         solutions: true,
         solutionMetadata: true,
@@ -60,27 +33,6 @@ export async function GET(
       return NextResponse.json(
         { error: 'No solution available for this challenge' },
         { status: 404 }
-      );
-    }
-
-    // Check if user has access to this challenge
-    const challengeForAccess = {
-      ...challenge,
-      content: challenge.content || '',
-      source: 'database' as const,
-      difficulty: challenge.difficulty
-        .toLowerCase()
-        .replace(/^\w/, c => c.toUpperCase()) as
-        | 'Beginner'
-        | 'Intermediate'
-        | 'Advanced',
-      solutionLanguage: challenge.solutionLanguage || undefined,
-    };
-    const hasAccess = hasAccessToChallenge(user, challengeForAccess);
-    if (!hasAccess) {
-      return NextResponse.json(
-        { error: 'Access denied. Pro subscription required.' },
-        { status: 403 }
       );
     }
 
@@ -106,7 +58,6 @@ export async function GET(
           ...(challenge.solutionMetadata || {}),
         },
         downloadedAt: new Date().toISOString(),
-        downloadedBy: userId,
       },
       null,
       2

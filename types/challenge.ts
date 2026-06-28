@@ -6,7 +6,6 @@ export interface ClientChallenge {
   category: string;
   skills: string[];
   estimatedTime: string;
-  tier: 'free' | 'pro' | 'FREE' | 'PRO';
-  hasAccess: boolean;
-  premium?: boolean; // Legacy support
+  hasSolution?: boolean;
+  solutionLanguage?: string;
 }
