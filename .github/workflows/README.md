@@ -51,8 +51,8 @@ Applies pending Prisma migrations to the production database.
 
 **Notes:**
 
-- `migrate deploy` only applies migrations not yet recorded in the database's
-  `_prisma_migrations` table, so re-runs are safe (idempotent).
+- `prisma migrate deploy` only applies migrations not yet recorded in the
+  database's `_prisma_migrations` table, so re-runs are safe (idempotent).
 - This runs independently of the Vercel app deploy. For destructive migrations,
   make sure the deployed app no longer reads the columns/tables being dropped.
 
