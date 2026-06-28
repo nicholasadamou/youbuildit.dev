@@ -1,1 +1,2 @@
-@tailwind components;
+/* Custom component styles. Tailwind's component layer now comes from
+   `@import "tailwindcss"` in app/globals.css. */

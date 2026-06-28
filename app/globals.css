@@ -1,3 +1,9 @@
+@import 'tailwindcss';
+@import 'tw-animate-css';
+
+/* Keep using the existing JS Tailwind config (theme, content, dark mode). */
+@config '../tailwind.config.ts';
+
 @import '../styles/base.css';
 @import '../styles/utilities.css';
 @import '../styles/components.css';
