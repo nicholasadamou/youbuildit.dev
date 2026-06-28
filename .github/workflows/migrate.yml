@@ -1,0 +1,52 @@
+name: Migrate Database
+
+# Applies pending Prisma migrations to the production database.
+# Runs after migrations/schema land on `main`, and can be triggered manually.
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'prisma/migrations/**'
+      - 'prisma/schema.prisma'
+  workflow_dispatch:
+
+# Never run two migrations against the same database at once, and never
+# cancel a migration that is already in progress.
+concurrency:
+  group: prisma-migrate-prod
+  cancel-in-progress: false
+
+jobs:
+  migrate:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Verify database secret is set
+        env:
+          PRISMA_DATABASE_URL: ${{ secrets.PRISMA_DATABASE_URL }}
+        run: |
+          if [ -z "$PRISMA_DATABASE_URL" ]; then
+            echo "::error::PRISMA_DATABASE_URL secret is not set. Add it under Settings → Secrets and variables → Actions."
+            exit 1
+          fi
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20.x
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Apply database migrations
+        env:
+          PRISMA_DATABASE_URL: ${{ secrets.PRISMA_DATABASE_URL }}
+        run: pnpm db:deploy
