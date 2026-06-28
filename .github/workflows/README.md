@@ -27,6 +27,35 @@ Runs the unit test suite on every push and pull request to `main` and `develop` 
 - No secrets required for basic functionality
 - Optional: `CODECOV_TOKEN` secret for coverage uploads
 
+### 🗄️ Migrate Database (`migrate.yml`)
+
+Applies pending Prisma migrations to the production database.
+
+**What it does:**
+
+- Installs dependencies with pnpm
+- Runs `pnpm db:deploy` (`prisma migrate deploy && prisma migrate status`)
+- Guarded by a concurrency group so two migrations never run at once (and an
+  in-progress migration is never cancelled)
+
+**Triggers:**
+
+- Push to `main` that changes `prisma/schema.prisma` or `prisma/migrations/**`
+- Manual trigger via the Actions UI (`workflow_dispatch`)
+
+**Requirements:**
+
+- `PRISMA_DATABASE_URL` secret (the production connection string). The job fails
+  fast with a clear message if it is missing. Add it under
+  **Settings → Secrets and variables → Actions**.
+
+**Notes:**
+
+- `prisma migrate deploy` only applies migrations not yet recorded in the
+  database's `_prisma_migrations` table, so re-runs are safe (idempotent).
+- This runs independently of the Vercel app deploy. For destructive migrations,
+  make sure the deployed app no longer reads the columns/tables being dropped.
+
 ### 🔄 Content Sync (`sync-content.yml`)
 
 Triggers a rebuild when challenge content is updated in the database.
