@@ -44,7 +44,7 @@ const NavItems = memo(function NavItems({
       {/* Explore Challenges Button */}
       <ExploreChallengesButton
         variant="default"
-        className="bg-[--brand] hover:bg-[--brand-dark] text-white"
+        className="bg-[var(--brand)] hover:bg-[var(--brand-dark)] text-white"
       />
     </div>
   );
@@ -177,8 +177,8 @@ export default function Navbar() {
                             onClick={closeSheet}
                             className="flex items-center space-x-3 p-3 rounded-lg hover:bg-accent transition-colors group"
                           >
-                            <div className="w-8 h-8 bg-[--brand]/10 rounded-lg flex items-center justify-center group-hover:bg-[--brand]/20 transition-colors">
-                              <Zap className="h-4 w-4 text-[--brand]" />
+                            <div className="w-8 h-8 bg-[var(--brand)]/10 rounded-lg flex items-center justify-center group-hover:bg-[var(--brand)]/20 transition-colors">
+                              <Zap className="h-4 w-4 text-[var(--brand)]" />
                             </div>
                             <div>
                               <span className="font-medium text-foreground">

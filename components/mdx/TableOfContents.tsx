@@ -50,7 +50,7 @@ export default function TableOfContents({ headings }: TableOfContentsProps) {
               <a
                 href={`#${heading.id}`}
                 onClick={e => handleClick(e, heading.id)}
-                className="text-[--brand] hover:text-green-600 transition-colors hover:underline text-sm block py-1 cursor-pointer"
+                className="text-[var(--brand)] hover:text-green-600 transition-colors hover:underline text-sm block py-1 cursor-pointer"
               >
                 {heading.text}
               </a>

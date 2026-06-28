@@ -151,7 +151,7 @@ export default function ChallengePageContent({
 
           {/* Footer Call-to-Action */}
           <motion.div
-            className="mt-12 p-6 bg-gradient-to-r from-[--brand] to-green-600 rounded-lg text-white"
+            className="mt-12 p-6 bg-gradient-to-r from-[var(--brand)] to-green-600 rounded-lg text-white"
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 1.0 }}
@@ -186,7 +186,7 @@ export default function ChallengePageContent({
                   href={process.env.NEXT_PUBLIC_CODE_REPO_URL}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center justify-center gap-2 px-6 py-2 bg-white text-[--brand] font-medium rounded-md hover:bg-gray-100 transition-colors"
+                  className="inline-flex items-center justify-center gap-2 px-6 py-2 bg-white text-[var(--brand)] font-medium rounded-md hover:bg-gray-100 transition-colors"
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                 >

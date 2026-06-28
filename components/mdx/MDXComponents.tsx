@@ -203,7 +203,7 @@ const MDXComponents: Components = {
   a: ({ href, children, ...props }) => {
     if (!href) {
       return (
-        <span className="text-[--brand]" {...props}>
+        <span className="text-[var(--brand)]" {...props}>
           {children}
         </span>
       );
@@ -217,7 +217,7 @@ const MDXComponents: Components = {
           href={href}
           target="_blank"
           rel="noopener noreferrer"
-          className="text-[--brand] hover:text-green-600 underline transition-colors"
+          className="text-[var(--brand)] hover:text-green-600 underline transition-colors"
           {...props}
         >
           {children}
@@ -228,7 +228,7 @@ const MDXComponents: Components = {
     return (
       <Link
         href={href}
-        className="text-[--brand] hover:text-green-600 underline transition-colors"
+        className="text-[var(--brand)] hover:text-green-600 underline transition-colors"
         {...props}
       >
         {children}
@@ -252,7 +252,7 @@ const MDXComponents: Components = {
   // Blockquote
   blockquote: ({ children, ...props }) => (
     <blockquote
-      className="border-l-4 border-[--brand] pl-6 py-2 my-6 italic text-muted-foreground bg-secondary"
+      className="border-l-4 border-[var(--brand)] pl-6 py-2 my-6 italic text-muted-foreground bg-secondary"
       {...props}
     >
       {children}

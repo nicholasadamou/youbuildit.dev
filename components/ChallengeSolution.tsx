@@ -273,7 +273,7 @@ export default function ChallengeSolution({
       transition={{ duration: 0.5, delay: 0.2 }}
     >
       {/* Subtle gradient overlay */}
-      <div className="absolute inset-0 bg-gradient-to-br from-[--brand]/5 via-transparent to-blue-500/5 pointer-events-none" />
+      <div className="absolute inset-0 bg-gradient-to-br from-[var(--brand)]/5 via-transparent to-blue-500/5 pointer-events-none" />
       {/* Subtle inner glow */}
       <div className="absolute inset-0 rounded-xl shadow-inner opacity-20" />
 
@@ -283,16 +283,16 @@ export default function ChallengeSolution({
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
           <div className="flex items-center gap-4">
             <div className="relative">
-              <div className="absolute inset-0 bg-[--brand]/20 rounded-xl blur-md" />
-              <div className="relative p-3 bg-gradient-to-br from-[--brand]/10 to-[--brand]/20 rounded-xl">
-                <Code2 className="h-6 w-6 text-[--brand]" />
+              <div className="absolute inset-0 bg-[var(--brand)]/20 rounded-xl blur-md" />
+              <div className="relative p-3 bg-gradient-to-br from-[var(--brand)]/10 to-[var(--brand)]/20 rounded-xl">
+                <Code2 className="h-6 w-6 text-[var(--brand)]" />
               </div>
             </div>
             <div>
               <h3 className="text-xl font-bold text-card-foreground flex items-center gap-2">
                 Complete Solution
-                <div className="px-2 py-1 bg-[--brand]/10 rounded-md">
-                  <span className="text-xs font-medium text-[--brand] uppercase tracking-wide">
+                <div className="px-2 py-1 bg-[var(--brand)]/10 rounded-md">
+                  <span className="text-xs font-medium text-[var(--brand)] uppercase tracking-wide">
                     {solutionData.language}
                   </span>
                 </div>
@@ -312,9 +312,9 @@ export default function ChallengeSolution({
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
             >
-              <div className="absolute inset-0 bg-gradient-to-r from-[--brand]/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+              <div className="absolute inset-0 bg-gradient-to-r from-[var(--brand)]/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
               <div className="relative flex items-center gap-2">
-                <Eye className="h-4 w-4 text-muted-foreground group-hover:text-[--brand] transition-colors" />
+                <Eye className="h-4 w-4 text-muted-foreground group-hover:text-[var(--brand)] transition-colors" />
                 <span className="text-muted-foreground group-hover:text-card-foreground transition-colors">
                   {showPreview ? 'Hide Preview' : 'Show Preview'}
                 </span>
@@ -323,7 +323,7 @@ export default function ChallengeSolution({
 
             <motion.button
               onClick={handleDownload}
-              className="group relative px-4 py-2 text-sm font-medium bg-[--brand] hover:bg-[--brand-dark] text-white rounded-lg transition-all duration-200 overflow-hidden shadow-lg hover:shadow-[--brand]/25"
+              className="group relative px-4 py-2 text-sm font-medium bg-[var(--brand)] hover:bg-[var(--brand-dark)] text-white rounded-lg transition-all duration-200 overflow-hidden shadow-lg hover:shadow-[var(--brand)]/25"
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
             >
@@ -344,10 +344,10 @@ export default function ChallengeSolution({
               whileHover={{ y: -2 }}
               transition={{ type: 'spring', stiffness: 300, damping: 20 }}
             >
-              <div className="absolute inset-0 bg-gradient-to-br from-[--brand]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+              <div className="absolute inset-0 bg-gradient-to-br from-[var(--brand)]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
               <div className="relative text-center">
                 <div className="text-2xl font-bold text-card-foreground mb-1 flex items-center justify-center gap-2">
-                  <Code2 className="h-5 w-5 text-[--brand] opacity-70" />
+                  <Code2 className="h-5 w-5 text-[var(--brand)] opacity-70" />
                   {metadata.linesOfCode}
                 </div>
                 <div className="text-xs text-muted-foreground uppercase tracking-wide font-medium">
@@ -361,10 +361,10 @@ export default function ChallengeSolution({
               whileHover={{ y: -2 }}
               transition={{ type: 'spring', stiffness: 300, damping: 20 }}
             >
-              <div className="absolute inset-0 bg-gradient-to-br from-[--brand]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+              <div className="absolute inset-0 bg-gradient-to-br from-[var(--brand)]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
               <div className="relative text-center">
                 <div className="text-2xl font-bold text-card-foreground mb-1 flex items-center justify-center gap-2">
-                  <FileText className="h-5 w-5 text-[--brand] opacity-70" />
+                  <FileText className="h-5 w-5 text-[var(--brand)] opacity-70" />
                   {sourceFiles.length}
                 </div>
                 <div className="text-xs text-muted-foreground uppercase tracking-wide font-medium">
@@ -378,10 +378,10 @@ export default function ChallengeSolution({
               whileHover={{ y: -2 }}
               transition={{ type: 'spring', stiffness: 300, damping: 20 }}
             >
-              <div className="absolute inset-0 bg-gradient-to-br from-[--brand]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+              <div className="absolute inset-0 bg-gradient-to-br from-[var(--brand)]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
               <div className="relative text-center">
                 <div className="text-2xl font-bold text-card-foreground mb-1 flex items-center justify-center gap-2">
-                  <TestTube className="h-5 w-5 text-[--brand] opacity-70" />
+                  <TestTube className="h-5 w-5 text-[var(--brand)] opacity-70" />
                   {testFiles.length}
                 </div>
                 <div className="text-xs text-muted-foreground uppercase tracking-wide font-medium">
@@ -395,11 +395,11 @@ export default function ChallengeSolution({
               whileHover={{ y: -2 }}
               transition={{ type: 'spring', stiffness: 300, damping: 20 }}
             >
-              <div className="absolute inset-0 bg-gradient-to-br from-[--brand]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+              <div className="absolute inset-0 bg-gradient-to-br from-[var(--brand)]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
               <div className="relative text-center">
                 <div className="text-2xl font-bold text-card-foreground mb-1 flex items-center justify-center gap-2">
                   {metadata.testCoverage}%
-                  <Gauge className="h-5 w-5 text-[--brand] opacity-70" />
+                  <Gauge className="h-5 w-5 text-[var(--brand)] opacity-70" />
                 </div>
                 <div className="text-xs text-muted-foreground uppercase tracking-wide font-medium">
                   Test Coverage
@@ -413,8 +413,8 @@ export default function ChallengeSolution({
         {metadata?.keyFeatures && metadata.keyFeatures.length > 0 && (
           <div className="mb-8">
             <div className="flex items-center gap-3 mb-4">
-              <div className="p-2 bg-[--brand]/10 rounded-lg">
-                <CheckCircle className="h-4 w-4 text-[--brand]" />
+              <div className="p-2 bg-[var(--brand)]/10 rounded-lg">
+                <CheckCircle className="h-4 w-4 text-[var(--brand)]" />
               </div>
               <h4 className="text-base font-semibold text-card-foreground">
                 Key Features Implemented
@@ -424,7 +424,7 @@ export default function ChallengeSolution({
               {metadata.keyFeatures.map((feature, index) => (
                 <motion.div
                   key={index}
-                  className="group relative p-3 bg-gradient-to-br from-[--brand]/5 to-[--brand]/10 rounded-lg transition-all duration-200 overflow-hidden shadow-sm hover:shadow-md"
+                  className="group relative p-3 bg-gradient-to-br from-[var(--brand)]/5 to-[var(--brand)]/10 rounded-lg transition-all duration-200 overflow-hidden shadow-sm hover:shadow-md"
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{
@@ -435,9 +435,9 @@ export default function ChallengeSolution({
                   }}
                   whileHover={{ scale: 1.02 }}
                 >
-                  <div className="absolute inset-0 bg-gradient-to-r from-[--brand]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                  <div className="absolute inset-0 bg-gradient-to-r from-[var(--brand)]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
                   <div className="relative flex items-center gap-2">
-                    <div className="w-1.5 h-1.5 bg-[--brand] rounded-full" />
+                    <div className="w-1.5 h-1.5 bg-[var(--brand)] rounded-full" />
                     <span className="text-xs font-medium text-card-foreground">
                       {feature}
                     </span>
@@ -460,8 +460,8 @@ export default function ChallengeSolution({
               {/* File List */}
               <div className="lg:w-1/3">
                 <div className="flex items-center gap-3 mb-4">
-                  <div className="p-2 bg-[--brand]/10 rounded-lg">
-                    <FileText className="h-4 w-4 text-[--brand]" />
+                  <div className="p-2 bg-[var(--brand)]/10 rounded-lg">
+                    <FileText className="h-4 w-4 text-[var(--brand)]" />
                   </div>
                   <h4 className="text-base font-semibold text-card-foreground">
                     Solution Files ({files.length})
@@ -524,8 +524,8 @@ export default function ChallengeSolution({
                             <div
                               className={`p-1.5 rounded-lg ${
                                 selectedFile?.relativePath === file.relativePath
-                                  ? 'bg-[--brand]/20'
-                                  : 'bg-secondary/50 group-hover:bg-[--brand]/10'
+                                  ? 'bg-[var(--brand)]/20'
+                                  : 'bg-secondary/50 group-hover:bg-[var(--brand)]/10'
                               }`}
                             >
                               {getFileIcon(file.type)}
@@ -543,7 +543,7 @@ export default function ChallengeSolution({
                             <span
                               className={`text-xs px-2 py-1 rounded-md ${
                                 selectedFile?.relativePath === file.relativePath
-                                  ? 'bg-[--brand]/10 text-[--brand]'
+                                  ? 'bg-[var(--brand)]/10 text-[var(--brand)]'
                                   : 'bg-secondary/50 text-muted-foreground'
                               }`}
                             >
@@ -566,7 +566,7 @@ export default function ChallengeSolution({
                     {/* File Header */}
                     <div className="px-6 py-4 bg-secondary/40 border-b border-secondary/60 flex items-center justify-between">
                       <div className="flex items-center gap-3">
-                        <div className="p-1.5 bg-[--brand]/10 rounded-lg">
+                        <div className="p-1.5 bg-[var(--brand)]/10 rounded-lg">
                           {getFileIcon(selectedFile.type)}
                         </div>
                         <div>
@@ -593,7 +593,7 @@ export default function ChallengeSolution({
                               }}
                               className={`group px-3 py-1.5 text-xs font-medium rounded-md transition-all duration-200 flex items-center gap-2 ${
                                 !showMarkdownPreview
-                                  ? 'bg-[--brand] text-white shadow-sm'
+                                  ? 'bg-[var(--brand)] text-white shadow-sm'
                                   : 'text-muted-foreground hover:text-card-foreground hover:bg-secondary/50'
                               }`}
                               title="Show raw markdown"
@@ -612,7 +612,7 @@ export default function ChallengeSolution({
                               }}
                               className={`group px-3 py-1.5 text-xs font-medium rounded-md transition-all duration-200 flex items-center gap-2 ${
                                 showMarkdownPreview
-                                  ? 'bg-[--brand] text-white shadow-sm'
+                                  ? 'bg-[var(--brand)] text-white shadow-sm'
                                   : 'text-muted-foreground hover:text-card-foreground hover:bg-secondary/50'
                               }`}
                               title="Show preview"
@@ -624,7 +624,7 @@ export default function ChallengeSolution({
                         )}
 
                         <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                          <span className="px-2 py-1 bg-[--brand]/10 rounded-md text-[--brand] font-medium">
+                          <span className="px-2 py-1 bg-[var(--brand)]/10 rounded-md text-[var(--brand)] font-medium">
                             {selectedFile.type.toLowerCase()}
                           </span>
                           <span className="font-mono">
@@ -676,8 +676,8 @@ export default function ChallengeSolution({
                 ) : (
                   <div className="flex items-center justify-center h-80 bg-secondary/20 rounded-xl border-2 border-dashed border-secondary/40">
                     <div className="text-center">
-                      <div className="p-4 bg-[--brand]/5 rounded-xl w-fit mx-auto mb-4">
-                        <Code2 className="h-8 w-8 text-[--brand] mx-auto" />
+                      <div className="p-4 bg-[var(--brand)]/5 rounded-xl w-fit mx-auto mb-4">
+                        <Code2 className="h-8 w-8 text-[var(--brand)] mx-auto" />
                       </div>
                       <h3 className="text-base font-medium text-card-foreground mb-2">
                         Select a File

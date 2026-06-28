@@ -136,7 +136,7 @@ export default function Features() {
     >
       {/* Animated background elements */}
       <motion.div
-        className="absolute top-16 right-10 w-40 h-40 bg-gradient-to-br from-[--brand]/10 to-transparent rounded-full blur-2xl"
+        className="absolute top-16 right-10 w-40 h-40 bg-gradient-to-br from-[var(--brand)]/10 to-transparent rounded-full blur-2xl"
         animate={{
           y: [-15, 25, -15],
           x: [-8, 12, -8],
@@ -177,7 +177,7 @@ export default function Features() {
           >
             Why Choose Our{' '}
             <motion.span
-              className="text-[--brand] inline-block"
+              className="text-[var(--brand)] inline-block"
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.5, delay: 0.5 }}

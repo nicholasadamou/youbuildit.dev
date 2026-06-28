@@ -233,7 +233,7 @@ export default function TermsOfUsePage() {
       <div className="min-h-screen bg-background relative overflow-hidden">
         {/* Animated background elements */}
         <motion.div
-          className="absolute top-20 right-10 w-72 h-72 bg-gradient-to-br from-[--brand]/10 to-transparent rounded-full blur-3xl"
+          className="absolute top-20 right-10 w-72 h-72 bg-gradient-to-br from-[var(--brand)]/10 to-transparent rounded-full blur-3xl"
           animate={{
             y: [-20, 30, -20],
             x: [-10, 15, -10],
@@ -282,7 +282,7 @@ export default function TermsOfUsePage() {
           {/* Header Section */}
           <motion.div className="text-center mb-16" variants={headerVariants}>
             <motion.h1
-              className="text-4xl md:text-5xl lg:text-6xl font-bold bg-gradient-to-r from-foreground via-[--brand] to-foreground bg-clip-text text-transparent mb-6"
+              className="text-4xl md:text-5xl lg:text-6xl font-bold bg-gradient-to-r from-foreground via-[var(--brand)] to-foreground bg-clip-text text-transparent mb-6"
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.2 }}
@@ -293,7 +293,7 @@ export default function TermsOfUsePage() {
               className="inline-flex items-center gap-3 bg-card/50 backdrop-blur-sm border border-border/50 rounded-full px-6 py-3 text-muted-foreground"
               variants={itemVariants}
             >
-              <div className="w-2 h-2 bg-[--brand] rounded-full animate-pulse" />
+              <div className="w-2 h-2 bg-[var(--brand)] rounded-full animate-pulse" />
               <span className="text-sm font-medium">
                 Last updated:{' '}
                 {new Date().toLocaleDateString('en-US', {
