@@ -104,7 +104,7 @@ export default function ChallengesPageContent() {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[--brand] mx-auto mb-4" />
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[var(--brand)] mx-auto mb-4" />
           <p className="text-muted-foreground">Loading challenges...</p>
         </div>
       </div>
@@ -133,7 +133,7 @@ export default function ChallengesPageContent() {
           href={`/challenge/${challenge.slug}`}
           className={`group block ${
             viewMode === 'grid'
-              ? 'p-6 bg-card border border-border rounded-lg hover:border-[--brand] hover:shadow-lg transition-all duration-200'
+              ? 'p-6 bg-card border border-border rounded-lg hover:border-[var(--brand)] hover:shadow-lg transition-all duration-200'
               : 'p-4 bg-card border-b border-border hover:bg-secondary transition-colors'
           }`}
         >
@@ -143,7 +143,7 @@ export default function ChallengesPageContent() {
             <div className={viewMode === 'grid' ? 'mb-4' : 'flex-1'}>
               <div className="flex items-start justify-between mb-3">
                 <h3
-                  className={`font-semibold text-card-foreground group-hover:text-[--brand] transition-colors ${
+                  className={`font-semibold text-card-foreground group-hover:text-[var(--brand)] transition-colors ${
                     viewMode === 'grid' ? 'text-xl' : 'text-lg'
                   }`}
                 >
@@ -211,7 +211,7 @@ export default function ChallengesPageContent() {
               <span className="text-sm text-muted-foreground">
                 {viewMode === 'grid' ? 'Click to start challenge' : ''}
               </span>
-              <ArrowRight className="h-4 w-4 text-[--brand] group-hover:translate-x-1 transition-transform" />
+              <ArrowRight className="h-4 w-4 text-[var(--brand)] group-hover:translate-x-1 transition-transform" />
             </div>
           </div>
         </Link>
@@ -319,7 +319,7 @@ export default function ChallengesPageContent() {
                       setSearchQuery(e.target.value);
                       updateUrlParams({ search: e.target.value });
                     }}
-                    className="w-full pl-10 pr-4 py-3 border border-input rounded-lg text-foreground bg-background placeholder-muted-foreground focus:ring-2 focus:ring-[--brand] focus:border-transparent"
+                    className="w-full pl-10 pr-4 py-3 border border-input rounded-lg text-foreground bg-background placeholder-muted-foreground focus:ring-2 focus:ring-[var(--brand)] focus:border-transparent"
                   />
                 </motion.div>
               </motion.div>
@@ -388,7 +388,7 @@ export default function ChallengesPageContent() {
                     onClick={() => setViewMode('grid')}
                     className={`p-2 rounded-md transition-colors ${
                       viewMode === 'grid'
-                        ? 'bg-[--brand] text-white'
+                        ? 'bg-[var(--brand)] text-white'
                         : 'bg-background text-muted-foreground hover:bg-secondary border border-input'
                     }`}
                     whileHover={{ scale: 1.05 }}
@@ -400,7 +400,7 @@ export default function ChallengesPageContent() {
                     onClick={() => setViewMode('list')}
                     className={`p-2 rounded-md transition-colors ${
                       viewMode === 'list'
-                        ? 'bg-[--brand] text-white'
+                        ? 'bg-[var(--brand)] text-white'
                         : 'bg-background text-muted-foreground hover:bg-secondary border border-input'
                     }`}
                     whileHover={{ scale: 1.05 }}
@@ -485,7 +485,7 @@ export default function ChallengesPageContent() {
                         tier: null,
                       });
                     }}
-                    className="text-[--brand] hover:underline"
+                    className="text-[var(--brand)] hover:underline"
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.4, delay: 0.4 }}

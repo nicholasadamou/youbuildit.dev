@@ -81,7 +81,7 @@ const HeroHeading = () => {
           </motion.span>
           <motion.span
             variants={gradientVariants}
-            className="text-transparent bg-clip-text bg-gradient-to-r from-[--brand] to-[--brand-dark] bg-[length:200%_100%] sm:whitespace-nowrap"
+            className="text-transparent bg-clip-text bg-gradient-to-r from-[var(--brand)] to-[var(--brand-dark)] bg-[length:200%_100%] sm:whitespace-nowrap"
           >
             Great Engineer
           </motion.span>
@@ -171,11 +171,11 @@ export default function HeroSection() {
         <div className="absolute inset-0 bg-gradient-to-br from-slate-50 via-green-50/30 to-emerald-50/40 dark:from-slate-950 dark:via-green-950/30 dark:to-emerald-950/40" />
 
         {/* Mesh gradient overlay */}
-        <div className="absolute inset-0 bg-gradient-to-tr from-[--brand]/10 via-transparent to-blue-500/5" />
+        <div className="absolute inset-0 bg-gradient-to-tr from-[var(--brand)]/10 via-transparent to-blue-500/5" />
 
         {/* Animated gradient orbs */}
         <motion.div
-          className="absolute -top-48 -left-48 w-96 h-96 bg-gradient-to-br from-[--brand]/15 to-emerald-400/10 rounded-full filter blur-3xl"
+          className="absolute -top-48 -left-48 w-96 h-96 bg-gradient-to-br from-[var(--brand)]/15 to-emerald-400/10 rounded-full filter blur-3xl"
           animate={{
             x: [0, 100, 0],
             y: [0, -50, 0],
@@ -188,7 +188,7 @@ export default function HeroSection() {
           }}
         />
         <motion.div
-          className="absolute -bottom-48 -right-48 w-96 h-96 bg-gradient-to-tl from-blue-400/10 to-[--brand]/15 rounded-full filter blur-3xl"
+          className="absolute -bottom-48 -right-48 w-96 h-96 bg-gradient-to-tl from-blue-400/10 to-[var(--brand)]/15 rounded-full filter blur-3xl"
           animate={{
             x: [0, -120, 0],
             y: [0, 60, 0],
@@ -227,7 +227,7 @@ export default function HeroSection() {
 
         {/* Parallax layer for scroll effect */}
         <motion.div
-          className="absolute inset-0 bg-gradient-to-t from-[--brand]/8 to-transparent"
+          className="absolute inset-0 bg-gradient-to-t from-[var(--brand)]/8 to-transparent"
           style={{
             y: backgroundY,
             opacity: backgroundOpacity,
@@ -267,7 +267,7 @@ export default function HeroSection() {
                     className="flex flex-col justify-center items-center h-64 space-y-4"
                   >
                     <motion.div
-                      className="w-12 h-12 border-4 border-[--brand] border-t-transparent rounded-full"
+                      className="w-12 h-12 border-4 border-[var(--brand)] border-t-transparent rounded-full"
                       animate={{ rotate: 360 }}
                       transition={{
                         duration: 1,

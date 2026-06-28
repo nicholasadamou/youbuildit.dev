@@ -46,9 +46,9 @@ export const FilterDropdown = React.forwardRef<
         <DropdownMenuTrigger
           ref={ref}
           className={cn(
-            'flex h-9 min-w-[140px] items-center justify-between whitespace-nowrap rounded-md border border-input bg-background px-3 py-2 text-sm shadow-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-[--brand] focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1',
+            'flex h-9 min-w-[140px] items-center justify-between whitespace-nowrap rounded-md border border-input bg-background px-3 py-2 text-sm shadow-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-[var(--brand)] focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1',
             'hover:bg-accent hover:text-accent-foreground transition-colors',
-            'data-[state=open]:ring-2 data-[state=open]:ring-[--brand] data-[state=open]:ring-offset-2',
+            'data-[state=open]:ring-2 data-[state=open]:ring-[var(--brand)] data-[state=open]:ring-offset-2',
             triggerClassName,
             className
           )}
@@ -106,7 +106,7 @@ export const FilterDropdown = React.forwardRef<
                         animate={{ scale: 1, opacity: 1 }}
                         transition={{ duration: 0.15 }}
                       >
-                        <Check className="h-4 w-4 text-[--brand]" />
+                        <Check className="h-4 w-4 text-[var(--brand)]" />
                       </motion.div>
                     )}
                   </DropdownMenuItem>

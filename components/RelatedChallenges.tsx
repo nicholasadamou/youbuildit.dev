@@ -63,10 +63,10 @@ export default function RelatedChallenges({
           >
             <Link
               href={`/challenge/${challenge.slug}`}
-              className="group block p-6 bg-card border border-border rounded-lg hover:border-[--brand] hover:shadow-lg transition-all duration-200 h-full"
+              className="group block p-6 bg-card border border-border rounded-lg hover:border-[var(--brand)] hover:shadow-lg transition-all duration-200 h-full"
             >
               <div className="flex items-start justify-between mb-3">
-                <h3 className="text-lg font-semibold text-card-foreground group-hover:text-[--brand] transition-colors">
+                <h3 className="text-lg font-semibold text-card-foreground group-hover:text-[var(--brand)] transition-colors">
                   {challenge.title}
                 </h3>
                 <DifficultyTag
@@ -91,7 +91,7 @@ export default function RelatedChallenges({
                     {challenge.category}
                   </div>
                 </div>
-                <ArrowRight className="h-4 w-4 text-[--brand] group-hover:translate-x-1 transition-transform" />
+                <ArrowRight className="h-4 w-4 text-[var(--brand)] group-hover:translate-x-1 transition-transform" />
               </div>
 
               <div className="mt-3">

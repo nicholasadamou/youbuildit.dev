@@ -539,7 +539,7 @@ export default function Testimonials() {
     >
       {/* Floating background elements */}
       <motion.div
-        className="absolute top-20 left-10 w-32 h-32 bg-[--brand]/5 rounded-full blur-xl"
+        className="absolute top-20 left-10 w-32 h-32 bg-[var(--brand)]/5 rounded-full blur-xl"
         animate={{
           y: [-20, 20, -20],
           x: [-10, 10, -10],
@@ -609,7 +609,7 @@ export default function Testimonials() {
                 whileTap="tap"
                 style={{ perspective: '1000px' }}
               >
-                <Card className="h-full flex flex-col overflow-hidden bg-card border border-[#333333] dark:border-[#2a2a2a] hover:border-[--brand]/20 transition-colors duration-300">
+                <Card className="h-full flex flex-col overflow-hidden bg-card border border-[#333333] dark:border-[#2a2a2a] hover:border-[var(--brand)]/20 transition-colors duration-300">
                   <CardHeader className="relative p-4 sm:p-6">
                     <motion.div
                       className="flex items-center space-x-4"
@@ -657,7 +657,7 @@ export default function Testimonials() {
 
                     <div className="relative">
                       <motion.div variants={quoteVariants} whileHover="hover">
-                        <Quote className="absolute top-0 left-0 h-8 w-8 text-[--brand]" />
+                        <Quote className="absolute top-0 left-0 h-8 w-8 text-[var(--brand)]" />
                       </motion.div>
                       <motion.p
                         className="italic pl-8 sm:pl-10 text-card-foreground text-sm sm:text-base leading-relaxed"
@@ -688,7 +688,7 @@ export default function Testimonials() {
                       >
                         <Badge
                           variant="secondary"
-                          className="hover:bg-[--brand] hover:text-white transition-all duration-300 shadow-sm hover:shadow-md"
+                          className="hover:bg-[var(--brand)] hover:text-white transition-all duration-300 shadow-sm hover:shadow-md"
                         >
                           {testimonial.challenge}
                         </Badge>

@@ -91,7 +91,7 @@ export default function NotFound() {
               >
                 <Link
                   href="/challenges"
-                  className="inline-flex items-center gap-2 px-6 py-3 bg-[--brand] text-white font-medium rounded-lg hover:bg-[--brand-dark] transition-all duration-200 shadow-md hover:shadow-lg"
+                  className="inline-flex items-center gap-2 px-6 py-3 bg-[var(--brand)] text-white font-medium rounded-lg hover:bg-[var(--brand-dark)] transition-all duration-200 shadow-md hover:shadow-lg"
                 >
                   <Layers className="h-4 w-4" />
                   Browse Challenges
@@ -120,14 +120,14 @@ export default function NotFound() {
               Need help? Check out our{' '}
               <Link
                 href="/challenges"
-                className="text-[--brand] hover:text-[--brand-dark] underline transition-colors"
+                className="text-[var(--brand)] hover:text-[var(--brand-dark)] underline transition-colors"
               >
                 full collection of challenges
               </Link>{' '}
               or start from the{' '}
               <Link
                 href="/"
-                className="text-[--brand] hover:text-[--brand-dark] underline transition-colors"
+                className="text-[var(--brand)] hover:text-[var(--brand-dark)] underline transition-colors"
               >
                 homepage
               </Link>

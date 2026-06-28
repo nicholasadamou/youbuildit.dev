@@ -106,7 +106,7 @@ const ChallengeCard = ({
       <div className="mt-auto">
         <Link href={`/challenge/${challenge.slug}`}>
           <motion.div
-            className="inline-flex items-center justify-center w-full px-3 py-2 sm:py-1 bg-[--brand] text-white text-sm font-medium rounded-md cursor-pointer overflow-hidden relative group"
+            className="inline-flex items-center justify-center w-full px-3 py-2 sm:py-1 bg-[var(--brand)] text-white text-sm font-medium rounded-md cursor-pointer overflow-hidden relative group"
             whileHover={{
               scale: 1.02,
             }}
@@ -136,7 +136,7 @@ const ChallengeCard = ({
           animate={{ scale: isHovered ? 1.1 : 1 }}
           transition={{ duration: 0.2 }}
         >
-          <Code className="h-4 w-4 text-[--brand]" />
+          <Code className="h-4 w-4 text-[var(--brand)]" />
         </motion.div>
       </div>
     </div>
