@@ -2,6 +2,11 @@
 node_modules/
 .pnpm-store/
 
+# Lockfiles (managed by the package manager, not Prettier)
+pnpm-lock.yaml
+package-lock.json
+yarn.lock
+
 # Build outputs
 .next/
 out/
