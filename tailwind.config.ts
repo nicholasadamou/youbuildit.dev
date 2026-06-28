@@ -73,7 +73,9 @@ const config: Config = {
       },
     },
   },
-  plugins: [require('tailwindcss-animate')],
+  // Animations previously from `tailwindcss-animate` now come from
+  // `tw-animate-css` (imported in app/globals.css), which is Tailwind 4 native.
+  plugins: [],
 };
 
 export default config;
