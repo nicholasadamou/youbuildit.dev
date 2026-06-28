@@ -13,23 +13,21 @@ export const contentType = 'image/svg+xml';
 // Image generation
 export default function Icon() {
   return new ImageResponse(
-    (
-      <div
-        style={{
-          fontSize: 24,
-          background: '#1a1a1a',
-          color: '#fff',
-          width: '100%',
-          height: '100%',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          borderRadius: '8px',
-        }}
-      >
-        YBI
-      </div>
-    ),
+    <div
+      style={{
+        fontSize: 24,
+        background: '#1a1a1a',
+        color: '#fff',
+        width: '100%',
+        height: '100%',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        borderRadius: '8px',
+      }}
+    >
+      YBI
+    </div>,
     {
       ...size,
     }

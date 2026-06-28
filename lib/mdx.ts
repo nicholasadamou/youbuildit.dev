@@ -38,9 +38,7 @@ export async function getAllChallenges(): Promise<Challenge[]> {
     difficulty: dbChallenge.difficulty
       .toLowerCase()
       .replace(/^\w/, c => c.toUpperCase()) as
-      | 'Beginner'
-      | 'Intermediate'
-      | 'Advanced',
+      'Beginner' | 'Intermediate' | 'Advanced',
     category: dbChallenge.category,
     skills: dbChallenge.skills,
     estimatedTime: dbChallenge.estimatedTime,
@@ -76,9 +74,7 @@ export async function getChallengeBySlug(
         difficulty: dbChallenge.difficulty
           .toLowerCase()
           .replace(/^\w/, c => c.toUpperCase()) as
-          | 'Beginner'
-          | 'Intermediate'
-          | 'Advanced',
+          'Beginner' | 'Intermediate' | 'Advanced',
         category: dbChallenge.category,
         skills: dbChallenge.skills,
         estimatedTime: dbChallenge.estimatedTime,

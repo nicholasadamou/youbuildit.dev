@@ -7,15 +7,19 @@ import Link from 'next/link';
 import { useNavigateToRandomFreeChallenge } from '@/lib/navigation';
 import { ReactNode } from 'react';
 
-export interface ExploreChallengesButtonProps
-  extends Omit<ButtonProps, 'asChild'> {
+export interface ExploreChallengesButtonProps extends Omit<
+  ButtonProps,
+  'asChild'
+> {
   children?: ReactNode;
   showIcon?: boolean;
   iconPosition?: 'left' | 'right';
 }
 
-export interface RandomFreeChallengeButtonProps
-  extends Omit<ButtonProps, 'onClick'> {
+export interface RandomFreeChallengeButtonProps extends Omit<
+  ButtonProps,
+  'onClick'
+> {
   children?: ReactNode;
   showIcon?: boolean;
   iconPosition?: 'left' | 'right';
