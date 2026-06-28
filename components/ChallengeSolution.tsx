@@ -323,7 +323,7 @@ export default function ChallengeSolution({
 
             <motion.button
               onClick={handleDownload}
-              className="group relative px-4 py-2 text-sm font-medium bg-[var(--brand)] hover:bg-[var(--brand-dark)] text-white rounded-lg transition-all duration-200 overflow-hidden shadow-lg hover:shadow-[var(--brand)]/25"
+              className="group relative px-4 py-2 text-sm font-medium bg-[var(--brand)] hover:bg-[var(--brand-dark)] text-white rounded-lg transition-all duration-200 overflow-hidden shadow-lg hover:shadow-[color:var(--brand)]/25"
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
             >
