@@ -12,7 +12,7 @@ importers:
         specifier: ^2.2.0
         version: 2.2.0(react@19.2.7)
       '@prisma/client':
-        specifier: ^7.8.0
+        specifier: 7.8.0
         version: 7.8.0(prisma@7.8.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(magicast@0.5.3)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(typescript@6.0.3))(typescript@6.0.3)
       '@prisma/extension-accelerate':
         specifier: ^3.0.1
@@ -75,7 +75,7 @@ importers:
         specifier: ^0.4.6
         version: 0.4.6(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
       prisma:
-        specifier: ^7.8.0
+        specifier: 7.8.0
         version: 7.8.0(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(magicast@0.5.3)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(typescript@6.0.3)
       react:
         specifier: ^19.2.7
