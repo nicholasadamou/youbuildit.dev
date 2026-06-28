@@ -1,17 +1,11 @@
-import { FlatCompat } from '@eslint/eslintrc';
-import path from 'path';
-import { fileURLToPath } from 'url';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
-const compat = new FlatCompat({
-  baseDirectory: __dirname,
-});
+import nextCoreWebVitals from 'eslint-config-next/core-web-vitals';
+import nextTypescript from 'eslint-config-next/typescript';
+import prettierRecommended from 'eslint-plugin-prettier/recommended';
 
 const eslintConfig = [
-  ...compat.extends('next/core-web-vitals', 'next/typescript', 'prettier'),
-  ...compat.plugins('prettier'),
+  ...nextCoreWebVitals,
+  ...nextTypescript,
+  prettierRecommended,
   {
     ignores: [
       'node_modules/**',
@@ -34,6 +28,10 @@ const eslintConfig = [
       '@typescript-eslint/no-explicit-any': 'warn',
       '@typescript-eslint/triple-slash-reference': 'off', // Allow triple slash in Next.js files
       '@typescript-eslint/no-require-imports': 'off', // Allow require in config files
+      // New opinionated rule from the react-hooks plugin (eslint-config-next 16).
+      // Flags intentional fetch-on-mount / state-sync effects here; keep as a
+      // warning rather than refactoring working data-fetching effects.
+      'react-hooks/set-state-in-effect': 'warn',
       'react/jsx-curly-brace-presence': [
         'error',
         {
