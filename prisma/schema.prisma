@@ -35,6 +35,7 @@ model Challenge {
 
   @@index([category, difficulty])
   @@index([hasSolution])
+  @@index([published, createdAt])
 }
 
 // Solution files for challenges

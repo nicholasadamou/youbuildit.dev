@@ -363,7 +363,7 @@ export default function Testimonials() {
           role: 'Software Engineer',
           company: 'DevFlow',
           quote:
-            'Perfect for beginners! The free challenges gave me confidence to tackle more complex problems.',
+            'Perfect for beginners! The challenges gave me confidence to tackle more complex problems.',
           rating: 5,
           challenge: 'Command Line Tools',
           challenge_link: 'command-line-tools',
@@ -373,7 +373,7 @@ export default function Testimonials() {
           role: 'Backend Developer',
           company: 'CodeBase',
           quote:
-            'The free tier provided an excellent foundation. I learned fundamentals that I use every day.',
+            'The open challenge library provided an excellent foundation. I learned fundamentals that I use every day.',
           rating: 4,
           challenge: 'File Processing',
           challenge_link: 'file-processing',
@@ -383,7 +383,7 @@ export default function Testimonials() {
           role: 'Full Stack Engineer',
           company: 'StartupXYZ',
           quote:
-            'These premium challenges bridge the gap between theoretical knowledge and practical application. The detailed solutions are worth every penny.',
+            'These advanced challenges bridge the gap between theoretical knowledge and practical application. The detailed solutions are incredibly valuable.',
           rating: 5,
           challenge: 'Docker Container',
           challenge_link: 'docker-container',
@@ -393,7 +393,7 @@ export default function Testimonials() {
           role: 'Senior Developer',
           company: 'TechScale',
           quote:
-            'The Pro challenges pushed my skills to the next level. The step-by-step explanations make complex distributed systems concepts clear.',
+            'The advanced challenges pushed my skills to the next level. The step-by-step explanations make complex distributed systems concepts clear.',
           rating: 5,
           challenge: 'Distributed Database',
           challenge_link: 'distributed-database',
@@ -403,7 +403,7 @@ export default function Testimonials() {
           role: 'Team Lead',
           company: 'Enterprise Solutions',
           quote:
-            'The Pro challenges are perfect for our engineering team. The advanced patterns and detailed solutions are exactly what we needed.',
+            'The advanced challenges are perfect for our engineering team. The advanced patterns and detailed solutions are exactly what we needed.',
           rating: 5,
           challenge: 'Microservices Architecture',
           challenge_link: 'microservices-architecture',

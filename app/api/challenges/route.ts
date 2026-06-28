@@ -38,7 +38,7 @@ export async function GET() {
       skills: challenge.skills,
       estimatedTime: challenge.estimatedTime,
       hasSolution: challenge.hasSolution,
-      solutionLanguage: challenge.solutionLanguage,
+      solutionLanguage: challenge.solutionLanguage ?? undefined,
     }));
 
     return NextResponse.json(formattedChallenges);

@@ -9,9 +9,9 @@ export async function GET(
   try {
     const { slug } = await params;
 
-    // Get challenge with solution
-    const challenge = await prisma.challenge.findUnique({
-      where: { slug },
+    // Get challenge with solution (published challenges only)
+    const challenge = await prisma.challenge.findFirst({
+      where: { slug, published: true },
       include: {
         solutions: true,
         solutionMetadata: true,

@@ -77,8 +77,16 @@ export default function ChallengeSolution({
   }, [selectedFile?.type, selectedFile?.relativePath]); // Include type to fix React Hook warning
 
   useEffect(() => {
+    if (!hasSolutionAvailable) {
+      setSolutionData(null);
+      setError(null);
+      setLoading(false);
+      return;
+    }
+
     const fetchSolution = async () => {
       try {
+        setLoading(true);
         const response = await fetch(
           `/api/challenges/${challengeSlug}/solution`
         );
@@ -105,7 +113,7 @@ export default function ChallengeSolution({
     };
 
     fetchSolution();
-  }, [challengeSlug]);
+  }, [challengeSlug, hasSolutionAvailable]);
 
   // Don't show component if no solution is available
   if (!hasSolutionAvailable) {

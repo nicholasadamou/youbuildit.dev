@@ -1,9 +1,22 @@
 import { NextResponse } from 'next/server';
-import { getAllChallenges } from '@/lib/mdx';
+import { prisma } from '@/lib/prisma';
 
 export async function GET() {
   try {
-    const challenges = await getAllChallenges();
+    // Lightweight projection — only the summary fields are needed here,
+    // so avoid materializing the full MDX content of every challenge.
+    const challenges = await prisma.challenge.findMany({
+      where: { published: true },
+      select: {
+        slug: true,
+        title: true,
+        summary: true,
+        difficulty: true,
+        category: true,
+        skills: true,
+        estimatedTime: true,
+      },
+    });
 
     if (challenges.length === 0) {
       return NextResponse.json(
@@ -16,18 +29,18 @@ export async function GET() {
     const randomIndex = Math.floor(Math.random() * challenges.length);
     const randomChallenge = challenges[randomIndex];
 
-    // Return simplified challenge data
-    const simplifiedChallenge = {
+    const formatDifficulty = (difficulty: string) =>
+      difficulty.charAt(0).toUpperCase() + difficulty.slice(1).toLowerCase();
+
+    return NextResponse.json({
       slug: randomChallenge.slug,
       title: randomChallenge.title,
       summary: randomChallenge.summary,
-      difficulty: randomChallenge.difficulty,
+      difficulty: formatDifficulty(randomChallenge.difficulty),
       category: randomChallenge.category,
       skills: randomChallenge.skills,
       estimatedTime: randomChallenge.estimatedTime,
-    };
-
-    return NextResponse.json(simplifiedChallenge);
+    });
   } catch (error) {
     console.error('Error fetching random challenge:', error);
     return NextResponse.json(

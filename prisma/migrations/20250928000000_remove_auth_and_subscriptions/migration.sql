@@ -37,3 +37,6 @@ DROP TYPE "public"."SubscriptionStatus";
 -- DropEnum
 DROP TYPE "public"."SubscriptionTier";
 
+-- CreateIndex
+CREATE INDEX "Challenge_published_createdAt_idx" ON "public"."Challenge"("published", "createdAt");
+

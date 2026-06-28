@@ -481,6 +481,8 @@ export default function ChallengesPageContent() {
                         search: null,
                         category: null,
                         difficulty: null,
+                        // Clear legacy tier param from old shared URLs
+                        tier: null,
                       });
                     }}
                     className="text-[--brand] hover:underline"
