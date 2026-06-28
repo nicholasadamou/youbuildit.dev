@@ -1,28 +1,13 @@
 import { NextResponse } from 'next/server';
 import { getAllChallenges } from '@/lib/mdx';
 
-export async function GET(request: Request) {
+export async function GET() {
   try {
-    const { searchParams } = new URL(request.url);
-    const tier = searchParams.get('tier');
-
-    const allChallenges = await getAllChallenges();
-
-    if (allChallenges.length === 0) {
-      return NextResponse.json(
-        { error: 'No challenges available' },
-        { status: 404 }
-      );
-    }
-
-    // Filter challenges by tier if specified
-    const challenges = tier
-      ? allChallenges.filter(challenge => challenge.tier === tier)
-      : allChallenges;
+    const challenges = await getAllChallenges();
 
     if (challenges.length === 0) {
       return NextResponse.json(
-        { error: `No ${tier || ''} challenges available` },
+        { error: 'No challenges available' },
         { status: 404 }
       );
     }

@@ -76,14 +76,9 @@ export function useChallenges(
     return challenges[randomIndex];
   };
 
-  const getRandomFreeChallenge = (): ClientChallenge | null => {
-    const freeChallenges = challenges.filter(
-      challenge => challenge.tier.toUpperCase() === 'FREE'
-    );
-    if (freeChallenges.length === 0) return null;
-    const randomIndex = Math.floor(Math.random() * freeChallenges.length);
-    return freeChallenges[randomIndex];
-  };
+  // All challenges are free; kept for backward compatibility with callers.
+  const getRandomFreeChallenge = (): ClientChallenge | null =>
+    getRandomChallenge();
 
   useEffect(() => {
     if (autoLoad) {

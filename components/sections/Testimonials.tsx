@@ -13,7 +13,6 @@ import {
   CardHeader,
 } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import PremiumBadge from '@/components/PremiumBadge';
 
 // Type definition for testimonial data
 type TestimonialType = {
@@ -24,7 +23,6 @@ type TestimonialType = {
   rating: number;
   challenge: string;
   challenge_link: string;
-  tier: 'free' | 'pro' | 'FREE' | 'PRO';
   style?: string;
   industry?: string;
 };
@@ -260,7 +258,6 @@ function createUniqueTestimonialCombinations(challenges: ClientChallenge[]) {
       rating: Math.floor(Math.random() * 2) + 4, // Random 4 or 5
       challenge: challenge.title,
       challenge_link: challenge.slug,
-      tier: challenge.tier,
       industry: finalCeo.industry,
     };
   });
@@ -270,7 +267,7 @@ function generateTestimonials(challenges: ClientChallenge[]) {
   return createUniqueTestimonialCombinations(challenges);
 }
 
-// Function to select a diverse set of testimonials with balanced tier distribution
+// Function to select a diverse set of testimonials (by industry and challenge)
 function selectDiverseTestimonials(
   testimonials: TestimonialType[],
   count: number
@@ -279,19 +276,6 @@ function selectDiverseTestimonials(
     return testimonials;
   }
 
-  // Separate testimonials by tier (handle both uppercase and lowercase)
-  const freeTestimonials = testimonials.filter(
-    t => t.tier === 'free' || t.tier === 'FREE'
-  );
-  const premiumTestimonials = testimonials.filter(
-    t => t.tier === 'pro' || t.tier === 'PRO'
-  );
-
-  // Calculate ideal distribution (roughly 60% free, 40% premium)
-  const idealFreeCount = Math.ceil(count * 0.6);
-  const idealPremiumCount = count - idealFreeCount;
-
-  // Shuffle both arrays
   function shuffleArray<T>(array: T[]): T[] {
     const shuffled = [...array];
     for (let i = shuffled.length - 1; i > 0; i--) {
@@ -301,8 +285,7 @@ function selectDiverseTestimonials(
     return shuffled;
   }
 
-  const shuffledFree = shuffleArray(freeTestimonials);
-  const shuffledPremium = shuffleArray(premiumTestimonials);
+  const shuffled = shuffleArray(testimonials);
 
   // Track diversity
   const includedIndustries = new Set<string>();
@@ -328,54 +311,22 @@ function selectDiverseTestimonials(
     includedChallenges.add(testimonial.challenge_link);
   };
 
-  // First pass: Select diverse free testimonials
-  let freeCount = 0;
-  for (const testimonial of shuffledFree) {
-    if (freeCount >= idealFreeCount) break;
+  // First pass: prefer testimonials that add industry/challenge diversity
+  for (const testimonial of shuffled) {
+    if (selected.length >= count) break;
     if (addsDiversity(testimonial)) {
       addTestimonial(testimonial);
-      freeCount++;
     }
   }
 
-  // Fill remaining free slots if needed
-  for (const testimonial of shuffledFree) {
-    if (freeCount >= idealFreeCount) break;
-    if (!selected.includes(testimonial)) {
-      addTestimonial(testimonial);
-      freeCount++;
-    }
-  }
-
-  // Second pass: Select diverse premium testimonials
-  let premiumCount = 0;
-  for (const testimonial of shuffledPremium) {
-    if (premiumCount >= idealPremiumCount) break;
-    if (addsDiversity(testimonial)) {
-      addTestimonial(testimonial);
-      premiumCount++;
-    }
-  }
-
-  // Fill remaining premium slots if needed
-  for (const testimonial of shuffledPremium) {
-    if (premiumCount >= idealPremiumCount) break;
-    if (!selected.includes(testimonial)) {
-      addTestimonial(testimonial);
-      premiumCount++;
-    }
-  }
-
-  // If we still need more testimonials, fill from any remaining
-  const allShuffled = shuffleArray([...shuffledFree, ...shuffledPremium]);
-  for (const testimonial of allShuffled) {
+  // Second pass: fill any remaining slots
+  for (const testimonial of shuffled) {
     if (selected.length >= count) break;
     if (!selected.includes(testimonial)) {
       addTestimonial(testimonial);
     }
   }
 
-  // Final shuffle to mix the order of free and premium
   return shuffleArray(selected);
 }
 
@@ -395,7 +346,7 @@ export default function Testimonials() {
       setTestimonialData(limitedTestimonials);
     } else if (!loading && (error || challenges.length === 0)) {
       console.error('Error loading challenges or no challenges found:', error);
-      // Create fallback testimonials if API fails or no challenges (balanced 60/40 free/premium)
+      // Create fallback testimonials if API fails or no challenges
       const fallbackTestimonials = [
         {
           name: 'Sarah Chen',
@@ -406,7 +357,6 @@ export default function Testimonials() {
           rating: 5,
           challenge: 'Basic Web Server',
           challenge_link: 'basic-web-server',
-          tier: 'free' as const,
         },
         {
           name: 'David Kim',
@@ -417,7 +367,6 @@ export default function Testimonials() {
           rating: 5,
           challenge: 'Command Line Tools',
           challenge_link: 'command-line-tools',
-          tier: 'free' as const,
         },
         {
           name: 'Alex Thompson',
@@ -428,7 +377,6 @@ export default function Testimonials() {
           rating: 4,
           challenge: 'File Processing',
           challenge_link: 'file-processing',
-          tier: 'free' as const,
         },
         {
           name: 'Michael Johnson',
@@ -439,7 +387,6 @@ export default function Testimonials() {
           rating: 5,
           challenge: 'Docker Container',
           challenge_link: 'docker-container',
-          tier: 'pro' as const,
         },
         {
           name: 'Emily Rodriguez',
@@ -450,7 +397,6 @@ export default function Testimonials() {
           rating: 5,
           challenge: 'Distributed Database',
           challenge_link: 'distributed-database',
-          tier: 'pro' as const,
         },
         {
           name: 'James Wilson',
@@ -461,7 +407,6 @@ export default function Testimonials() {
           rating: 5,
           challenge: 'Microservices Architecture',
           challenge_link: 'microservices-architecture',
-          tier: 'pro' as const,
         },
       ];
       setTestimonialData(fallbackTestimonials);
@@ -747,9 +692,6 @@ export default function Testimonials() {
                         >
                           {testimonial.challenge}
                         </Badge>
-                        {testimonial.tier !== 'free' && (
-                          <PremiumBadge tier={testimonial.tier} size="sm" />
-                        )}
                       </motion.div>
                     </Link>
                   </CardFooter>

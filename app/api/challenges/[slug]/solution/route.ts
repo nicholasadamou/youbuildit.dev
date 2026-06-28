@@ -1,6 +1,4 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { auth } from '@clerk/nextjs/server';
-import { hasAccessToChallenge } from '@/lib/subscription';
 import { prisma } from '@/lib/prisma';
 
 export async function GET(
@@ -8,35 +6,7 @@ export async function GET(
   { params }: { params: Promise<{ slug: string }> }
 ) {
   try {
-    const { userId } = await auth();
-
-    if (!userId) {
-      return NextResponse.json(
-        { error: 'Authentication required' },
-        { status: 401 }
-      );
-    }
-
-    console.log('Solution API - User ID from Clerk:', userId);
-
     const { slug } = await params;
-
-    // Get user subscription status
-    const user = await prisma.user.findUnique({
-      where: { id: userId },
-      select: {
-        subscriptionTier: true,
-        subscriptionStatus: true,
-        stripeCurrentPeriodEnd: true,
-      },
-    });
-
-    console.log('Solution API - User from database:', user);
-
-    if (!user) {
-      console.log('Solution API - User not found in database for ID:', userId);
-      return NextResponse.json({ error: 'User not found' }, { status: 404 });
-    }
 
     // Get challenge with solutions
     const challenge = await prisma.challenge.findUnique({
@@ -62,27 +32,6 @@ export async function GET(
       return NextResponse.json(
         { error: 'No solution available for this challenge' },
         { status: 404 }
-      );
-    }
-
-    // Check if user has access to this challenge
-    const challengeForAccess = {
-      ...challenge,
-      content: challenge.content || '',
-      source: 'database' as const,
-      difficulty: challenge.difficulty
-        .toLowerCase()
-        .replace(/^\w/, c => c.toUpperCase()) as
-        | 'Beginner'
-        | 'Intermediate'
-        | 'Advanced',
-      solutionLanguage: challenge.solutionLanguage || undefined,
-    };
-    const hasAccess = hasAccessToChallenge(user, challengeForAccess);
-    if (!hasAccess) {
-      return NextResponse.json(
-        { error: 'Access denied. Pro subscription required.' },
-        { status: 403 }
       );
     }
 

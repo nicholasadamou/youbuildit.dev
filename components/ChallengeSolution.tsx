@@ -17,8 +17,6 @@ import {
 } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import MDXComponents from '@/components/mdx/MDXComponents';
-import { useSubscription } from '@/hooks/useSubscription';
-import { hasAccessToChallenge } from '@/lib/subscription';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
 
@@ -44,42 +42,19 @@ interface SolutionData {
 
 interface ChallengeSolutionProps {
   challengeSlug: string;
-  challengeTier: string;
   hasSolutionAvailable?: boolean;
-  challenge?: { tier: string }; // Minimal challenge object for access check
-  hasAccess?: boolean; // External access state from parent
 }
 
 export default function ChallengeSolution({
   challengeSlug,
-  challengeTier,
   hasSolutionAvailable = false,
-  hasAccess: externalHasAccess,
 }: ChallengeSolutionProps) {
-  const { subscription } = useSubscription();
   const [solutionData, setSolutionData] = useState<SolutionData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [selectedFile, setSelectedFile] = useState<SolutionFile | null>(null);
   const [showPreview, setShowPreview] = useState(false);
   const [showMarkdownPreview, setShowMarkdownPreview] = useState(true); // Default to preview for README
-
-  // Check if user has access - use external access state if provided, otherwise compute internally
-  const hasAccess =
-    externalHasAccess !== undefined
-      ? externalHasAccess
-      : subscription
-        ? hasAccessToChallenge(
-            {
-              subscriptionTier: subscription.tier,
-              subscriptionStatus: subscription.status,
-              stripeCurrentPeriodEnd: subscription.currentPeriodEnd
-                ? new Date(subscription.currentPeriodEnd)
-                : null,
-            },
-            { tier: challengeTier } as never // Minimal challenge object - hasAccessToChallenge normalizes tier internally
-          )
-        : challengeTier.toUpperCase() !== 'PRO';
 
   // Auto-select README when solution data is loaded
   useEffect(() => {
@@ -110,100 +85,8 @@ export default function ChallengeSolution({
 
         if (!response.ok) {
           if (response.status === 404) {
-            const errorData = await response.json().catch(() => ({}));
-            // Check if it's "User not found" error (treat as unauthenticated)
-            if (errorData.error === 'User not found') {
-              // User exists in Clerk but not in database - treat as unauthenticated
-              setSolutionData({
-                language: 'python',
-                files: [
-                  {
-                    type: 'SOURCE',
-                    filename: 'main.py',
-                    content:
-                      '# Complete Python implementation\n# with error handling, CLI interface,\n# and comprehensive test coverage\n\nimport argparse\nimport sys\n\n# ... implementation details ...\n\nif __name__ == "__main__":\n    main()',
-                    relativePath: 'src/main.py',
-                  },
-                  {
-                    type: 'TEST',
-                    filename: 'test_main.py',
-                    content:
-                      '# Comprehensive test suite\n# covering edge cases and functionality\n\nimport pytest\n\n# ... test implementation ...\n\ndef test_basic_functionality():\n    # Test implementation\n    pass',
-                    relativePath: 'tests/test_main.py',
-                  },
-                  {
-                    type: 'README',
-                    filename: 'README.md',
-                    content:
-                      '# Challenge Solution\n\nComplete implementation with:\n- Error handling\n- CLI interface\n- Test coverage\n- Documentation\n\n## Setup\n\n```bash\npip install -r requirements.txt\n```\n\n## Usage\n\n```bash\npython src/main.py [options]\n```',
-                    relativePath: 'README.md',
-                  },
-                ],
-                metadata: {
-                  linesOfCode: 150,
-                  testCoverage: 95,
-                  keyFeatures: [
-                    'CLI Interface',
-                    'Error Handling',
-                    'Unicode Support',
-                    'Comprehensive Tests',
-                  ],
-                  implementationNotes: [
-                    'Professional Python implementation',
-                    'Follows best practices',
-                    'Production-ready code',
-                  ],
-                },
-              });
-              setError(null);
-            } else {
-              // Actually no solution available
-              setSolutionData(null);
-              setError(null);
-            }
-          } else if (response.status === 401 && !hasAccess) {
-            // User doesn't have access - create mock data for preview
-            setSolutionData({
-              language: 'python',
-              files: [
-                {
-                  type: 'SOURCE',
-                  filename: 'main.py',
-                  content:
-                    '# Complete Python implementation\n# with error handling, CLI interface,\n# and comprehensive test coverage\n\nimport argparse\nimport sys\n\n# ... implementation details ...\n\nif __name__ == "__main__":\n    main()',
-                  relativePath: 'src/main.py',
-                },
-                {
-                  type: 'TEST',
-                  filename: 'test_main.py',
-                  content:
-                    '# Comprehensive test suite\n# covering edge cases and functionality\n\nimport pytest\n\n# ... test implementation ...\n\ndef test_basic_functionality():\n    # Test implementation\n    pass',
-                  relativePath: 'tests/test_main.py',
-                },
-                {
-                  type: 'README',
-                  filename: 'README.md',
-                  content:
-                    '# Challenge Solution\n\nComplete implementation with:\n- Error handling\n- CLI interface\n- Test coverage\n- Documentation\n\n## Setup\n\n```bash\npip install -r requirements.txt\n```\n\n## Usage\n\n```bash\npython src/main.py [options]\n```',
-                  relativePath: 'README.md',
-                },
-              ],
-              metadata: {
-                linesOfCode: 150,
-                testCoverage: 95,
-                keyFeatures: [
-                  'CLI Interface',
-                  'Error Handling',
-                  'Unicode Support',
-                  'Comprehensive Tests',
-                ],
-                implementationNotes: [
-                  'Professional Python implementation',
-                  'Follows best practices',
-                  'Production-ready code',
-                ],
-              },
-            });
+            // No solution available for this challenge
+            setSolutionData(null);
             setError(null);
           } else {
             throw new Error(`Failed to fetch solution: ${response.statusText}`);
@@ -222,7 +105,7 @@ export default function ChallengeSolution({
     };
 
     fetchSolution();
-  }, [challengeSlug, hasAccess]);
+  }, [challengeSlug]);
 
   // Don't show component if no solution is available
   if (!hasSolutionAvailable) {

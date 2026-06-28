@@ -16,7 +16,6 @@ describe('useChallenges', () => {
       category: 'Test',
       skills: ['JavaScript'],
       estimatedTime: '1h',
-      tier: 'FREE',
       hasSolution: false,
     },
     {
@@ -27,7 +26,6 @@ describe('useChallenges', () => {
       category: 'Test',
       skills: ['TypeScript'],
       estimatedTime: '2h',
-      tier: 'FREE',
       hasSolution: true,
     },
     {
@@ -38,7 +36,6 @@ describe('useChallenges', () => {
       category: 'Test',
       skills: ['React'],
       estimatedTime: '3h',
-      tier: 'PRO',
       hasSolution: true,
     },
   ];
@@ -178,34 +175,11 @@ describe('useChallenges', () => {
 
     const randomFreeChallenge = result.current.getRandomFreeChallenge();
     expect(randomFreeChallenge).not.toBe(null);
-    expect(randomFreeChallenge?.tier.toUpperCase()).toBe('FREE');
+    expect(mockChallenges).toContainEqual(randomFreeChallenge);
   });
 
-  it('should return null for random free challenge when no free challenges', async () => {
-    const proChallenges: ClientChallenge[] = [
-      {
-        slug: 'pro-challenge',
-        title: 'Pro Challenge',
-        summary: 'Test',
-        difficulty: 'Advanced',
-        category: 'Test',
-        skills: [],
-        estimatedTime: '3h',
-        tier: 'PRO',
-        hasSolution: true,
-      },
-    ];
-
-    (global.fetch as any).mockResolvedValueOnce({
-      ok: true,
-      json: async () => proChallenges,
-    });
-
-    const { result } = renderHook(() => useChallenges());
-
-    await waitFor(() => {
-      expect(result.current.loading).toBe(false);
-    });
+  it('should return null for random free challenge when no challenges loaded', () => {
+    const { result } = renderHook(() => useChallenges({ autoLoad: false }));
 
     const randomFreeChallenge = result.current.getRandomFreeChallenge();
     expect(randomFreeChallenge).toBe(null);
