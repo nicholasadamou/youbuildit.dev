@@ -1,7 +1,8 @@
 'use client';
 
 import Link from 'next/link';
-import { Menu, Zap, Github, Search, Command } from 'lucide-react';
+import { Menu, Zap, Search, Command } from 'lucide-react';
+import GithubIcon from '@/components/icons/GithubIcon';
 import { ExploreChallengesButton } from '@/components/ui/ChallengeNavigationButtons';
 import {
   Sheet,
@@ -205,7 +206,7 @@ export default function Navbar() {
                             className="flex items-center space-x-2 text-muted-foreground hover:text-foreground transition-colors"
                             aria-label="You Build It on GitHub"
                           >
-                            <Github className="h-5 w-5" />
+                            <GithubIcon className="h-5 w-5" />
                             <span className="text-sm font-medium">GitHub</span>
                           </a>
                         </div>

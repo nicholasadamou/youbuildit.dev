@@ -1,7 +1,8 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { Clock, Code, Tag, Github, MessageCircle } from 'lucide-react';
+import { Clock, Code, Tag, MessageCircle } from 'lucide-react';
+import GithubIcon from '@/components/icons/GithubIcon';
 
 // Components
 import MDXContent from '@/components/mdx/MDXContent';
@@ -189,7 +190,7 @@ export default function ChallengePageContent({
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                 >
-                  <Github className="w-4 h-4" />
+                  <GithubIcon className="w-4 h-4" />
                   View Examples
                 </motion.a>
               )}
