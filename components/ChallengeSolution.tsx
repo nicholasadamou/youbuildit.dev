@@ -291,8 +291,8 @@ export default function ChallengeSolution({
             <div>
               <h3 className="text-xl font-bold text-card-foreground flex items-center gap-2">
                 Complete Solution
-                <div className="px-2 py-1 bg-[var(--brand)]/10 rounded-md">
-                  <span className="text-xs font-medium text-[var(--brand)] uppercase tracking-wide">
+                <div className="inline-flex items-center justify-center px-2 py-1 bg-[var(--brand)]/10 rounded-md">
+                  <span className="text-xs font-medium leading-none text-[var(--brand)] uppercase tracking-wide">
                     {solutionData.language}
                   </span>
                 </div>
