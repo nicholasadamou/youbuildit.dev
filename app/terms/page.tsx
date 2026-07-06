@@ -18,6 +18,8 @@ import {
 } from 'lucide-react';
 
 export default function TermsOfUsePage() {
+  const lastUpdated = 'July 6, 2026';
+
   // Animation variants
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -103,10 +105,21 @@ export default function TermsOfUsePage() {
       textColor: 'text-green-500',
       glowColor: 'bg-green-500/20',
       content:
-        'You Build It is a platform that provides coding challenges designed to help software engineers improve their skills through practical, real-world application development. The Platform offers various coding challenges, tutorials, and educational content.',
+        'You Build It provides free coding challenges, reference solutions, tutorials, and educational content designed to help software engineers improve their skills through practical, real-world application development.',
     },
     {
       id: 3,
+      title: 'Free Access',
+      icon: GraduationCap,
+      color: 'from-teal-500 to-teal-600',
+      iconColor: 'bg-teal-500',
+      textColor: 'text-teal-500',
+      glowColor: 'bg-teal-500/20',
+      content:
+        'The Platform does not require an account, subscription, or payment to access challenges or solutions. We do not offer paid access, paid memberships, or paid digital goods through the Platform.',
+    },
+    {
+      id: 4,
       title: 'User Responsibilities',
       icon: Users,
       color: 'from-purple-500 to-purple-600',
@@ -124,7 +137,7 @@ export default function TermsOfUsePage() {
       ],
     },
     {
-      id: 4,
+      id: 5,
       title: 'Intellectual Property',
       icon: Copyright,
       color: 'from-orange-500 to-orange-600',
@@ -132,10 +145,10 @@ export default function TermsOfUsePage() {
       textColor: 'text-orange-500',
       glowColor: 'bg-orange-500/20',
       content:
-        'Platform Content: The challenges, tutorials, and educational content provided on the Platform are owned by You Build It and are protected by copyright and other intellectual property laws. You may use this content for personal learning and development purposes. User Submissions: Any code, solutions, or content you create or submit while using the Platform remains your intellectual property. However, you grant You Build It a non-exclusive license to use your submissions for educational purposes and Platform improvement. Open Source: The Platform encourages open source development. Challenge solutions and related code may be shared publicly as part of the learning process.',
+        'The challenges, tutorials, reference solutions, and educational content provided on the Platform are owned by You Build It or its contributors and are protected by copyright and other intellectual property laws. You may use this content for personal learning and development purposes. Code and solutions you create independently remain yours. The Platform does not currently accept account-based code submissions.',
     },
     {
-      id: 5,
+      id: 6,
       title: 'Privacy and Data Collection',
       icon: Eye,
       color: 'from-indigo-500 to-indigo-600',
@@ -143,10 +156,10 @@ export default function TermsOfUsePage() {
       textColor: 'text-indigo-500',
       glowColor: 'bg-indigo-500/20',
       content:
-        'We respect your privacy and are committed to protecting your personal information. The Platform may collect anonymous usage data to improve the service and user experience. We do not collect personal information unless explicitly provided by you.',
+        'We respect your privacy and are committed to limiting personal data collection. Because the Platform does not provide user accounts or paid access, we do not collect account credentials or payment information through the Platform. We may collect anonymous or aggregate usage data to improve the service and user experience, and we may receive personal information only if you choose to provide it when contacting us.',
     },
     {
-      id: 6,
+      id: 7,
       title: 'Educational Use',
       icon: GraduationCap,
       color: 'from-teal-500 to-teal-600',
@@ -157,7 +170,7 @@ export default function TermsOfUsePage() {
         'The Platform is designed for educational purposes. The challenges and content are meant to help users learn and improve their software development skills. While we strive for accuracy, the content should not be considered as professional advice or production-ready solutions without proper review and testing.',
     },
     {
-      id: 7,
+      id: 8,
       title: 'Disclaimer of Warranties',
       icon: AlertTriangle,
       color: 'from-yellow-500 to-yellow-600',
@@ -168,7 +181,7 @@ export default function TermsOfUsePage() {
         'The Platform is provided "as is" without warranties of any kind, either express or implied. We make no guarantees about the availability, accuracy, or reliability of the Platform. Use of the Platform is at your own risk.',
     },
     {
-      id: 8,
+      id: 9,
       title: 'Limitation of Liability',
       icon: Scale,
       color: 'from-red-500 to-red-600',
@@ -176,10 +189,10 @@ export default function TermsOfUsePage() {
       textColor: 'text-red-500',
       glowColor: 'bg-red-500/20',
       content:
-        'To the fullest extent permitted by law, You Build It shall not be liable for any indirect, incidental, special, or consequential damages resulting from your use of the Platform. Our total liability shall not exceed the amount you paid to use the Platform (if any).',
+        'To the fullest extent permitted by law, You Build It shall not be liable for any indirect, incidental, special, or consequential damages resulting from your use of the Platform. Because the Platform is provided free of charge, our total liability for any claim arising from or related to the Platform is limited to the maximum extent permitted by applicable law.',
     },
     {
-      id: 9,
+      id: 10,
       title: 'Modifications to Terms',
       icon: FileX,
       color: 'from-pink-500 to-pink-600',
@@ -190,18 +203,18 @@ export default function TermsOfUsePage() {
         'We reserve the right to modify these Terms of Use at any time. Changes will be effective immediately upon posting on the Platform. Your continued use of the Platform after changes are posted constitutes acceptance of the revised terms.',
     },
     {
-      id: 10,
-      title: 'Termination',
+      id: 11,
+      title: 'Availability and Access',
       icon: Gavel,
       color: 'from-gray-500 to-gray-600',
       iconColor: 'bg-gray-500',
       textColor: 'text-gray-500',
       glowColor: 'bg-gray-500/20',
       content:
-        'We reserve the right to terminate or suspend access to the Platform at any time, with or without cause or notice. Upon termination, your right to use the Platform will cease immediately.',
+        'We may modify, suspend, or discontinue any part of the Platform at any time, with or without notice. Because the Platform does not provide user accounts, there is no account termination process. Your right to use the Platform ends if you violate these Terms.',
     },
     {
-      id: 11,
+      id: 12,
       title: 'Governing Law',
       icon: MapPin,
       color: 'from-cyan-500 to-cyan-600',
@@ -212,7 +225,7 @@ export default function TermsOfUsePage() {
         'These Terms of Use shall be governed by and construed in accordance with the laws of the jurisdiction where You Build It is operated, without regard to conflict of law principles.',
     },
     {
-      id: 12,
+      id: 13,
       title: 'Contact Information',
       icon: Mail,
       color: 'from-emerald-500 to-emerald-600',
@@ -295,12 +308,7 @@ export default function TermsOfUsePage() {
             >
               <div className="w-2 h-2 bg-[var(--brand)] rounded-full animate-pulse" />
               <span className="text-sm font-medium">
-                Last updated:{' '}
-                {new Date().toLocaleDateString('en-US', {
-                  year: 'numeric',
-                  month: 'long',
-                  day: 'numeric',
-                })}
+                Last updated: {lastUpdated}
               </span>
             </motion.div>
           </motion.div>
