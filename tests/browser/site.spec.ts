@@ -90,18 +90,16 @@ test('search reports failure, recovers, filters and restores focus', async ({
     fail
       ? route.fulfill({ status: 500, json: { error: 'Unavailable' } })
       : route.fulfill({
-          json: [
-            {
-              slug: 'shell',
-              title: 'Build a shell',
-              summary: 'A command interpreter',
-              skills: ['Parsing'],
-              difficulty: 'Beginner',
-              category: 'CLI',
-              estimatedTime: '2 hours',
-              hasSolution: false,
-            },
-          ],
+          json: Array.from({ length: 12 }, (_, index) => ({
+            slug: `shell-${index}`,
+            title: `Build a shell ${index}`,
+            summary: 'A command interpreter',
+            skills: ['Parsing'],
+            difficulty: 'Beginner',
+            category: 'CLI',
+            estimatedTime: '2 hours',
+            hasSolution: false,
+          })),
         })
   );
   await page.goto('/');
@@ -109,19 +107,45 @@ test('search reports failure, recovers, filters and restores focus', async ({
     name: 'Search challenges',
     exact: true,
   });
-  await trigger.click();
+  await trigger.focus();
+  await page.evaluate(() => window.scrollTo(0, 700));
+  const scrollPosition = await page.evaluate(() => window.scrollY);
+  await page.keyboard.press('Control+k');
+  await expect(page.getByRole('dialog')).toBeVisible();
+  await page.mouse.move(2, 2);
+  await page.mouse.wheel(0, 800);
+  await expect
+    .poll(() => page.evaluate(() => window.scrollY))
+    .toBe(scrollPosition);
+  await expect(page.getByRole('combobox')).toBeFocused();
   await expect(page.getByText('Challenges could not be loaded.')).toBeVisible();
   fail = false;
   await page.getByRole('button', { name: 'Try again' }).click();
-  await expect(page.getByRole('link', { name: /Build a shell/ })).toBeVisible();
+  const options = page.getByRole('option');
+  await expect(options).toHaveCount(12);
+  const input = page.getByRole('combobox');
+  await input.focus();
+  await input.press('ArrowUp');
+  await expect(options.last()).toHaveAttribute('aria-selected', 'true');
+  await expect(input).toHaveAttribute(
+    'aria-activedescendant',
+    'challenge-option-11'
+  );
+  await expect(options.last()).toBeInViewport();
+  await options.nth(10).hover();
+  await expect(options.nth(10)).toHaveAttribute('aria-selected', 'true');
+  await input.press('ArrowDown');
+  await expect(options.last()).toHaveAttribute('aria-selected', 'true');
+  expect((await new AxeBuilder({ page }).analyze()).violations).toEqual([]);
   await page
-    .getByRole('textbox', { name: 'Search challenges' })
+    .getByRole('combobox', { name: 'Search challenges' })
     .fill('no matching challenge');
   await expect(
     page.getByText('No challenges match. Try another search.')
   ).toBeVisible();
   await page.keyboard.press('Escape');
   await expect(trigger).toBeFocused();
+  expect(await page.evaluate(() => window.scrollY)).toBe(scrollPosition);
 });
 
 test('published challenge, solution and ZIP work against PostgreSQL', async ({

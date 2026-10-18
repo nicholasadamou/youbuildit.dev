@@ -4,40 +4,18 @@ import { useState, useEffect, useCallback } from 'react';
 import type { ClientChallenge } from '@/types/challenge';
 
 interface UseChallengesOptions {
-  /**
-   * Whether to automatically load challenges on mount.
-   * @default true
-   */
   autoLoad?: boolean;
-  /**
-   * Custom error message for fetch failures.
-   * @default 'Failed to fetch challenges'
-   */
   errorMessage?: string;
 }
 
 interface UseChallengesReturn {
-  /** Array of challenges */
   challenges: ClientChallenge[];
-  /** Whether challenges are currently loading */
   loading: boolean;
-  /** Error object if the fetch failed */
   error: Error | null;
-  /** Function to manually reload challenges */
   refetch: () => Promise<void>;
-  /** Function to get a random challenge from the loaded challenges */
   getRandomChallenge: () => ClientChallenge | null;
-  /** Function to get a random free challenge from the loaded challenges */
   getRandomFreeChallenge: () => ClientChallenge | null;
 }
-
-/**
- * Custom hook for loading challenges from the API.
- * Provides loading state, error handling, and utility functions.
- *
- * @param options - Configuration options for the hook
- * @returns Object containing challenges, loading state, error, and utility functions
- */
 export function useChallenges(
   options: UseChallengesOptions = {}
 ): UseChallengesReturn {

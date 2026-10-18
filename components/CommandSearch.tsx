@@ -20,13 +20,12 @@ export default function CommandSearch({
   });
   const dialog = useRef<HTMLDialogElement>(null);
   const router = useRouter();
-  const matches = challenges
-    .filter(challenge =>
-      `${challenge.title} ${challenge.summary} ${challenge.skills.join(' ')}`
-        .toLowerCase()
-        .includes(query.toLowerCase())
-    )
-    .slice(0, 6);
+  const input = useRef<HTMLInputElement>(null);
+  const matches = challenges.filter(challenge =>
+    `${challenge.title} ${challenge.summary} ${challenge.skills.join(' ')}`
+      .toLowerCase()
+      .includes(query.trim().toLowerCase())
+  );
   useEffect(() => {
     const element = dialog.current;
     if (!isOpen) {
@@ -34,15 +33,28 @@ export default function CommandSearch({
       return;
     }
     const previousFocus = document.activeElement as HTMLElement | null;
-    const overflow = document.body.style.overflow;
+    const root = document.documentElement;
+    const overflow = root.style.overflow;
+    const { scrollX, scrollY } = window;
     element?.showModal();
-    document.body.style.overflow = 'hidden';
+    root.style.overflow = 'hidden';
+    input.current?.focus({ preventScroll: true });
+    window.scrollTo(scrollX, scrollY);
     return () => {
       element?.close();
-      document.body.style.overflow = overflow;
-      previousFocus?.focus();
+      root.style.overflow = overflow;
+      previousFocus?.focus({ preventScroll: true });
     };
   }, [isOpen]);
+  useEffect(() => {
+    dialog.current
+      ?.querySelector('[aria-selected="true"]')
+      ?.scrollIntoView({ block: 'nearest' });
+  }, [selectedIndex, query, loading]);
+  const select = (slug: string) => {
+    router.push(`/challenge/${slug}`);
+    onClose();
+  };
   return (
     <dialog
       ref={dialog}
@@ -67,7 +79,16 @@ export default function CommandSearch({
         <Search size={18} />
         <span className="sr-only">Search challenges</span>
         <input
-          autoFocus
+          ref={input}
+          role="combobox"
+          aria-expanded="true"
+          aria-controls={!loading && !error ? 'challenge-options' : undefined}
+          aria-autocomplete="list"
+          aria-activedescendant={
+            !loading && !error && matches[selectedIndex]
+              ? `challenge-option-${selectedIndex}`
+              : undefined
+          }
           value={query}
           onChange={event => {
             setQuery(event.target.value);
@@ -87,41 +108,51 @@ export default function CommandSearch({
             }
             if (event.key === 'Enter' && matches[selectedIndex]) {
               event.preventDefault();
-              router.push(`/challenge/${matches[selectedIndex].slug}`);
-              onClose();
+              select(matches[selectedIndex].slug);
             }
           }}
         />
       </label>
-      <div className="search-results" aria-live="polite">
+      <div className="search-results">
         {loading ? (
-          <p>Loading challenges…</p>
+          <p role="status">Loading challenges…</p>
         ) : error ? (
           <div>
-            <p>Challenges could not be loaded.</p>
+            <p role="alert">Challenges could not be loaded.</p>
             <button className="text-link" onClick={() => void refetch()}>
               Try again
             </button>
           </div>
-        ) : matches.length ? (
-          matches.map((challenge, index) => (
-            <Link
-              className={
-                index === selectedIndex
-                  ? 'search-result selected'
-                  : 'search-result'
-              }
-              key={challenge.slug}
-              href={`/challenge/${challenge.slug}`}
-              onClick={onClose}
-            >
-              <strong>{challenge.title}</strong>
-              <span>{challenge.summary}</span>
-              <small>{challenge.difficulty}</small>
-            </Link>
-          ))
         ) : (
-          <p>No challenges match. Try another search.</p>
+          <div
+            id="challenge-options"
+            role="listbox"
+            aria-label="Matching challenges"
+          >
+            {matches.map((challenge, index) => (
+              <button
+                type="button"
+                role="option"
+                id={`challenge-option-${index}`}
+                aria-selected={index === selectedIndex}
+                tabIndex={-1}
+                className="search-result"
+                key={challenge.slug}
+                onMouseMove={() => setSelectedIndex(index)}
+                onMouseDown={event => event.preventDefault()}
+                onClick={() => select(challenge.slug)}
+              >
+                <strong>{challenge.title}</strong>
+                <span>{challenge.summary}</span>
+                <small>
+                  {challenge.difficulty} · {challenge.category}
+                </small>
+              </button>
+            ))}
+            {!matches.length && (
+              <p role="status">No challenges match. Try another search.</p>
+            )}
+          </div>
         )}
       </div>
       <div className="search-footer">

@@ -61,7 +61,6 @@ export default function ChallengeSolution({
     if (solutionData?.files && !selectedFile) {
       const readmeFile = solutionData.files.find(f => f.type === 'README');
       if (readmeFile) {
-        console.log('Auto-selecting README file:', readmeFile.filename);
         setSelectedFile(readmeFile);
         setShowMarkdownPreview(true);
       }
@@ -71,7 +70,6 @@ export default function ChallengeSolution({
   // Reset markdown preview state when switching to README files
   useEffect(() => {
     if (selectedFile?.type === 'README') {
-      console.log('Switching to README, enabling preview mode');
       setShowMarkdownPreview(true);
     }
   }, [selectedFile?.type, selectedFile?.relativePath]); // Include type to fix React Hook warning
@@ -572,9 +570,6 @@ export default function ChallengeSolution({
                               onClick={e => {
                                 e.preventDefault();
                                 e.stopPropagation();
-                                console.log(
-                                  'Code button clicked, setting showMarkdownPreview to false'
-                                );
                                 setShowMarkdownPreview(false);
                               }}
                               className={`group px-3 py-1.5 text-xs font-medium rounded-md transition-all duration-200 flex items-center gap-2 ${
@@ -591,9 +586,6 @@ export default function ChallengeSolution({
                               onClick={e => {
                                 e.preventDefault();
                                 e.stopPropagation();
-                                console.log(
-                                  'Preview button clicked, setting showMarkdownPreview to true'
-                                );
                                 setShowMarkdownPreview(true);
                               }}
                               className={`group px-3 py-1.5 text-xs font-medium rounded-md transition-all duration-200 flex items-center gap-2 ${
@@ -621,17 +613,7 @@ export default function ChallengeSolution({
                     </div>
 
                     {/* File Content */}
-                    {(() => {
-                      console.log('Rendering content:', {
-                        fileType: selectedFile.type,
-                        showMarkdownPreview,
-                        shouldShowPreview:
-                          selectedFile.type === 'README' && showMarkdownPreview,
-                      });
-                      return (
-                        selectedFile.type === 'README' && showMarkdownPreview
-                      );
-                    })() ? (
+                    {selectedFile.type === 'README' && showMarkdownPreview ? (
                       <div className="p-6 text-sm max-h-96 overflow-y-auto bg-card/50">
                         <ReactMarkdown components={MDXComponents}>
                           {selectedFile.content}
