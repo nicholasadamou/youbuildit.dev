@@ -134,6 +134,13 @@ test('published challenge, solution and ZIP work against PostgreSQL', async ({
   await expect(page.getByRole('heading', { level: 1 })).toContainText(
     'Word counter'
   );
+  await page.getByRole('button', { name: 'Show Preview' }).click();
+  const file = page.getByRole('button', { name: 'counter.py Source 3 lines' });
+  await file.click();
+  await expect(file).toHaveAttribute('aria-pressed', 'true');
+  await expect(
+    page.getByText('def count_words', { exact: false }).last()
+  ).toBeVisible();
   const solution = await request.get(`/api/challenges/${slug}/solution`);
   expect(solution.ok()).toBe(true);
   expect((await solution.json()).files[0].filename).toBe('counter.py');

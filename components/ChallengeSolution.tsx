@@ -504,56 +504,42 @@ export default function ChallengeSolution({
                       // Finally alphabetical by filename
                       return a.filename.localeCompare(b.filename);
                     })
-                    .map((file, index) => (
+                    .map(file => (
                       <button
-                        key={`file-${index}-${file.relativePath}`}
-                        onClick={e => {
-                          e.preventDefault();
-                          e.stopPropagation();
-                          console.log('Selecting file:', file.filename);
-                          setSelectedFile(file);
-                        }}
-                        className={`group w-full p-4 text-left rounded-xl transition-all duration-200 ${
+                        key={file.relativePath}
+                        type="button"
+                        aria-pressed={
                           selectedFile?.relativePath === file.relativePath
-                            ? 'bg-secondary/40 shadow-md'
-                            : 'hover:bg-secondary/40 shadow-sm hover:shadow-md'
+                        }
+                        onClick={() => setSelectedFile(file)}
+                        className={`group flex w-full items-center gap-3 rounded-lg border p-3 text-left transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--brand)] ${
+                          selectedFile?.relativePath === file.relativePath
+                            ? 'border-[var(--brand)] bg-[var(--brand)]/5'
+                            : 'border-border bg-card hover:border-[var(--brand)]/40 hover:bg-secondary/30'
                         }`}
                       >
-                        <div className="relative">
-                          <div className="flex items-center gap-3 mb-2">
-                            <div
-                              className={`p-1.5 rounded-lg ${
-                                selectedFile?.relativePath === file.relativePath
-                                  ? 'bg-[var(--brand)]/20'
-                                  : 'bg-secondary/50 group-hover:bg-[var(--brand)]/10'
-                              }`}
-                            >
-                              {getFileIcon(file.type)}
-                            </div>
-                            <div className="flex-1 min-w-0">
-                              <span className="text-sm font-medium truncate text-card-foreground block">
-                                {file.filename}
-                              </span>
-                              <span className="text-xs text-muted-foreground">
-                                {file.relativePath}
-                              </span>
-                            </div>
-                          </div>
-                          <div className="flex items-center justify-between">
-                            <span
-                              className={`text-xs px-2 py-1 rounded-md ${
-                                selectedFile?.relativePath === file.relativePath
-                                  ? 'bg-[var(--brand)]/10 text-[var(--brand)]'
-                                  : 'bg-secondary/50 text-muted-foreground'
-                              }`}
-                            >
-                              {file.type.toLowerCase()}
+                        <span className="flex size-9 shrink-0 items-center justify-center rounded-md border border-border bg-background text-[var(--brand)]">
+                          {getFileIcon(file.type)}
+                        </span>
+                        <span className="min-w-0 flex-1">
+                          <span className="block truncate font-mono text-sm font-medium text-card-foreground">
+                            {file.filename}
+                          </span>
+                          {file.relativePath !== file.filename && (
+                            <span className="block truncate text-xs text-muted-foreground">
+                              {file.relativePath.slice(
+                                0,
+                                file.relativePath.lastIndexOf('/')
+                              )}
                             </span>
-                            <span className="text-xs text-muted-foreground font-mono">
-                              {file.content.split('\n').length} lines
-                            </span>
-                          </div>
-                        </div>
+                          )}
+                          <span className="block text-xs capitalize text-muted-foreground">
+                            {file.type.toLowerCase()}
+                          </span>
+                        </span>
+                        <span className="shrink-0 font-mono text-xs text-muted-foreground">
+                          {file.content.split('\n').length} lines
+                        </span>
                       </button>
                     ))}
                 </div>
