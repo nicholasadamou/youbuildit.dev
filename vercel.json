@@ -1,7 +1,7 @@
 {
-  "buildCommand": "pnpm run build",
+  "buildCommand": "bun run build",
   "outputDirectory": ".next",
-  "installCommand": "pnpm install",
+  "installCommand": "bun install --frozen-lockfile",
   "framework": "nextjs",
   "env": {
     "SKIP_ENV_VALIDATION": "1"

@@ -36,6 +36,7 @@ export function generateOpenGraphMetadata({
       : 'home';
   const ogImageUrl =
     image ||
+    (!challengeData ? `${baseUrl}/og.png` : undefined) ||
     `${baseUrl}/api/og?title=${encodeURIComponent(title)}&description=${encodeURIComponent(description)}${challengeData ? `&type=challenge&category=${encodeURIComponent(challengeData.category)}&difficulty=${challengeData.difficulty}&skills=${encodeURIComponent(challengeData.skills.slice(0, 3).join(', '))}` : `&type=${ogImageType}`}`;
 
   const metadata: Metadata = {

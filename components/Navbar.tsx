@@ -1,226 +1,191 @@
 'use client';
 
 import Link from 'next/link';
-import { Menu, Zap, Search, Command } from 'lucide-react';
-import GithubIcon from '@/components/icons/GithubIcon';
-import { ExploreChallengesButton } from '@/components/ui/ChallengeNavigationButtons';
+import { usePathname } from 'next/navigation';
+import { useRef, useState } from 'react';
 import {
-  Sheet,
-  SheetContent,
-  SheetTrigger,
-  SheetTitle,
-  SheetDescription,
-} from '@/components/ui/sheet';
-import { Button } from '@/components/ui/button';
-import Logo from '@/components/Logo';
+  BookOpen,
+  Compass,
+  Grid2X2,
+  Menu,
+  Search,
+  X,
+  Code2,
+} from 'lucide-react';
+import Brand from '@/components/Brand';
+import GithubIcon from '@/components/icons/GithubIcon';
 import CommandSearch, { useCommandSearch } from '@/components/CommandSearch';
-import { useSheetControl } from '@/hooks/useSheetControl';
-import { useState, useEffect, memo } from 'react';
 
-// Memoized navigation items to prevent re-renders
-const NavItems = memo(function NavItems({
-  openSearch,
-}: {
-  openSearch: () => void;
-}) {
-  return (
-    <div className="hidden md:flex items-center space-x-3">
-      {/* Search Button */}
-      <Button
-        variant="outline"
-        size="sm"
-        onClick={openSearch}
-        className="flex items-center gap-2 px-3 py-2 text-sm text-muted-foreground border-border hover:bg-accent hover:text-accent-foreground transition-colors"
-      >
-        <Search className="h-4 w-4" />
-        <span className="hidden lg:inline">Search challenges</span>
-        <div className="hidden lg:flex items-center gap-0.5 ml-2">
-          <kbd className="pointer-events-none inline-flex h-5 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium text-muted-foreground opacity-100">
-            <Command className="h-3 w-3" />K
-          </kbd>
-        </div>
-      </Button>
-
-      {/* Explore Challenges Button */}
-      <ExploreChallengesButton
-        variant="default"
-        className="bg-[var(--brand)] hover:bg-[var(--brand-dark)] text-white"
-      />
-    </div>
-  );
-});
+const repository = 'https://github.com/youbuildit/youbuildit.dev';
+const links = [
+  ['/challenges', 'Explore challenges'],
+  ['/docs/getting-started', 'Getting started'],
+  ['/docs', 'Documentation'],
+];
 
 export default function Navbar() {
+  const pathname = usePathname();
+  const isDocs = pathname.startsWith('/docs');
+  const dialog = useRef<HTMLDialogElement>(null);
+  const trigger = useRef<HTMLButtonElement>(null);
+  const [menuOpen, setMenuOpen] = useState(false);
   const { isOpen, openSearch, closeSearch } = useCommandSearch();
-  const { isSheetOpen, openSheet, closeSheet } = useSheetControl();
-  const [isMounted, setIsMounted] = useState(false);
-
-  useEffect(() => {
-    setIsMounted(true);
-  }, []);
-
+  function closeMenu() {
+    dialog.current?.close();
+    setMenuOpen(false);
+    document.body.style.overflow = '';
+    trigger.current?.focus();
+  }
+  function showMenu() {
+    dialog.current?.showModal();
+    setMenuOpen(true);
+    document.body.style.overflow = 'hidden';
+  }
+  function search() {
+    if (menuOpen) closeMenu();
+    openSearch();
+  }
   return (
     <>
-      <nav className="relative z-50">
-        <div className="navbar-container w-full">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex items-center justify-between h-16">
+      <a href="#main" className="skip-link">
+        Skip to content
+      </a>
+      <header
+        className={isDocs ? 'site-header docs-header' : 'site-header'}
+        id="top"
+      >
+        <div className="site-wrap header-inner">
+          <Brand />
+          {isDocs && <span className="docs-header-label">Documentation</span>}
+          <nav className="desktop-nav" aria-label="Main navigation">
+            {(isDocs
+              ? [
+                  ['/docs/api', 'API reference'],
+                  ['/docs/getting-started', 'Getting started'],
+                ]
+              : links
+            ).map(([href, label]) => (
               <Link
-                href="/"
-                className="flex items-center space-x-3"
-                aria-label="Go to homepage"
+                key={href}
+                href={href}
+                aria-current={pathname === href ? 'page' : undefined}
               >
-                <Logo />
-                <span className="text-xl font-bold text-foreground">
-                  You Build It
-                </span>
+                {label}
               </Link>
-              {isMounted && <NavItems openSearch={openSearch} />}
-              {isMounted && (
-                <div className="md:hidden flex items-center space-x-2">
-                  {/* Mobile Search Button */}
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    onClick={openSearch}
-                    className="text-muted-foreground hover:text-foreground hover:bg-accent"
-                    aria-label="Search challenges"
-                  >
-                    <Search className="h-5 w-5" />
-                  </Button>
-
-                  {/* Mobile Menu */}
-                  <Sheet
-                    open={isSheetOpen}
-                    onOpenChange={open => (open ? openSheet() : closeSheet())}
-                  >
-                    <SheetTrigger asChild>
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        aria-label="Open main menu"
-                        className="text-muted-foreground hover:text-foreground hover:bg-accent"
-                        onClick={openSheet}
-                      >
-                        <Menu className="h-6 w-6" />
-                      </Button>
-                    </SheetTrigger>
-                    <SheetContent side="right" className="w-80 flex flex-col">
-                      <SheetTitle className="sr-only">
-                        Main Navigation Menu
-                      </SheetTitle>
-                      <SheetDescription className="sr-only">
-                        Access search functionality and navigate to different
-                        sections of the website.
-                      </SheetDescription>
-
-                      {/* Header */}
-                      <div className="flex items-center space-x-3 mb-8 mt-6">
-                        <Logo />
-                        <span className="text-xl font-bold text-foreground">
-                          You Build It
-                        </span>
-                      </div>
-
-                      {/* Search Section */}
-                      <div className="mb-6">
-                        <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-3">
-                          Search
-                        </h3>
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={() => {
-                            closeSheet();
-                            openSearch();
-                          }}
-                          className="w-full flex items-center gap-3 justify-start px-3 py-2 text-sm text-muted-foreground border-border hover:bg-accent hover:text-accent-foreground"
-                        >
-                          <Search className="h-4 w-4" />
-                          <span>Search challenges</span>
-                          <div className="ml-auto flex items-center gap-0.5">
-                            <kbd className="inline-flex h-5 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium text-muted-foreground">
-                              <Command className="h-3 w-3" />K
-                            </kbd>
-                          </div>
-                        </Button>
-                      </div>
-
-                      {/* Navigation */}
-                      <nav className="flex-grow">
-                        <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-3">
-                          Navigation
-                        </h3>
-                        <div className="space-y-3">
-                          <Link
-                            href="/"
-                            onClick={closeSheet}
-                            className="flex items-center space-x-3 p-3 rounded-lg hover:bg-accent transition-colors group"
-                          >
-                            <div className="w-8 h-8 bg-muted rounded-lg flex items-center justify-center group-hover:bg-accent transition-colors">
-                              <span className="text-sm font-semibold text-muted-foreground">
-                                🏠
-                              </span>
-                            </div>
-                            <div>
-                              <span className="font-medium text-foreground">
-                                Home
-                              </span>
-                              <p className="text-xs text-muted-foreground">
-                                Back to homepage
-                              </p>
-                            </div>
-                          </Link>
-
-                          <Link
-                            href="/challenges"
-                            onClick={closeSheet}
-                            className="flex items-center space-x-3 p-3 rounded-lg hover:bg-accent transition-colors group"
-                          >
-                            <div className="w-8 h-8 bg-[var(--brand)]/10 rounded-lg flex items-center justify-center group-hover:bg-[var(--brand)]/20 transition-colors">
-                              <Zap className="h-4 w-4 text-[var(--brand)]" />
-                            </div>
-                            <div>
-                              <span className="font-medium text-foreground">
-                                Explore Challenges
-                              </span>
-                              <p className="text-xs text-muted-foreground">
-                                Browse all coding challenges
-                              </p>
-                            </div>
-                          </Link>
-                        </div>
-                      </nav>
-
-                      {/* Footer */}
-                      <div className="mt-8 pb-6 border-t border-border pt-6">
-                        <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-4">
-                          Connect with us
-                        </h3>
-                        <div className="flex space-x-4">
-                          <a
-                            href="https://github.com/youbuildit"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            onClick={closeSheet}
-                            className="flex items-center space-x-2 text-muted-foreground hover:text-foreground transition-colors"
-                            aria-label="You Build It on GitHub"
-                          >
-                            <GithubIcon className="h-5 w-5" />
-                            <span className="text-sm font-medium">GitHub</span>
-                          </a>
-                        </div>
-                      </div>
-                    </SheetContent>
-                  </Sheet>
-                </div>
-              )}
-            </div>
-          </div>
+            ))}
+          </nav>
+          <button
+            className="header-search-trigger"
+            onClick={search}
+            aria-label="Search challenges"
+            aria-haspopup="dialog"
+          >
+            <Search size={17} />
+            <span>Search</span>
+            <kbd>⌘ K</kbd>
+          </button>
+          <a className="github-link" href={repository}>
+            <GithubIcon className="h-4 w-4" />
+            <span>GitHub</span>
+          </a>
+          <button
+            ref={trigger}
+            className="menu-toggle"
+            onClick={showMenu}
+            aria-expanded={menuOpen}
+            aria-controls="mobile-menu"
+            aria-haspopup="dialog"
+          >
+            Menu <Menu size={18} />
+          </button>
         </div>
-      </nav>
-
-      {/* Command Search Modal */}
+      </header>
+      <dialog
+        ref={dialog}
+        id="mobile-menu"
+        className="mobile-dialog"
+        aria-labelledby="mobile-title"
+        onCancel={closeMenu}
+      >
+        <div className="mobile-panel-heading">
+          <Brand />
+          <button
+            className="close-overlay"
+            onClick={closeMenu}
+            aria-label="Close navigation"
+            autoFocus
+          >
+            <X size={20} />
+          </button>
+        </div>
+        <div className="mobile-panel-body">
+          <p className="eyebrow">A little direction goes a long way</p>
+          <h2 id="mobile-title">What’s next?</h2>
+          <button className="mobile-search-trigger" onClick={search}>
+            <Search size={18} />
+            <span>Search challenges</span>
+            <kbd>⌘ K</kbd>
+          </button>
+          <nav className="mobile-primary" aria-label="Mobile navigation">
+            <Link
+              className="mobile-feature-card"
+              href="/challenges"
+              onClick={closeMenu}
+            >
+              <Grid2X2 size={22} />
+              <span>
+                <strong>Explore challenges</strong>
+                <small>Find your next thing to build.</small>
+              </span>
+            </Link>
+            <div className="mobile-resource-grid">
+              <Link href="/docs/getting-started" onClick={closeMenu}>
+                <BookOpen size={20} />
+                <strong>Getting started</strong>
+                <small>From a blank editor to your first build.</small>
+              </Link>
+              <Link href="/docs" onClick={closeMenu}>
+                <Compass size={20} />
+                <strong>Documentation</strong>
+                <small>A little guidance, when you need it.</small>
+              </Link>
+            </div>
+          </nav>
+          <section className="mobile-tasks">
+            <div className="mobile-section-label">
+              <h3>Build your own way</h3>
+              <span>Start with an outcome</span>
+            </div>
+            <nav aria-label="Resources">
+              {[
+                ['/docs/getting-started', 'Choose a challenge'],
+                ['/docs/solutions', 'Learn from solutions'],
+                ['/docs/local-development', 'Run locally'],
+                ['/docs/contributing', 'Contribute a change'],
+              ].map(([href, label]) => (
+                <Link key={href} href={href} onClick={closeMenu}>
+                  <Code2 size={18} />
+                  {label}
+                </Link>
+              ))}
+            </nav>
+          </section>
+          <aside className="mobile-starter">
+            <p className="eyebrow">Not sure where to begin?</p>
+            <h3>Something small is a good start.</h3>
+            <p>Pick one challenge. Make it work. Make it yours.</p>
+            <Link href="/docs/getting-started" onClick={closeMenu}>
+              Read the getting started guide
+            </Link>
+          </aside>
+        </div>
+        <div className="mobile-panel-footer">
+          <a href={repository}>
+            <GithubIcon className="h-4 w-4" /> GitHub
+          </a>
+          <a href={`${repository}/issues`}>Feedback & issues</a>
+        </div>
+      </dialog>
       <CommandSearch isOpen={isOpen} onClose={closeSearch} />
     </>
   );

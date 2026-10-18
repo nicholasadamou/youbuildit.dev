@@ -1,0 +1,136 @@
+@media (max-width: 1100px) {
+  .site-wrap {
+    width: calc(100% - 64px);
+  }
+  .header-inner {
+    gap: 12px;
+    padding-inline: 22px;
+  }
+  .desktop-nav a {
+    padding: 8px;
+  }
+  .header-search-trigger kbd {
+    display: none;
+  }
+  .home-hero {
+    gap: 32px;
+  }
+  .learning-section {
+    gap: 50px;
+  }
+}
+@media (max-width: 780px) {
+  .site-wrap {
+    width: calc(100% - 32px);
+  }
+  .site-header {
+    padding-top: 12px;
+  }
+  .header-inner {
+    height: 56px;
+    padding-inline: 12px;
+    gap: 12px;
+  }
+  .brand {
+    font-size: 16px;
+    gap: 9px;
+  }
+  .brand > svg {
+    width: 28px;
+    height: 28px;
+  }
+  .desktop-nav,
+  .header-inner .github-link {
+    display: none;
+  }
+  .header-search-trigger {
+    margin-left: auto;
+    padding: 10px;
+  }
+  .header-search-trigger span,
+  .header-search-trigger kbd {
+    display: none;
+  }
+  .menu-toggle {
+    display: flex;
+    font-size: 12px;
+  }
+  .home-hero {
+    grid-template-columns: 1fr;
+    padding-block: 50px;
+    gap: 48px;
+  }
+  .studio-home h1 {
+    font-size: 56px;
+  }
+  .hero-lead {
+    font-size: 16px;
+  }
+  .hero-actions {
+    gap: 20px;
+  }
+  .build-scene {
+    width: min(460px, 100%);
+    margin: auto;
+  }
+  .language-strip {
+    flex-direction: column;
+    align-items: start;
+    gap: 20px;
+  }
+  .language-strip > div {
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+  .learning-section {
+    grid-template-columns: 1fr;
+    gap: 35px;
+    padding-block: 60px;
+  }
+  .section-heading {
+    align-items: start;
+    flex-direction: column;
+  }
+  .project-grid {
+    grid-template-columns: 1fr;
+    gap: 30px;
+  }
+  .project-grid article {
+    padding: 25px 0 0;
+    border-left: 0;
+    border-top: 1px solid #cfd7c7;
+  }
+  .project-section {
+    padding-block: 45px;
+  }
+  .home-cta {
+    padding-block: 60px;
+  }
+  .footer-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 32px 24px;
+  }
+  .footer-brand {
+    grid-column: 1/-1;
+  }
+  .footer-bottom {
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-top: 30px;
+  }
+  .footer-note {
+    display: none;
+  }
+  .footer-bottom > a:last-child {
+    margin-left: auto;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "total": 11090,
+  "perFile": 350,
+  "exceptions": {
+    "app/challenges/ChallengesPageContent.tsx": 531,
+    "app/og-preview/page.tsx": 414,
+    "app/terms/page.tsx": 419,
+    "components/ChallengeSolution.tsx": 729,
+    "components/mdx/MDXComponents.tsx": 363
+  }
+}

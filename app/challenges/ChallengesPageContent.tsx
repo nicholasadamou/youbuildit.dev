@@ -525,7 +525,7 @@ export default function ChallengesPageContent() {
       </div>
 
       {/* Footer */}
-      <Footer bgColor="bg-secondary" />
+      <Footer />
     </div>
   );
 }

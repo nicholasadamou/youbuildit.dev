@@ -6,16 +6,16 @@ This project uses [Vitest](https://vitest.dev/) as the testing framework for uni
 
 ```bash
 # Run all tests once
-pnpm test
+bun run test
 
 # Run tests in watch mode
-pnpm test:watch
+bun run test:watch
 
 # Run tests with UI
-pnpm test:ui
+bun run test:ui
 
 # Run tests with coverage report
-pnpm test:coverage
+bun run test:coverage
 ```
 
 ## Test Coverage
@@ -39,7 +39,7 @@ pnpm test:coverage
 
 ## Test Structure
 
-```
+```text
 lib/__tests__/
 ├── formatShortDate.test.ts
 ├── getBaseUrl.test.ts

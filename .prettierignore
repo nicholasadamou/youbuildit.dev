@@ -76,3 +76,10 @@ content/challenges/
 public/sw.js
 public/workbox-*.js
 public/fallback-*.js
+
+.website-studio/
+.flox/
+bun.lock
+
+test-results/
+playwright-report/

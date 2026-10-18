@@ -27,7 +27,7 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Verify database secret is set
         env:
@@ -38,19 +38,12 @@ jobs:
             exit 1
           fi
 
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20.x
-          cache: 'pnpm'
+      - uses: flox/install-flox-action@v2
 
       - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+        run: flox activate -- bun install --frozen-lockfile
 
       - name: Apply database migrations
         env:
           PRISMA_DATABASE_URL: ${{ secrets.PRISMA_DATABASE_URL }}
-        run: pnpm db:deploy
+        run: flox activate -- bun run db:deploy

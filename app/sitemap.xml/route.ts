@@ -1,3 +1,4 @@
+import { docSlugs, docHref } from '@/lib/docs';
 import { getBaseUrl } from '@/lib/getBaseUrl';
 
 // You'll need to create this function to get all challenges
@@ -45,7 +46,13 @@ export async function GET(): Promise<Response> {
     })
   );
 
-  const allPages = [...staticPages, ...challengePages];
+  const docPages = docSlugs.map(slug => ({
+    url: `${baseUrl}${docHref(slug)}`,
+    lastModified: new Date().toISOString(),
+    changeFrequency: 'monthly',
+    priority: 0.7,
+  }));
+  const allPages = [...staticPages, ...docPages, ...challengePages];
 
   // Generate XML sitemap
   const sitemap = `<?xml version="1.0" encoding="UTF-8"?>

@@ -223,7 +223,7 @@ export default function ChallengePageContent({
           <RelatedChallenges challenges={relatedChallenges} />
         </div>
       </div>
-      <Footer bgColor="bg-secondary" />
+      <Footer />
     </>
   );
 }

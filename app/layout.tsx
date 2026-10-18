@@ -29,13 +29,15 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased dark`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <Providers>
           <WebVitals />
           <div className="bg-background text-foreground min-h-screen">
             <Navbar />
-            <main>{children}</main>
+            <main id="main" tabIndex={-1}>
+              {children}
+            </main>
           </div>
         </Providers>
         {/* Only render analytics in production or when deployment ID is available */}

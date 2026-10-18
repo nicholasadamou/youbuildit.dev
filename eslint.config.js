@@ -9,6 +9,9 @@ const eslintConfig = [
   {
     ignores: [
       'node_modules/**',
+      '.website-studio/**',
+      'test-results/**',
+      '.flox/**',
       '.next/**',
       'out/**',
       'dist/**',
