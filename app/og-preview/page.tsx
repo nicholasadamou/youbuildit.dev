@@ -345,7 +345,7 @@ export default function OGPreviewPage() {
                   Dimensions: 1200x630 pixels (Facebook/Twitter recommended)
                 </li>
                 <li>Format: Dynamic PNG generated via Next.js ImageResponse</li>
-                <li>Brand colors: Primary #37d388, Light #a4e6c5</li>
+                <li>Brand colors: Primary #26754e, Light #e0eee5</li>
                 <li>Fonts: Inter (system fallback supported)</li>
               </ul>
             </div>

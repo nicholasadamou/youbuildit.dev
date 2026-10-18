@@ -11,7 +11,7 @@ const Logo: React.FC<LogoProps> = ({ className = 'h-8 w-8' }) => (
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
   >
-    <rect width="24" height="24" rx="6" fill="#2fbc77" />
+    <rect width="24" height="24" rx="6" fill="var(--brand)" />
     <path
       d="M6 8L10 12L6 16"
       stroke="white"

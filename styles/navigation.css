@@ -4,7 +4,7 @@
   --quiet: #696d63;
   --line: #e1e3d9;
   --sage: #eceee5;
-  --studio-accent: #26754e;
+  --studio-accent: var(--brand);
   color-scheme: light;
 }
 html {

@@ -10,5 +10,9 @@
       "sizes": "512x512",
       "type": "image/png"
     }
-  ]
+  ],
+  "name": "You Build It",
+  "short_name": "You Build It",
+  "theme_color": "#26754e",
+  "background_color": "#f7f7f2"
 }

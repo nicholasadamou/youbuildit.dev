@@ -48,3 +48,15 @@ flowchart LR
 ```
 
 The release workflow tags the exact successful CI revision, not an untested newer commit. Production database migrations run separately when migration files change. Vercel remains the application host; a GitHub release is a source release, not proof of deployment.
+
+## Brand palette
+
+You Build It pairs forest green (`#26754e`) with warm paper (`#f7f7f2`),
+charcoal (`#292b25`), and pale sage. The terminal logo uses the same forest
+green with a white prompt. Keep the mark's shape when creating new assets.
+
+UI accents and the inline logo inherit `--brand` from `styles/base.css`.
+Standalone SVGs, browser icons, and social images use the same literal palette.
+When changing it, update `public/logo.svg`, `public/icons/`, `app/icon.svg`,
+`public/og.svg`, and the dynamic OG route together; regenerate PNG/ICO assets
+from their SVG sources.

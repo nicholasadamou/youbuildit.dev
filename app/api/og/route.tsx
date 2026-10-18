@@ -4,11 +4,11 @@ import { NextRequest } from 'next/server';
 export const runtime = 'edge';
 
 // Brand colors from the project
-const BRAND_COLOR = '#37d388';
-const BRAND_LIGHT = '#a4e6c5';
-const BACKGROUND_COLOR = '#ffffff';
-const TEXT_PRIMARY = '#1f2937';
-const TEXT_SECONDARY = '#374151';
+const BRAND_COLOR = '#26754e';
+const BRAND_LIGHT = '#e0eee5';
+const BACKGROUND_COLOR = '#f7f7f2';
+const TEXT_PRIMARY = '#292b25';
+const TEXT_SECONDARY = '#696d63';
 
 export async function GET(request: NextRequest) {
   try {
@@ -88,7 +88,7 @@ export async function GET(request: NextRequest) {
                   height: '100%',
                 }}
               >
-                <rect width="24" height="24" rx="6" fill="#2fbc77" />
+                <rect width="24" height="24" rx="6" fill={BRAND_COLOR} />
                 <path
                   d="M6 8L10 12L6 16"
                   stroke="white"

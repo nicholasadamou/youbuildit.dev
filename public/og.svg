@@ -3,7 +3,7 @@
 <desc>Practical coding challenges, with a project brief and a terminal ready for your first command.</desc>
 <rect width="1200" height="630" fill="#f7f7f2"/>
 <g font-family="Arial, Helvetica, sans-serif" fill="#292b25">
-<rect x="62" y="48" width="40" height="40" rx="10" fill="#2fbc77"/><path d="m73 61 7 7-7 7m12 0h9" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+<rect x="62" y="48" width="40" height="40" rx="10" fill="#26754e"/><path d="m73 61 7 7-7 7m12 0h9" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
 <text x="115" y="78" font-size="29" font-weight="700" letter-spacing="-1">you / build it</text>
 <text x="1138" y="76" text-anchor="end" font-size="14" fill="#696d63">A little challenge. A lot of possibility.</text>
 <text x="62" y="230" font-size="67" font-weight="600" letter-spacing="-3.5">Less watching.</text>

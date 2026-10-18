@@ -200,7 +200,7 @@ export const defaultSiteMetadata: Metadata = {
   classification: 'education',
   other: {
     // Additional SEO meta tags
-    'theme-color': '#3b82f6',
+    'theme-color': '#26754e',
     'color-scheme': 'light',
     'format-detection': 'telephone=no',
     'mobile-web-capable': 'yes',
@@ -208,7 +208,7 @@ export const defaultSiteMetadata: Metadata = {
     'apple-mobile-web-app-status-bar-style': 'default',
     'apple-mobile-web-app-title': 'You Build It',
     'application-name': 'You Build It',
-    'msapplication-TileColor': '#3b82f6',
+    'msapplication-TileColor': '#26754e',
     'msapplication-config': '/icons/browserconfig.xml',
     // Educational content meta tags
     audience: 'developers, programmers, software engineers, students',
