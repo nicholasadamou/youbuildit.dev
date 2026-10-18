@@ -4,7 +4,6 @@ import localFont from 'next/font/local';
 import './globals.css';
 import Navbar from '@/components/Navbar';
 import WebVitals from '@/components/WebVitals';
-import { Providers } from '@/components/Providers';
 import { defaultSiteMetadata } from '@/lib/og-metadata';
 import { Analytics } from '@vercel/analytics/react';
 
@@ -31,15 +30,13 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <Providers>
-          <WebVitals />
-          <div className="bg-background text-foreground min-h-screen">
-            <Navbar />
-            <main id="main" tabIndex={-1}>
-              {children}
-            </main>
-          </div>
-        </Providers>
+        <WebVitals />
+        <div className="bg-background text-foreground min-h-screen">
+          <Navbar />
+          <main id="main" tabIndex={-1}>
+            {children}
+          </main>
+        </div>
         {/* Only render analytics in production or when deployment ID is available */}
         {process.env.NODE_ENV === 'production' && <Analytics />}
       </body>
