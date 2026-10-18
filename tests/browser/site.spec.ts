@@ -176,3 +176,37 @@ test('challenge content remains readable without animation or JavaScript', async
   ).toBe(true);
   await context.close();
 });
+
+test('homepage guides visitors into filtered challenges', async ({ page }) => {
+  await page.goto('/');
+  await page.getByRole('link', { name: 'Help me choose', exact: true }).click();
+  await expect(page).toHaveURL('/#choose-challenge');
+  await page
+    .locator('.discovery-card[href="/challenges?difficulty=Beginner"]')
+    .click();
+  await expect(page).toHaveURL('/challenges?difficulty=Beginner');
+  await expect(
+    page.getByRole('link', { name: /Test fixture: Word counter/ }).first()
+  ).toBeVisible();
+  await page.goBack();
+  await page
+    .locator('.discovery-card[href="/challenges?difficulty=Advanced"]')
+    .click();
+  await expect(page).toHaveURL('/challenges?difficulty=Advanced');
+  await expect(
+    page.getByText('No challenges found', { exact: true })
+  ).toBeVisible();
+  await page.getByRole('button', { name: 'Clear all filters' }).click();
+  await expect(page).toHaveURL('/challenges');
+  await expect(
+    page.getByRole('link', { name: /Test fixture: Word counter/ }).first()
+  ).toBeVisible();
+  await page.goto('/');
+  await page
+    .getByRole('link', { name: 'Browse command-line projects', exact: true })
+    .click();
+  await expect(page).toHaveURL('/challenges?category=Command%20Line');
+  await expect(
+    page.getByRole('button', { name: 'Command Line', exact: true })
+  ).toBeVisible();
+});

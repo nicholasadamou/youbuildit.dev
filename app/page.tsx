@@ -14,16 +14,22 @@ const steps = [
     '01',
     'Find your next challenge.',
     'Choose a project that sparks your curiosity. Filter by difficulty, category, or a skill you want to practice.',
+    '/challenges',
+    'Browse the library',
   ],
   [
     '02',
     'Build it your way.',
     'Start with a clear brief. Pick your language, open your editor, and turn the requirements into working software.',
+    '/docs/getting-started',
+    'Plan your first build',
   ],
   [
     '03',
     'See another perspective.',
     'Compare with a reference solution when one is available. Understand the trade-offs, then make your version better.',
+    '/docs/solutions',
+    'How to use solutions',
   ],
 ];
 
@@ -48,8 +54,8 @@ export default function Home() {
             <Link className="studio-button" href="/challenges">
               Find your next challenge
             </Link>
-            <Link className="text-link" href="/docs/getting-started">
-              How it works
+            <Link className="text-link" href="#choose-challenge">
+              Help me choose
             </Link>
           </div>
           <p className="hero-note">
@@ -125,6 +131,122 @@ export default function Home() {
           ))}
         </div>
       </section>
+      <section className="site-wrap discovery-section" id="choose-challenge">
+        <div className="section-heading">
+          <div>
+            <p className="eyebrow">There’s a starting point for everyone</p>
+            <h2>What feels like your next step?</h2>
+          </div>
+          <p className="discovery-note">
+            Pick a comfortable start. You can always turn up the difficulty.
+          </p>
+        </div>
+        <div className="discovery-grid">
+          {[
+            [
+              'Beginner',
+              'Get your first win.',
+              'Practice the fundamentals with a focused tool you can build and test locally.',
+              'Browse beginner challenges',
+            ],
+            [
+              'Intermediate',
+              'Connect the pieces.',
+              'Work with protocols, parsers, and data structures in a more involved project.',
+              'Browse intermediate challenges',
+            ],
+            [
+              'Advanced',
+              'Go under the hood.',
+              'Take on deeper systems problems and make your own implementation decisions.',
+              'Browse advanced challenges',
+            ],
+          ].map(([level, title, description, action]) => (
+            <Link
+              className="discovery-card"
+              href={`/challenges?difficulty=${level}`}
+              key={level}
+            >
+              <span className="eyebrow">{level}</span>
+              <h3>{title}</h3>
+              <p>{description}</p>
+              <span className="card-action">{action}</span>
+            </Link>
+          ))}
+        </div>
+        <p className="discovery-help">
+          Not sure yet?{' '}
+          <Link href="/challenge/build-your-own-wc-tool">
+            Start with a word counter
+          </Link>{' '}
+          — a small command-line tool with a clear finish line.
+        </p>
+      </section>
+      <section className="featured-section">
+        <div className="site-wrap">
+          <div className="section-heading">
+            <div>
+              <p className="eyebrow">A few places to begin</p>
+              <h2>Small brief. Real software.</h2>
+            </div>
+            <Link className="text-link" href="/challenges">
+              Browse all challenges
+            </Link>
+          </div>
+          <div className="discovery-grid">
+            {[
+              [
+                'build-your-own-wc-tool',
+                'Build a word counter',
+                'Beginner',
+                '2–4 hours',
+                'Read files, handle input, and recreate a tool you can use every day.',
+                'File I/O · Text processing',
+              ],
+              [
+                'build-your-own-json-parser',
+                'Build a JSON parser',
+                'Intermediate',
+                '4–6 hours',
+                'Turn raw text into structured data and understand what happens behind JSON.parse.',
+                'Parsing · Data structures',
+              ],
+              [
+                'build-your-own-redis',
+                'Build your own Redis',
+                'Intermediate',
+                '6–8 hours',
+                'Explore how an in-memory data store handles commands and serves clients.',
+                'Databases · Networking',
+              ],
+            ].map(([slug, title, level, time, description, skills]) => (
+              <Link
+                className="discovery-card"
+                key={slug}
+                href={`/challenge/${slug}`}
+              >
+                <div className="challenge-meta">
+                  <span>{level}</span>
+                  <span>{time}</span>
+                </div>
+                <h3>{title}</h3>
+                <p>{description}</p>
+                <span className="challenge-skills">{skills}</span>
+                <span className="card-action">Read the challenge brief</span>
+              </Link>
+            ))}
+          </div>
+          <div className="discovery-help">
+            <span>
+              New to building from a brief? We’ll walk you through your first
+              project.
+            </span>
+            <Link className="text-link" href="/docs/getting-started">
+              Read the getting-started guide
+            </Link>
+          </div>
+        </div>
+      </section>
       <section className="site-wrap learning-section" id="how-it-works">
         <div className="section-intro">
           <p className="eyebrow">The best way to learn is to build</p>
@@ -139,12 +261,15 @@ export default function Home() {
           </p>
         </div>
         <div className="learning-steps">
-          {steps.map(([number, title, description]) => (
+          {steps.map(([number, title, description, href, action]) => (
             <article key={number}>
               <span>{number}</span>
               <div>
                 <h3>{title}</h3>
                 <p>{description}</p>
+                <Link className="text-link step-action" href={href}>
+                  {action}
+                </Link>
               </div>
             </article>
           ))}
@@ -167,24 +292,36 @@ export default function Home() {
                 Terminal,
                 'Tools for your terminal',
                 'Get closer to the command line. Learn how small utilities turn input into something useful.',
+                'Command Line',
+                'Browse command-line projects',
               ],
               [
                 Layers,
                 'Systems from the inside',
                 'Understand the pieces behind the interfaces you use, one implementation at a time.',
+                'Systems Programming',
+                'Browse systems projects',
               ],
               [
                 Braces,
                 'Ideas for the web',
                 'Connect data, behavior, and an interface. Make something you can use and share.',
+                'Web Development',
+                'Browse web projects',
               ],
-            ].map(([Icon, title, description]) => {
+            ].map(([Icon, title, description, category, action]) => {
               const ProjectIcon = Icon as typeof Code2;
               return (
                 <article key={String(title)}>
                   <ProjectIcon size={28} strokeWidth={1.3} />
                   <h3>{String(title)}</h3>
                   <p>{String(description)}</p>
+                  <Link
+                    className="text-link step-action"
+                    href={`/challenges?category=${encodeURIComponent(String(category))}`}
+                  >
+                    {String(action)}
+                  </Link>
                 </article>
               );
             })}
@@ -198,11 +335,11 @@ export default function Home() {
           <br />
           <em>You need a place to start.</em>
         </h2>
-        <Link className="studio-button" href="/challenges">
-          Let’s build something
+        <Link className="studio-button" href="/challenges?difficulty=Beginner">
+          Find a beginner challenge
         </Link>
-        <Link className="text-link" href="/docs">
-          Read the docs
+        <Link className="text-link" href="/challenges">
+          Browse the full library
         </Link>
       </section>
       <Footer />

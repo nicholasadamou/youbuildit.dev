@@ -44,20 +44,12 @@ export default function ChallengesPageContent() {
 
   // Set initial filters based on URL parameters
   useEffect(() => {
-    const categoryParam = searchParams.get('category');
-    if (categoryParam && categoryParam !== 'All') {
-      setSelectedCategory(categoryParam);
-    }
-
-    const difficultyParam = searchParams.get('difficulty');
-    if (difficultyParam && difficultyParam !== 'All') {
-      setSelectedDifficulty(difficultyParam);
-    }
-
-    const searchParam = searchParams.get('search');
-    if (searchParam) {
-      setSearchQuery(searchParam);
-    }
+    setSelectedCategory(searchParams.get('category') || 'All');
+    const difficulty = searchParams.get('difficulty');
+    setSelectedDifficulty(
+      difficulty && difficulties.includes(difficulty) ? difficulty : 'All'
+    );
+    setSearchQuery(searchParams.get('search') || '');
   }, [searchParams]);
 
   // Function to update URL parameters
