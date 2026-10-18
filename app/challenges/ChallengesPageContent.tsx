@@ -120,7 +120,7 @@ export default function ChallengesPageContent() {
   }) => {
     return (
       <motion.div
-        initial={{ opacity: 0, y: 20 }}
+        initial={false}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 1.0 + index * 0.1 }}
         whileHover={{
@@ -241,13 +241,13 @@ export default function ChallengesPageContent() {
           <div className="max-w-7xl mx-auto px-4 py-12">
             <motion.div
               className="text-center mb-12"
-              initial={{ opacity: 0, y: 30 }}
+              initial={false}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6 }}
             >
               <motion.h1
                 className="text-4xl md:text-5xl font-bold text-card-foreground mb-4"
-                initial={{ opacity: 0, y: 20 }}
+                initial={false}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.1 }}
               >
@@ -255,7 +255,7 @@ export default function ChallengesPageContent() {
               </motion.h1>
               <motion.p
                 className="text-xl text-muted-foreground mb-8 max-w-3xl mx-auto"
-                initial={{ opacity: 0, y: 20 }}
+                initial={false}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.2 }}
               >
@@ -265,13 +265,13 @@ export default function ChallengesPageContent() {
               </motion.p>
               <motion.div
                 className="flex items-center justify-center gap-4 text-sm text-muted-foreground"
-                initial={{ opacity: 0, y: 20 }}
+                initial={false}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.3 }}
               >
                 <motion.span
                   className="flex items-center gap-1"
-                  initial={{ opacity: 0, scale: 0.8 }}
+                  initial={false}
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ duration: 0.4, delay: 0.4 }}
                 >
@@ -280,7 +280,7 @@ export default function ChallengesPageContent() {
                 </motion.span>
                 <motion.span
                   className="flex items-center gap-1"
-                  initial={{ opacity: 0, scale: 0.8 }}
+                  initial={false}
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ duration: 0.4, delay: 0.5 }}
                 >
@@ -293,20 +293,20 @@ export default function ChallengesPageContent() {
             {/* Search and Filters */}
             <motion.div
               className="max-w-4xl mx-auto"
-              initial={{ opacity: 0, y: 30 }}
+              initial={false}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.4 }}
             >
               <motion.div
                 className="flex flex-col md:flex-row gap-4 mb-6"
-                initial={{ opacity: 0, y: 20 }}
+                initial={false}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: 0.5 }}
               >
                 {/* Search */}
                 <motion.div
                   className="flex-1 relative"
-                  initial={{ opacity: 0, scale: 0.95 }}
+                  initial={false}
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ duration: 0.4, delay: 0.6 }}
                 >
@@ -326,20 +326,20 @@ export default function ChallengesPageContent() {
 
               <motion.div
                 className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8"
-                initial={{ opacity: 0, y: 20 }}
+                initial={false}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: 0.6 }}
               >
                 {/* Filters */}
                 <motion.div
                   className="flex flex-wrap gap-3"
-                  initial={{ opacity: 0, x: -20 }}
+                  initial={false}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ duration: 0.4, delay: 0.7 }}
                 >
                   <motion.div
                     className="flex items-center gap-2"
-                    initial={{ opacity: 0, scale: 0.9 }}
+                    initial={false}
                     animate={{ opacity: 1, scale: 1 }}
                     transition={{ duration: 0.3, delay: 0.8 }}
                   >
@@ -358,7 +358,7 @@ export default function ChallengesPageContent() {
                   </motion.div>
 
                   <motion.div
-                    initial={{ opacity: 0, scale: 0.9 }}
+                    initial={false}
                     animate={{ opacity: 1, scale: 1 }}
                     transition={{ duration: 0.3, delay: 0.9 }}
                   >
@@ -380,7 +380,7 @@ export default function ChallengesPageContent() {
                 {/* View Mode Toggle */}
                 <motion.div
                   className="flex items-center gap-2"
-                  initial={{ opacity: 0, x: 20 }}
+                  initial={false}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ duration: 0.4, delay: 0.8 }}
                 >
@@ -414,7 +414,7 @@ export default function ChallengesPageContent() {
               {/* Results Count */}
               <motion.div
                 className="mb-6"
-                initial={{ opacity: 0 }}
+                initial={false}
                 animate={{ opacity: 1 }}
                 transition={{ duration: 0.4, delay: 0.9 }}
               >
@@ -433,7 +433,7 @@ export default function ChallengesPageContent() {
         {/* Challenges Grid/List */}
         <motion.div
           className="max-w-7xl mx-auto px-4 py-12"
-          initial={{ opacity: 0, y: 20 }}
+          initial={false}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 1.0 }}
         >
@@ -442,14 +442,14 @@ export default function ChallengesPageContent() {
               <motion.div
                 key="no-results"
                 className="text-center py-12"
-                initial={{ opacity: 0, scale: 0.9 }}
+                initial={false}
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.9 }}
                 transition={{ duration: 0.4 }}
               >
                 <div className="max-w-md mx-auto">
                   <motion.div
-                    initial={{ opacity: 0, y: 20 }}
+                    initial={false}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.4, delay: 0.1 }}
                   >
@@ -457,7 +457,7 @@ export default function ChallengesPageContent() {
                   </motion.div>
                   <motion.h3
                     className="text-lg font-semibold text-foreground mb-2"
-                    initial={{ opacity: 0, y: 10 }}
+                    initial={false}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.4, delay: 0.2 }}
                   >
@@ -465,7 +465,7 @@ export default function ChallengesPageContent() {
                   </motion.h3>
                   <motion.p
                     className="text-muted-foreground mb-4"
-                    initial={{ opacity: 0, y: 10 }}
+                    initial={false}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.4, delay: 0.3 }}
                   >
@@ -486,7 +486,7 @@ export default function ChallengesPageContent() {
                       });
                     }}
                     className="text-[var(--brand)] hover:underline"
-                    initial={{ opacity: 0, y: 10 }}
+                    initial={false}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.4, delay: 0.4 }}
                     whileHover={{ scale: 1.05 }}
@@ -504,7 +504,7 @@ export default function ChallengesPageContent() {
                     ? 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6'
                     : 'space-y-0'
                 }
-                initial={{ opacity: 0 }}
+                initial={false}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.4 }}

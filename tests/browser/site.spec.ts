@@ -146,3 +146,26 @@ test('published challenge, solution and ZIP work against PostgreSQL', async ({
     (await request.get('/api/challenges/not-a-challenge/solution')).status()
   ).toBe(404);
 });
+
+test('challenge content remains readable without animation or JavaScript', async ({
+  browser,
+}) => {
+  const context = await browser.newContext({ javaScriptEnabled: false });
+  const page = await context.newPage();
+  await page.goto('http://127.0.0.1:4318/challenge/browser-test-word-counter');
+  const heading = page.getByRole('heading', { level: 1 });
+  await expect(heading).toBeVisible();
+  expect(
+    await heading.evaluate(element => {
+      for (
+        let node: Element | null = element;
+        node;
+        node = node.parentElement
+      ) {
+        if (getComputedStyle(node).opacity === '0') return false;
+      }
+      return true;
+    })
+  ).toBe(true);
+  await context.close();
+});

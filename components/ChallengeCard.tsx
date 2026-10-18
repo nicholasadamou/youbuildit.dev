@@ -84,7 +84,7 @@ const ChallengeCard = ({
             whileHover={{
               scale: 1.05,
             }}
-            initial={{ opacity: 0, scale: 0.8 }}
+            initial={false}
             animate={{ opacity: 1, scale: 1 }}
             transition={{
               delay: index * 0.1,

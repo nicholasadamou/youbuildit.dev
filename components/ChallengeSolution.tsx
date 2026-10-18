@@ -198,7 +198,7 @@ export default function ChallengeSolution({
     return (
       <motion.div
         className="mt-8 p-6 bg-card rounded-lg border border-border"
-        initial={{ opacity: 0, y: 20 }}
+        initial={false}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
       >
@@ -214,7 +214,7 @@ export default function ChallengeSolution({
     return (
       <motion.div
         className="mt-8 p-6 bg-card rounded-lg border border-destructive/20"
-        initial={{ opacity: 0, y: 20 }}
+        initial={false}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
       >
@@ -233,7 +233,7 @@ export default function ChallengeSolution({
       return (
         <motion.div
           className="mt-8 relative overflow-hidden rounded-lg border border-border bg-card"
-          initial={{ opacity: 0, y: 20 }}
+          initial={false}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.2 }}
         >
@@ -268,7 +268,7 @@ export default function ChallengeSolution({
   return (
     <motion.div
       className="mt-8 relative overflow-hidden rounded-xl bg-gradient-to-br from-secondary/40 via-secondary/30 to-secondary/20 backdrop-blur-sm shadow-lg"
-      initial={{ opacity: 0, y: 20 }}
+      initial={false}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay: 0.2 }}
     >
@@ -425,7 +425,7 @@ export default function ChallengeSolution({
                 <motion.div
                   key={index}
                   className="group relative p-3 bg-gradient-to-br from-[var(--brand)]/5 to-[var(--brand)]/10 rounded-lg transition-all duration-200 overflow-hidden shadow-sm hover:shadow-md"
-                  initial={{ opacity: 0, y: 10 }}
+                  initial={false}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{
                     delay: index * 0.1,
@@ -451,7 +451,7 @@ export default function ChallengeSolution({
         {/* File Preview */}
         {showPreview && (
           <motion.div
-            initial={{ opacity: 0, height: 0 }}
+            initial={false}
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
             className="border-t border-secondary/30 pt-6"
@@ -711,7 +711,7 @@ export default function ChallengeSolution({
                     <motion.li
                       key={index}
                       className="flex items-start gap-3 text-sm text-card-foreground"
-                      initial={{ opacity: 0, x: -10 }}
+                      initial={false}
                       animate={{ opacity: 1, x: 0 }}
                       transition={{ delay: index * 0.1 }}
                     >

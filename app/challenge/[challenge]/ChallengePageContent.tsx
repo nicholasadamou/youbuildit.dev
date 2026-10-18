@@ -30,14 +30,14 @@ export default function ChallengePageContent({
           {/* Challenge Header */}
           <motion.div
             className="mb-8"
-            initial={{ opacity: 0, y: 20 }}
+            initial={false}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
           >
             <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 mb-6">
               <motion.h1
                 className="text-4xl font-bold text-foreground"
-                initial={{ opacity: 0, x: -20 }}
+                initial={false}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.6, delay: 0.1 }}
               >
@@ -45,7 +45,7 @@ export default function ChallengePageContent({
               </motion.h1>
               <motion.div
                 className="flex flex-col sm:flex-row items-start sm:items-center gap-3"
-                initial={{ opacity: 0, scale: 0.8 }}
+                initial={false}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.5, delay: 0.3 }}
               >
@@ -59,7 +59,7 @@ export default function ChallengePageContent({
 
             <motion.p
               className="text-xl text-muted-foreground mb-6"
-              initial={{ opacity: 0, y: 10 }}
+              initial={false}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.2 }}
             >
@@ -69,13 +69,13 @@ export default function ChallengePageContent({
             {/* Challenge Metadata */}
             <motion.div
               className="flex flex-wrap items-center gap-6 p-4 bg-card rounded-lg border border-border"
-              initial={{ opacity: 0, y: 20 }}
+              initial={false}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.4 }}
             >
               <motion.div
                 className="flex items-center gap-2"
-                initial={{ opacity: 0, x: -10 }}
+                initial={false}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.4, delay: 0.5 }}
               >
@@ -87,7 +87,7 @@ export default function ChallengePageContent({
 
               <motion.div
                 className="flex items-center gap-2"
-                initial={{ opacity: 0, x: -10 }}
+                initial={false}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.4, delay: 0.6 }}
               >
@@ -101,13 +101,13 @@ export default function ChallengePageContent({
             {/* Skills */}
             <motion.div
               className="mt-4"
-              initial={{ opacity: 0, y: 20 }}
+              initial={false}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.5 }}
             >
               <motion.div
                 className="flex items-center gap-2 mb-2"
-                initial={{ opacity: 0 }}
+                initial={false}
                 animate={{ opacity: 1 }}
                 transition={{ duration: 0.4, delay: 0.6 }}
               >
@@ -121,7 +121,7 @@ export default function ChallengePageContent({
                   <motion.span
                     key={index}
                     className="inline-flex items-center px-2 py-1 rounded-md text-xs font-medium bg-secondary text-secondary-foreground border border-border"
-                    initial={{ opacity: 0, scale: 0.8 }}
+                    initial={false}
                     animate={{ opacity: 1, scale: 1 }}
                     transition={{ duration: 0.3, delay: 0.7 + index * 0.1 }}
                     whileHover={{ scale: 1.05 }}
@@ -136,7 +136,7 @@ export default function ChallengePageContent({
           {/* Challenge Content */}
           <motion.div
             className="prose prose-lg max-w-none dark:prose-invert"
-            initial={{ opacity: 0, y: 30 }}
+            initial={false}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.8 }}
           >
@@ -152,14 +152,14 @@ export default function ChallengePageContent({
           {/* Footer Call-to-Action */}
           <motion.div
             className="mt-12 p-6 bg-gradient-to-r from-[var(--brand)] to-green-600 rounded-lg text-white"
-            initial={{ opacity: 0, y: 30 }}
+            initial={false}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 1.0 }}
             whileHover={{ scale: 1.02 }}
           >
             <motion.h3
               className="text-xl font-semibold mb-2"
-              initial={{ opacity: 0 }}
+              initial={false}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.4, delay: 1.2 }}
             >
@@ -167,7 +167,7 @@ export default function ChallengePageContent({
             </motion.h3>
             <motion.p
               className="text-green-100 mb-4"
-              initial={{ opacity: 0 }}
+              initial={false}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.4, delay: 1.3 }}
             >
@@ -177,7 +177,7 @@ export default function ChallengePageContent({
             </motion.p>
             <motion.div
               className="flex flex-col sm:flex-row gap-3"
-              initial={{ opacity: 0, y: 10 }}
+              initial={false}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.4, delay: 1.4 }}
             >
@@ -208,7 +208,7 @@ export default function ChallengePageContent({
             </motion.div>
             <motion.div
               className="mt-4 pt-4 border-t border-green-400/30"
-              initial={{ opacity: 0 }}
+              initial={false}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.4, delay: 1.5 }}
             >

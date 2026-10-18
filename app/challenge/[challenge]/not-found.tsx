@@ -43,7 +43,7 @@ export default function NotFound() {
       <div className="flex-1 flex items-center justify-center px-4 py-24">
         <motion.div
           className="max-w-lg mx-auto text-center"
-          initial="hidden"
+          initial={false}
           animate="visible"
           variants={containerVariants}
         >
