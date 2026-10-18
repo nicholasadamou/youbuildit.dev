@@ -32,8 +32,7 @@ button {
   top: 0;
   z-index: 40;
   padding: 16px 0 0;
-  background: #f7f7f2f5;
-  backdrop-filter: blur(12px);
+  pointer-events: none;
 }
 .header-inner {
   height: 66px;
@@ -41,7 +40,9 @@ button {
   align-items: center;
   gap: 12px;
   border: 1px solid var(--line);
-  background: #ffffffbd;
+  background: #fffffff0;
+  backdrop-filter: blur(12px);
+  pointer-events: auto;
   border-radius: 999px;
   padding-inline: 22px;
 }
