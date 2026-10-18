@@ -52,13 +52,9 @@ button {
   gap: 11px;
   font-size: 18px;
   font-weight: 600;
-  letter-spacing: -0.04em;
+  letter-spacing: -0.035em;
   white-space: nowrap;
   color: var(--ink);
-}
-.brand-sub {
-  font-weight: 400;
-  color: var(--quiet);
 }
 .desktop-nav {
   display: flex;
