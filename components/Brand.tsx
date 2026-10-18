@@ -5,7 +5,7 @@ export default function Brand() {
   return (
     <Link href="/" className="brand" aria-label="You Build It home">
       <Logo />
-      <span>you build it</span>
+      <span>You Build It</span>
     </Link>
   );
 }
