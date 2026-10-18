@@ -13,6 +13,15 @@ for (const width of [320, 390, 768, 1440]) {
         () => document.documentElement.scrollWidth <= innerWidth
       )
     ).toBe(true);
+    await page.evaluate(() => window.scrollTo(0, 700));
+    await expect
+      .poll(() =>
+        page
+          .locator('.site-header')
+          .evaluate(element => Math.round(element.getBoundingClientRect().top))
+      )
+      .toBe(0);
+    expect(await page.evaluate(() => window.scrollY)).toBeGreaterThan(0);
     if (width <= 780) {
       const menu = page.getByRole('button', { name: 'Menu', exact: true });
       await menu.click();

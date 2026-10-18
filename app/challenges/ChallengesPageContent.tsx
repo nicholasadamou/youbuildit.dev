@@ -229,62 +229,32 @@ export default function ChallengesPageContent() {
       {/* Main Content */}
       <div className="flex-1">
         {/* Hero Section */}
-        <div className="bg-card border-b border-border">
-          <div className="max-w-7xl mx-auto px-4 py-12">
-            <motion.div
-              className="text-center mb-12"
-              initial={false}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6 }}
-            >
-              <motion.h1
-                className="text-4xl md:text-5xl font-bold text-card-foreground mb-4"
-                initial={false}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.1 }}
-              >
-                Coding Challenges
-              </motion.h1>
-              <motion.p
-                className="text-xl text-muted-foreground mb-8 max-w-3xl mx-auto"
-                initial={false}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.2 }}
-              >
-                Build real applications and improve your programming skills with
-                our hands-on coding challenges. Each challenge teaches practical
-                concepts through building tools you&apos;ll actually use.
-              </motion.p>
-              <motion.div
-                className="flex items-center justify-center gap-4 text-sm text-muted-foreground"
-                initial={false}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.3 }}
-              >
-                <motion.span
-                  className="flex items-center gap-1"
-                  initial={false}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ duration: 0.4, delay: 0.4 }}
-                >
-                  <Code className="h-4 w-4" />
-                  {allChallenges.length} Challenges
-                </motion.span>
-                <motion.span
-                  className="flex items-center gap-1"
-                  initial={false}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ duration: 0.4, delay: 0.5 }}
-                >
-                  <Tag className="h-4 w-4" />
-                  {categories.length} Categories
-                </motion.span>
-              </motion.div>
-            </motion.div>
+        <div className="border-b border-border">
+          <div className="site-wrap py-10 md:py-12">
+            <div className="mb-8">
+              <p className="eyebrow mb-3">The challenge library</p>
+              <h1 className="text-4xl md:text-5xl font-medium tracking-tight mb-4">
+                Find your next build.
+              </h1>
+              <p className="text-base text-muted-foreground max-w-xl leading-relaxed">
+                Pick a tool you’re curious about. Choose your language, read the
+                brief, and make it work.
+              </p>
+              <div className="flex flex-wrap items-center gap-5 mt-5 text-sm text-muted-foreground">
+                <span className="flex items-center gap-2">
+                  <Code className="h-4 w-4" aria-hidden="true" />
+                  {allChallenges.length} challenges
+                </span>
+                <span className="flex items-center gap-2">
+                  <Tag className="h-4 w-4" aria-hidden="true" />
+                  {categories.length} categories
+                </span>
+              </div>
+            </div>
 
             {/* Search and Filters */}
             <motion.div
-              className="max-w-4xl mx-auto"
+              className="w-full"
               initial={false}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.4 }}
