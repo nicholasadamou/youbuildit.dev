@@ -1,24 +1,17 @@
 'use client';
 
-import { ThemeProvider as NextThemesProvider } from 'next-themes';
-import { Toaster } from 'sonner';
+import dynamic from 'next/dynamic';
 import { ReactNode } from 'react';
 
-interface ProvidersProps {
-  children: ReactNode;
-}
+const Toaster = dynamic(() => import('sonner').then(module => module.Toaster), {
+  ssr: false,
+});
 
-export function Providers({ children }: ProvidersProps) {
+export function Providers({ children }: { children: ReactNode }) {
   return (
-    <NextThemesProvider
-      attribute="class"
-      defaultTheme="light"
-      enableSystem={false}
-      themes={['light']}
-      forcedTheme="light"
-    >
+    <>
       {children}
       <Toaster theme="light" richColors closeButton position="top-right" />
-    </NextThemesProvider>
+    </>
   );
 }

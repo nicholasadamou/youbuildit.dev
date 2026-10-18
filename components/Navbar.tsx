@@ -14,7 +14,10 @@ import {
 } from 'lucide-react';
 import Brand from '@/components/Brand';
 import GithubIcon from '@/components/icons/GithubIcon';
-import CommandSearch, { useCommandSearch } from '@/components/CommandSearch';
+import dynamic from 'next/dynamic';
+import { useCommandSearch } from '@/hooks/useCommandSearch';
+
+const CommandSearch = dynamic(() => import('@/components/CommandSearch'));
 
 const repository = 'https://github.com/youbuildit/youbuildit.dev';
 const links = [
@@ -186,7 +189,7 @@ export default function Navbar() {
           <a href={`${repository}/issues`}>Feedback & issues</a>
         </div>
       </dialog>
-      <CommandSearch isOpen={isOpen} onClose={closeSearch} />
+      {isOpen && <CommandSearch isOpen={isOpen} onClose={closeSearch} />}
     </>
   );
 }
