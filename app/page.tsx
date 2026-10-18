@@ -1,37 +1,28 @@
 import Link from 'next/link';
-import { Braces, Terminal, Layers, Check, Code2 } from 'lucide-react';
+import {
+  Braces,
+  Terminal,
+  Layers,
+  Code2,
+  Sprout,
+  Network,
+  Cpu,
+  Compass,
+  Clock,
+  BookOpen,
+} from 'lucide-react';
+import { steps } from '@/lib/home-content';
 import {
   siTypescript,
   siPython,
   siGo,
   siRust,
   siJavascript,
+  siRedis,
+  siJson,
 } from 'simple-icons';
 import Footer from '@/components/sections/Footer';
-
-const steps = [
-  [
-    '01',
-    'Find your next challenge.',
-    'Choose a project that sparks your curiosity. Filter by difficulty, category, or a skill you want to practice.',
-    '/challenges',
-    'Browse the library',
-  ],
-  [
-    '02',
-    'Build it your way.',
-    'Start with a clear brief. Pick your language, open your editor, and turn the requirements into working software.',
-    '/docs/getting-started',
-    'Plan your first build',
-  ],
-  [
-    '03',
-    'See another perspective.',
-    'Compare with a reference solution when one is available. Understand the trade-offs, then make your version better.',
-    '/docs/solutions',
-    'How to use solutions',
-  ],
-];
+import BuildScene from '@/components/sections/BuildScene';
 
 export default function Home() {
   return (
@@ -52,7 +43,7 @@ export default function Home() {
           </p>
           <div className="hero-actions">
             <Link className="studio-button" href="/challenges">
-              Find your next challenge
+              <Compass size={17} aria-hidden="true" /> Find your next challenge
             </Link>
             <Link className="text-link" href="#choose-challenge">
               Help me choose
@@ -62,58 +53,7 @@ export default function Home() {
             Free to explore. No account. Just you and your editor.
           </p>
         </div>
-        <div
-          className="build-scene"
-          aria-label="Illustration of a project brief and a working terminal"
-        >
-          <div className="brief-window">
-            <div className="window-bar">
-              <span />
-              <span />
-              <span />
-              <small>your-next-project.md</small>
-            </div>
-            <div className="brief-content">
-              <span className="eyebrow">From idea to implementation</span>
-              <h2>
-                A tool you’ll
-                <br />
-                actually use.
-              </h2>
-              <p>Start small. Understand every piece.</p>
-              <ul>
-                <li>
-                  <Check size={16} /> Read the requirements
-                </li>
-                <li>
-                  <Check size={16} /> Build the first version
-                </li>
-                <li>
-                  <span className="empty-check" /> Make it your own
-                </li>
-              </ul>
-              <div className="brief-tags">
-                <span>Your language</span>
-                <span>Your pace</span>
-              </div>
-            </div>
-          </div>
-          <div className="terminal-window">
-            <div className="terminal-heading">
-              <Terminal size={16} /> ~/your-next-project
-            </div>
-            <p>
-              <span>$</span> git init
-            </p>
-            <p className="terminal-muted">A good place to start.</p>
-            <p>
-              <span>$</span> <span className="cursor-block" />
-            </p>
-          </div>
-          <span className="scene-caption">
-            A small project. A real step forward.
-          </span>
-        </div>
+        <BuildScene />
       </section>
       <section
         className="language-strip site-wrap"
@@ -161,12 +101,21 @@ export default function Home() {
               'Take on deeper systems problems and make your own implementation decisions.',
               'Browse advanced challenges',
             ],
-          ].map(([level, title, description, action]) => (
+          ].map(([level, title, description, action], index) => (
             <Link
               className="discovery-card"
               href={`/challenges?difficulty=${level}`}
               key={level}
             >
+              <span className="discovery-icon" aria-hidden="true">
+                {
+                  [
+                    <Sprout key="beginner" />,
+                    <Network key="intermediate" />,
+                    <Cpu key="advanced" />,
+                  ][index]
+                }
+              </span>
               <span className="eyebrow">{level}</span>
               <h3>{title}</h3>
               <p>{description}</p>
@@ -225,14 +174,33 @@ export default function Home() {
                 key={slug}
                 href={`/challenge/${slug}`}
               >
+                <span className="discovery-icon" aria-hidden="true">
+                  {slug === 'build-your-own-wc-tool' ? (
+                    <Terminal />
+                  ) : (
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                      <path
+                        d={
+                          (slug === 'build-your-own-redis' ? siRedis : siJson)
+                            .path
+                        }
+                      />
+                    </svg>
+                  )}
+                </span>
                 <div className="challenge-meta">
                   <span>{level}</span>
-                  <span>{time}</span>
+                  <span>
+                    <Clock size={13} aria-hidden="true" /> {time}
+                  </span>
                 </div>
                 <h3>{title}</h3>
                 <p>{description}</p>
                 <span className="challenge-skills">{skills}</span>
-                <span className="card-action">Read the challenge brief</span>
+                <span className="card-action">
+                  <BookOpen size={15} aria-hidden="true" /> Read the challenge
+                  brief
+                </span>
               </Link>
             ))}
           </div>
@@ -336,7 +304,7 @@ export default function Home() {
           <em>You need a place to start.</em>
         </h2>
         <Link className="studio-button" href="/challenges?difficulty=Beginner">
-          Find a beginner challenge
+          <Sprout size={17} aria-hidden="true" /> Find a beginner challenge
         </Link>
         <Link className="text-link" href="/challenges">
           Browse the full library

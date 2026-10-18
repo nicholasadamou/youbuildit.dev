@@ -119,3 +119,26 @@
     padding-block: 10px;
   }
 }
+
+.discovery-icon {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  margin-bottom: 20px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--sage);
+  color: var(--brand);
+}
+.discovery-icon svg {
+  width: 24px;
+  height: 24px;
+}
+.challenge-meta > span,
+.card-action,
+.studio-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
