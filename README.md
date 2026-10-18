@@ -1,6 +1,4 @@
-# You Build It
-
-<p align="center"><img src="public/logo.svg" width="64" height="64" alt="You Build It logo" /></p>
+# <img src="public/logo.svg" width="36" height="36" alt="" align="absmiddle" /> You Build It
 
 Learn by building real applications. Explore free coding challenges, implement them in your own language, and compare available reference solutions. No account required.
 
