@@ -11,7 +11,9 @@ export function useCommandSearch() {
         !document.querySelector('dialog[open]')
       ) {
         event.preventDefault();
-        setIsOpen(true);
+        if (location.pathname.startsWith('/docs'))
+          window.dispatchEvent(new Event('docs-search'));
+        else setIsOpen(true);
       }
     };
     document.addEventListener('keydown', handleKeyDown);

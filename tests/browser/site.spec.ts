@@ -255,3 +255,53 @@ test('homepage guides visitors into filtered challenges', async ({ page }) => {
     page.getByRole('button', { name: 'Command Line', exact: true })
   ).toBeVisible();
 });
+
+test('documentation search, mobile drawer and copy controls work', async ({
+  page,
+  context,
+}) => {
+  await context.grantPermissions(['clipboard-read', 'clipboard-write']);
+  await page.goto('/docs/api');
+  await page
+    .getByRole('button', { name: 'Search documentation', exact: true })
+    .click();
+  const dialog = page.getByRole('dialog', { name: 'Search documentation' });
+  await dialog.getByRole('searchbox').fill('architecture');
+  await expect(dialog.getByRole('link')).toHaveCount(1);
+  await dialog.getByRole('link', { name: 'Architecture' }).click();
+  await expect(page).toHaveURL('/docs/architecture');
+  await page.goto('/docs/getting-started');
+  const block = page.locator('.docs-code').first();
+  const source = (await block.locator('pre code').innerText()).trimEnd();
+  await block.getByRole('button', { name: 'Copy', exact: true }).click();
+  await expect(block.getByRole('button', { name: 'Copied' })).toBeVisible();
+  expect(await page.evaluate(() => navigator.clipboard.readText())).toBe(
+    source
+  );
+  await page.getByRole('button', { name: 'Copy as Markdown' }).click();
+  expect(await page.evaluate(() => navigator.clipboard.readText())).toContain(
+    '# Getting started'
+  );
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.evaluate(() => window.scrollTo(0, 0));
+  const menu = page.getByRole('button', {
+    name: 'Browse documentation',
+    exact: true,
+  });
+  await menu.click();
+  const drawer = page.getByRole('dialog', {
+    name: 'Documentation',
+    exact: true,
+  });
+  await expect(drawer).toBeVisible();
+  expect(
+    await page.evaluate(
+      () => getComputedStyle(document.documentElement).overflow
+    )
+  ).toBe('hidden');
+  await page.keyboard.press('Escape');
+  await expect(menu).toBeFocused();
+  await page.locator('.mobile-toc summary').click();
+  await expect(page.locator('.mobile-toc nav')).toBeVisible();
+  expect((await new AxeBuilder({ page }).analyze()).violations).toEqual([]);
+});

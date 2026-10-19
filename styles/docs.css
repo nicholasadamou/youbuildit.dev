@@ -1,3 +1,5 @@
+@import './docs-controls.css';
+
 .docs-page {
   background: #f6f6f3;
   color: #242522;
@@ -6,14 +8,13 @@
   margin: auto;
   display: grid;
   grid-template-columns: 245px minmax(0, 1fr) 240px;
-  max-width: 1600px;
 }
 .docs-sidebar {
   padding: 36px 22px;
   border-right: 1px solid var(--line);
   position: sticky;
-  top: 82px;
-  height: calc(100dvh - 82px);
+  top: 76px;
+  height: calc(100dvh - 76px);
   overflow: auto;
 }
 .docs-sidebar nav,
@@ -70,6 +71,8 @@
   font-weight: 550;
   line-height: 1.2;
   margin: 44px 0 20px;
+  padding-top: 40px;
+  border-top: 1px solid var(--line);
   scroll-margin-top: 110px;
 }
 .docs-main p,
@@ -99,7 +102,7 @@
   text-decoration: underline;
   text-underline-offset: 3px;
 }
-.docs-main :not(.docs-code) > code {
+.docs-main :not(pre) > code {
   font-size: 12px;
   background: #e9ede2;
   border-radius: 4px;
@@ -111,12 +114,13 @@
   border: 1px solid #dbe1d2;
   border-radius: 12px;
   background: #fcfdf8;
-  overflow: auto;
+  overflow: hidden;
 }
-.docs-code > code {
-  display: block;
+.docs-code pre {
+  display: flex;
   white-space: pre;
-  padding: 20px;
+  padding: 18px 0;
+  overflow: auto;
   font:
     12px/1.9 var(--font-geist-mono),
     monospace;
@@ -140,7 +144,7 @@
 .docs-toc {
   padding: 50px 24px 32px 8px;
   position: sticky;
-  top: 82px;
+  top: 76px;
   height: fit-content;
   display: grid;
   gap: 17px;
@@ -199,21 +203,6 @@
   padding-top: 15px;
   overflow: auto;
 }
-.docs-search-label {
-  display: block;
-  font-size: 11px;
-  margin-bottom: 8px;
-  color: #626a5b;
-}
-#docs-search {
-  border: 1px solid var(--line);
-  border-radius: 8px;
-  padding: 10px;
-  width: 100%;
-  font-size: 12px;
-  background: #fcfdf8;
-}
-.docs-menu-toggle,
 .mobile-toc {
   display: none;
 }
@@ -230,26 +219,7 @@
     display: block;
   }
   .docs-sidebar {
-    position: static;
-    height: auto;
-    padding: 16px;
-    border-right: 0;
-    border-bottom: 1px solid var(--line);
-  }
-  .docs-menu-toggle {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    width: 100%;
-    font-size: 13px;
-    min-height: 44px;
-  }
-  .docs-navigation {
     display: none;
-    padding-top: 18px;
-  }
-  .docs-navigation.is-open {
-    display: block;
   }
   .docs-main {
     padding: 36px 20px 0;
@@ -302,10 +272,6 @@
   order: 4;
   border-radius: 8px;
 }
-.docs-header .header-search-trigger span,
-.docs-header .header-search-trigger kbd {
-  display: none;
-}
 @media (max-width: 780px) {
   .docs-header .header-inner {
     height: 66px;
@@ -316,7 +282,7 @@
     display: none;
   }
   .docs-header .header-search-trigger {
-    order: 0;
+    order: 4;
   }
 }
 

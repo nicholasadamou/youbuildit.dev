@@ -68,3 +68,9 @@ If you are browsing for the first time, open a beginner challenge and read its e
 Command examples are shown in fenced code blocks. Run them from the directory and environment described in the surrounding instructions. Example API payloads are illustrative; use the live response when building an integration.
 
 Mermaid diagrams summarize workflows and data relationships. Each rendered diagram includes an expandable source view so you can inspect its steps as text. The same Markdown files can be read directly in the repository without maintaining a second set of documentation.
+
+## Navigate and reuse the guides
+
+Use Search docs or Cmd+K (Ctrl+K on other platforms) while reading documentation to find a guide by title. On mobile, the menu button opens the documentation drawer; On this page expands the current guide’s section links.
+
+Each code block includes its language, line numbers, and a Copy button that copies only the code. Page actions let you copy the guide as Markdown, edit its source on GitHub, return to the top, or open a chat provider with a link to the guide.

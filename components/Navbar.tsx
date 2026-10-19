@@ -46,7 +46,8 @@ export default function Navbar() {
   }
   function search() {
     if (menuOpen) closeMenu();
-    openSearch();
+    if (isDocs) window.dispatchEvent(new Event('docs-search'));
+    else openSearch();
   }
   return (
     <>
@@ -80,26 +81,32 @@ export default function Navbar() {
           <button
             className="header-search-trigger"
             onClick={search}
-            aria-label="Search challenges"
+            aria-label={isDocs ? 'Search documentation' : 'Search challenges'}
             aria-haspopup="dialog"
           >
             <Search size={17} />
-            <span>Search</span>
+            <span>{isDocs ? 'Search docs' : 'Search'}</span>
             <kbd>⌘ K</kbd>
           </button>
-          <a className="github-link" href={repository}>
+          <a className="github-link" href={repository} aria-label="GitHub">
             <GithubIcon className="h-4 w-4" />
             <span>GitHub</span>
           </a>
           <button
             ref={trigger}
             className="menu-toggle"
-            onClick={showMenu}
-            aria-expanded={menuOpen}
-            aria-controls="mobile-menu"
+            onClick={
+              isDocs
+                ? () => window.dispatchEvent(new Event('docs-menu'))
+                : showMenu
+            }
+            aria-label={isDocs ? 'Browse documentation' : 'Menu'}
+            aria-expanded={isDocs ? undefined : menuOpen}
+            aria-controls={isDocs ? 'docs-navigation-dialog' : 'mobile-menu'}
             aria-haspopup="dialog"
           >
-            Menu <Menu size={18} />
+            <span>{isDocs ? 'Browse documentation' : 'Menu'}</span>
+            <Menu size={18} />
           </button>
         </div>
       </header>
