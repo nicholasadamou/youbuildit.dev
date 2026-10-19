@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { Search, X } from 'lucide-react';
+import { X } from 'lucide-react';
 import { useChallenges } from '@/hooks/useChallenges';
 
 export default function CommandSearch({
@@ -13,6 +13,7 @@ export default function CommandSearch({
   isOpen: boolean;
   onClose: () => void;
 }) {
+  const [difficulty, setDifficulty] = useState('Everything');
   const [query, setQuery] = useState('');
   const [selectedIndex, setSelectedIndex] = useState(0);
   const { challenges, loading, error, refetch } = useChallenges({
@@ -21,10 +22,12 @@ export default function CommandSearch({
   const dialog = useRef<HTMLDialogElement>(null);
   const router = useRouter();
   const input = useRef<HTMLInputElement>(null);
-  const matches = challenges.filter(challenge =>
-    `${challenge.title} ${challenge.summary} ${challenge.skills.join(' ')}`
-      .toLowerCase()
-      .includes(query.trim().toLowerCase())
+  const matches = challenges.filter(
+    challenge =>
+      (difficulty === 'Everything' || challenge.difficulty === difficulty) &&
+      `${challenge.title} ${challenge.summary} ${challenge.category} ${challenge.skills.join(' ')}`
+        .toLowerCase()
+        .includes(query.trim().toLowerCase())
   );
   useEffect(() => {
     const element = dialog.current;
@@ -50,7 +53,7 @@ export default function CommandSearch({
     dialog.current
       ?.querySelector('[aria-selected="true"]')
       ?.scrollIntoView({ block: 'nearest' });
-  }, [selectedIndex, query, loading]);
+  }, [selectedIndex, query, difficulty, loading]);
   const select = (slug: string) => {
     router.push(`/challenge/${slug}`);
     onClose();
@@ -66,18 +69,20 @@ export default function CommandSearch({
       }}
     >
       <div className="search-heading">
-        <h2 id="search-title">Find your next challenge</h2>
+        <div>
+          <p>A little less looking</p>
+          <h2 id="search-title">Find your next challenge.</h2>
+        </div>
         <button
           onClick={onClose}
           className="close-overlay"
           aria-label="Close search"
         >
-          <X size={18} />
+          <X size={20} />
         </button>
       </div>
       <label className="search-input">
-        <Search size={18} />
-        <span className="sr-only">Search challenges</span>
+        <span>Search challenges</span>
         <input
           ref={input}
           role="combobox"
@@ -113,6 +118,25 @@ export default function CommandSearch({
           }}
         />
       </label>
+      <div
+        className="search-filters"
+        role="group"
+        aria-label="Challenge difficulty"
+      >
+        {['Everything', 'Beginner', 'Intermediate', 'Advanced'].map(value => (
+          <button
+            key={value}
+            aria-pressed={difficulty === value}
+            onClick={() => {
+              setDifficulty(value);
+              setSelectedIndex(0);
+              input.current?.focus({ preventScroll: true });
+            }}
+          >
+            {value}
+          </button>
+        ))}
+      </div>
       <div className="search-results">
         {loading ? (
           <p role="status">Loading challenges…</p>
@@ -142,11 +166,11 @@ export default function CommandSearch({
                 onMouseDown={event => event.preventDefault()}
                 onClick={() => select(challenge.slug)}
               >
-                <strong>{challenge.title}</strong>
-                <span>{challenge.summary}</span>
-                <small>
-                  {challenge.difficulty} · {challenge.category}
-                </small>
+                <span className="search-result-copy">
+                  <strong>{challenge.title}</strong>
+                  <span>{challenge.summary}</span>
+                </span>
+                <small>{challenge.difficulty}</small>
               </button>
             ))}
             {!matches.length && (
@@ -156,10 +180,20 @@ export default function CommandSearch({
         )}
       </div>
       <div className="search-footer">
-        <Link href="/docs" onClick={onClose}>
-          Read the documentation
+        <span role="status">
+          {loading
+            ? 'Loading…'
+            : error
+              ? 'Unavailable'
+              : `${matches.length} results`}
+        </span>
+        <span className="search-shortcuts">
+          <kbd>↑</kbd>
+          <kbd>↓</kbd> Move <kbd>↵</kbd> Open <kbd>esc</kbd> Close
+        </span>
+        <Link href="/challenges" onClick={onClose}>
+          All challenges
         </Link>
-        <span>↑ ↓ navigate · Enter select · Esc close</span>
       </div>
     </dialog>
   );

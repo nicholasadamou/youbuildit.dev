@@ -141,6 +141,14 @@ test('search reports failure, recovers, filters and restores focus', async ({
   await input.press('ArrowDown');
   await expect(options.last()).toHaveAttribute('aria-selected', 'true');
   expect((await new AxeBuilder({ page }).analyze()).violations).toEqual([]);
+  await page.getByRole('button', { name: 'Advanced', exact: true }).click();
+  await expect(options).toHaveCount(0);
+  await expect(page.getByText('0 results', { exact: true })).toBeVisible();
+  await expect(input).toBeFocused();
+  await page.getByRole('button', { name: 'Beginner', exact: true }).click();
+  await expect(options).toHaveCount(12);
+  await expect(options.first()).toHaveAttribute('aria-selected', 'true');
+  await expect(page.getByText('12 results', { exact: true })).toBeVisible();
   await page
     .getByRole('combobox', { name: 'Search challenges' })
     .fill('no matching challenge');

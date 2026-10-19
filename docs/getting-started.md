@@ -29,6 +29,8 @@ If the library looks empty, clear the search and filters before choosing a diffe
 
 Select Search in the navigation or press **Cmd+K** on macOS or **Ctrl+K** on other platforms. Start typing a tool or skill. Use the up and down arrow keys to change the selected result, then press Enter to open it. Escape closes the dialog and returns focus to where you started.
 
+Use Everything, Beginner, Intermediate, or Advanced to narrow quick-search results by difficulty. The footer shows the matching result count; All challenges opens the full library.
+
 The highlighted row is the current selection. Moving the pointer over another result selects that row. Results scroll independently of the underlying page, and the search field remains available while you browse them.
 
 ## Turn the brief into a plan
