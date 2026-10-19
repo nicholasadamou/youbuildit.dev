@@ -1,0 +1,36 @@
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+  .docs-nav-group a,
+  .docs-toc a,
+  .doc-next,
+  .discovery-card,
+  .studio-button,
+  .search-filters button,
+  .search-result {
+    transition:
+      background-color 160ms ease,
+      color 160ms ease,
+      border-color 160ms ease,
+      box-shadow 160ms ease;
+  }
+  .doc-next:hover,
+  .discovery-card:hover {
+    background-color: var(--sage);
+  }
+  .search-dialog[open],
+  .docs-navigation-dialog[open] {
+    animation: overlay-enter 180ms ease-out;
+  }
+  @keyframes overlay-enter {
+    from {
+      opacity: 0.85;
+      translate: 0 6px;
+    }
+    to {
+      opacity: 1;
+      translate: 0 0;
+    }
+  }
+}

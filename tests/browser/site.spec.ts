@@ -13,7 +13,9 @@ for (const width of [320, 390, 768, 1440]) {
         () => document.documentElement.scrollWidth <= innerWidth
       )
     ).toBe(true);
-    await page.evaluate(() => window.scrollTo(0, 700));
+    await page.evaluate(() =>
+      window.scrollTo({ top: 700, behavior: 'instant' })
+    );
     await expect
       .poll(() =>
         page
@@ -112,7 +114,7 @@ test('search reports failure, recovers, filters and restores focus', async ({
     exact: true,
   });
   await trigger.focus();
-  await page.evaluate(() => window.scrollTo(0, 700));
+  await page.evaluate(() => window.scrollTo({ top: 700, behavior: 'instant' }));
   const scrollPosition = await page.evaluate(() => window.scrollY);
   await page.keyboard.press('Control+k');
   await expect(page.getByRole('dialog')).toBeVisible();
@@ -283,7 +285,7 @@ test('documentation search, mobile drawer and copy controls work', async ({
     '# Getting started'
   );
   await page.setViewportSize({ width: 390, height: 844 });
-  await page.evaluate(() => window.scrollTo(0, 0));
+  await page.evaluate(() => window.scrollTo({ top: 0, behavior: 'instant' }));
   const menu = page.getByRole('button', {
     name: 'Browse documentation',
     exact: true,

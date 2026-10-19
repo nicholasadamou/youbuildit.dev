@@ -3,6 +3,7 @@ import type { Metadata } from 'next';
 import localFont from 'next/font/local';
 import './globals.css';
 import Navbar from '@/components/Navbar';
+import PageTransitions from '@/components/PageTransitions';
 import WebVitals from '@/components/WebVitals';
 import { defaultSiteMetadata } from '@/lib/og-metadata';
 import { Analytics } from '@vercel/analytics/react';
@@ -31,6 +32,7 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <WebVitals />
+        <PageTransitions />
         <div className="bg-background text-foreground min-h-screen">
           <Navbar />
           <main id="main" tabIndex={-1}>
