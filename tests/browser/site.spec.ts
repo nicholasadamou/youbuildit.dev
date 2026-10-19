@@ -181,13 +181,41 @@ test('published challenge, solution and ZIP work against PostgreSQL', async ({
   await expect(page.getByRole('heading', { level: 1 })).toContainText(
     'Word counter'
   );
-  await page.getByRole('button', { name: 'Show Preview' }).click();
+  await page.getByRole('button', { name: 'Browse files' }).click();
   const file = page.getByRole('button', { name: 'counter.py Source 3 lines' });
-  await file.click();
   await expect(file).toHaveAttribute('aria-pressed', 'true');
   await expect(
     page.getByText('def count_words', { exact: false }).last()
   ).toBeVisible();
+  await page.route(`**/api/challenges/${slug}/solution/download`, route =>
+    route.fulfill({ status: 500 })
+  );
+  await page.getByRole('button', { name: 'Download ZIP', exact: true }).click();
+  await expect(
+    page.locator('.solution-panel').getByRole('alert')
+  ).toContainText('Download failed');
+  await expect(
+    page.getByRole('button', { name: 'Download ZIP', exact: true })
+  ).toBeEnabled();
+  await page.unroute(`**/api/challenges/${slug}/solution/download`);
+  const archiveDownload = page.waitForEvent('download');
+  await page.getByRole('button', { name: 'Download ZIP', exact: true }).click();
+  expect((await archiveDownload).suggestedFilename()).toBe(
+    `${slug}-solution.zip`
+  );
+  await expect(page.locator('.solution-panel').getByRole('alert')).toHaveCount(
+    0
+  );
+  await page.setViewportSize({ width: 390, height: 844 });
+  expect(
+    await page
+      .locator('.solution-panel')
+      .evaluate(element => element.scrollWidth <= element.clientWidth)
+  ).toBe(true);
+  expect(
+    (await new AxeBuilder({ page }).include('.solution-panel').analyze())
+      .violations
+  ).toEqual([]);
   const solution = await request.get(`/api/challenges/${slug}/solution`);
   expect(solution.ok()).toBe(true);
   expect((await solution.json()).files[0].filename).toBe('counter.py');

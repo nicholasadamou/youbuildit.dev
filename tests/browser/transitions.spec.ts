@@ -17,6 +17,7 @@ test('docs navigation respects motion preferences and keeps anchors visible', as
       .locator('.docs-main')
       .evaluate(element => element.getAnimations().length)
   ).toBe(0);
+  await expect(page.locator('.docs-diagram svg')).toBeVisible();
   await page.emulateMedia({ reducedMotion: 'no-preference' });
   await expect(page.locator('html')).toHaveCSS('scroll-behavior', 'smooth');
   await page

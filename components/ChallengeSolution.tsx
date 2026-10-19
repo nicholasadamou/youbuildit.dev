@@ -1,673 +1,224 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
+import { useEffect, useId, useState } from 'react';
 import {
-  Download,
-  Code2,
-  FileText,
-  TestTube,
-  Gauge,
-  CheckCircle,
-  Eye,
-  Loader2,
-  AlertCircle,
   BookOpen,
-  FileCode,
+  Check,
+  ChevronDown,
+  Code2,
+  Download,
+  Loader2,
 } from 'lucide-react';
-import ReactMarkdown from 'react-markdown';
-import MDXComponents from '@/components/mdx/MDXComponents';
-import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
-import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
-
-interface SolutionFile {
-  type: 'SOURCE' | 'TEST' | 'FIXTURE' | 'README' | 'CONFIG';
-  filename: string;
-  content: string;
-  relativePath: string;
-}
-
-interface SolutionMetadata {
-  linesOfCode: number;
-  testCoverage: number;
-  keyFeatures: string[];
-  implementationNotes: string[];
-}
+import SolutionFiles, {
+  type SolutionFile,
+} from '@/components/solution/SolutionFiles';
+import '@/styles/solution.css';
 
 interface SolutionData {
   language: string;
   files: SolutionFile[];
-  metadata: SolutionMetadata | null;
-}
-
-interface ChallengeSolutionProps {
-  challengeSlug: string;
-  hasSolutionAvailable?: boolean;
+  metadata: {
+    linesOfCode: number;
+    testCoverage: number;
+    keyFeatures: string[];
+    implementationNotes: string[];
+  } | null;
 }
 
 export default function ChallengeSolution({
   challengeSlug,
   hasSolutionAvailable = false,
-}: ChallengeSolutionProps) {
-  const [solutionData, setSolutionData] = useState<SolutionData | null>(null);
+}: {
+  challengeSlug: string;
+  hasSolutionAvailable?: boolean;
+}) {
+  const [data, setData] = useState<SolutionData | null>(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const [selectedFile, setSelectedFile] = useState<SolutionFile | null>(null);
-  const [showPreview, setShowPreview] = useState(false);
-  const [showMarkdownPreview, setShowMarkdownPreview] = useState(true); // Default to preview for README
-
-  // Auto-select README when solution data is loaded
+  const [error, setError] = useState('');
+  const [attempt, setAttempt] = useState(0);
+  const [open, setOpen] = useState(false);
+  const [downloading, setDownloading] = useState(false);
+  const [downloadError, setDownloadError] = useState('');
+  const id = useId();
   useEffect(() => {
-    if (solutionData?.files && !selectedFile) {
-      const readmeFile = solutionData.files.find(f => f.type === 'README');
-      if (readmeFile) {
-        setSelectedFile(readmeFile);
-        setShowMarkdownPreview(true);
-      }
-    }
-  }, [solutionData, selectedFile]); // Include selectedFile to fix React Hook warning
-
-  // Reset markdown preview state when switching to README files
-  useEffect(() => {
-    if (selectedFile?.type === 'README') {
-      setShowMarkdownPreview(true);
-    }
-  }, [selectedFile?.type, selectedFile?.relativePath]); // Include type to fix React Hook warning
-
-  useEffect(() => {
-    if (!hasSolutionAvailable) {
-      setSolutionData(null);
-      setError(null);
-      setLoading(false);
-      return;
-    }
-
-    const fetchSolution = async () => {
+    if (!hasSolutionAvailable) return;
+    const controller = new AbortController();
+    setLoading(true);
+    setError('');
+    setData(null);
+    setOpen(false);
+    setDownloadError('');
+    async function load() {
       try {
-        setLoading(true);
         const response = await fetch(
-          `/api/challenges/${challengeSlug}/solution`
+          `/api/challenges/${challengeSlug}/solution`,
+          { signal: controller.signal }
         );
-
-        if (!response.ok) {
-          if (response.status === 404) {
-            // No solution available for this challenge
-            setSolutionData(null);
-            setError(null);
-          } else {
-            throw new Error(`Failed to fetch solution: ${response.statusText}`);
-          }
-        } else {
-          const data = await response.json();
-          setSolutionData(data);
-          setError(null);
-        }
-      } catch (err) {
-        setError(err instanceof Error ? err.message : 'Unknown error');
-        setSolutionData(null);
+        if (response.status === 404) return;
+        if (!response.ok)
+          throw new Error(
+            'The solution could not be loaded. Please try again.'
+          );
+        setData(await response.json());
+      } catch (error) {
+        if (!controller.signal.aborted)
+          setError(
+            error instanceof Error
+              ? error.message
+              : 'The solution could not be loaded.'
+          );
       } finally {
-        setLoading(false);
+        if (!controller.signal.aborted) setLoading(false);
       }
-    };
+    }
+    void load();
+    return () => controller.abort();
+  }, [challengeSlug, hasSolutionAvailable, attempt]);
 
-    fetchSolution();
-  }, [challengeSlug, hasSolutionAvailable]);
-
-  // Don't show component if no solution is available
-  if (!hasSolutionAvailable) {
-    return null;
-  }
-
-  const handleDownload = async () => {
+  async function download() {
+    setDownloading(true);
+    setDownloadError('');
     try {
       const response = await fetch(
         `/api/challenges/${challengeSlug}/solution/download`
       );
-      if (!response.ok) {
-        throw new Error('Failed to download solution');
-      }
-
-      const blob = await response.blob();
-      const url = window.URL.createObjectURL(blob);
+      if (!response.ok) throw new Error('Download failed. Please try again.');
+      const url = URL.createObjectURL(await response.blob());
       const link = document.createElement('a');
       link.href = url;
       link.download = `${challengeSlug}-solution.zip`;
-      document.body.appendChild(link);
       link.click();
-      document.body.removeChild(link);
-      window.URL.revokeObjectURL(url);
-    } catch (err) {
-      console.error('Download failed:', err);
-    }
-  };
-
-  const getFileIcon = (type: string) => {
-    switch (type) {
-      case 'SOURCE':
-        return <Code2 className="h-4 w-4" />;
-      case 'TEST':
-        return <TestTube className="h-4 w-4" />;
-      case 'README':
-        return <FileText className="h-4 w-4" />;
-      default:
-        return <FileText className="h-4 w-4" />;
-    }
-  };
-
-  // Helper function to detect language from filename
-  const getLanguageFromFilename = (filename: string): string => {
-    const ext = filename.split('.').pop()?.toLowerCase();
-    const languageMap: Record<string, string> = {
-      js: 'javascript',
-      jsx: 'jsx',
-      ts: 'typescript',
-      tsx: 'tsx',
-      py: 'python',
-      rb: 'ruby',
-      java: 'java',
-      cpp: 'cpp',
-      c: 'c',
-      cs: 'csharp',
-      go: 'go',
-      rs: 'rust',
-      php: 'php',
-      swift: 'swift',
-      kt: 'kotlin',
-      scala: 'scala',
-      sh: 'bash',
-      bash: 'bash',
-      yml: 'yaml',
-      yaml: 'yaml',
-      json: 'json',
-      xml: 'xml',
-      html: 'html',
-      css: 'css',
-      scss: 'scss',
-      sql: 'sql',
-      md: 'markdown',
-      txt: 'text',
-    };
-    return languageMap[ext || ''] || 'text';
-  };
-
-  // Always show the component, but with different behavior based on access
-
-  if (loading) {
-    return (
-      <motion.div
-        className="mt-8 p-6 bg-card rounded-lg border border-border"
-        initial={false}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-      >
-        <div className="flex items-center justify-center py-8">
-          <Loader2 className="h-6 w-6 animate-spin text-muted-foreground mr-2" />
-          <span className="text-muted-foreground">Loading solution...</span>
-        </div>
-      </motion.div>
-    );
-  }
-
-  if (error) {
-    return (
-      <motion.div
-        className="mt-8 p-6 bg-card rounded-lg border border-destructive/20"
-        initial={false}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-      >
-        <div className="flex items-center text-destructive mb-2">
-          <AlertCircle className="h-5 w-5 mr-2" />
-          <h3 className="font-semibold">Error Loading Solution</h3>
-        </div>
-        <p className="text-sm text-muted-foreground">{error}</p>
-      </motion.div>
-    );
-  }
-
-  if (!solutionData) {
-    // Show placeholder content for blurring when no solution data but solution should be available
-    if (hasSolutionAvailable) {
-      return (
-        <motion.div
-          className="mt-8 relative overflow-hidden rounded-lg border border-border bg-card"
-          initial={false}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.2 }}
-        >
-          <div className="p-6">
-            <div className="flex items-center gap-3 mb-6">
-              <div className="p-2 bg-emerald-900/30 rounded-lg">
-                <Code2 className="h-5 w-5 text-emerald-300" />
-              </div>
-              <div>
-                <h3 className="text-lg font-semibold text-card-foreground">
-                  Complete Solution
-                </h3>
-                <p className="text-sm text-muted-foreground">
-                  Professional implementation with tests and documentation
-                </p>
-              </div>
-            </div>
-            <div className="py-12 text-center text-muted-foreground">
-              <p>Solution content will be available here</p>
-            </div>
-          </div>
-        </motion.div>
+      setTimeout(() => URL.revokeObjectURL(url), 1000);
+    } catch (error) {
+      setDownloadError(
+        error instanceof Error
+          ? error.message
+          : 'Download failed. Please try again.'
       );
+    } finally {
+      setDownloading(false);
     }
-    return null; // No solution available at all
   }
-
-  const { files, metadata } = solutionData;
-  const sourceFiles = files.filter(f => f.type === 'SOURCE');
-  const testFiles = files.filter(f => f.type === 'TEST');
-
-  return (
-    <motion.div
-      className="mt-8 relative overflow-hidden rounded-xl bg-gradient-to-br from-secondary/40 via-secondary/30 to-secondary/20 backdrop-blur-sm shadow-lg"
-      initial={false}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5, delay: 0.2 }}
-    >
-      {/* Subtle gradient overlay */}
-      <div className="absolute inset-0 bg-gradient-to-br from-[var(--brand)]/5 via-transparent to-blue-500/5 pointer-events-none" />
-      {/* Subtle inner glow */}
-      <div className="absolute inset-0 rounded-xl shadow-inner opacity-20" />
-
-      {/* Solution Content */}
-      <div className="relative p-6">
-        {/* Enhanced Header */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
-          <div className="flex items-center gap-4">
-            <div className="relative">
-              <div className="absolute inset-0 bg-[var(--brand)]/20 rounded-xl blur-md" />
-              <div className="relative p-3 bg-gradient-to-br from-[var(--brand)]/10 to-[var(--brand)]/20 rounded-xl">
-                <Code2 className="h-6 w-6 text-[var(--brand)]" />
-              </div>
-            </div>
-            <div>
-              <h3 className="text-xl font-bold text-card-foreground flex items-center gap-2">
-                Complete Solution
-                <div className="inline-flex items-center justify-center px-2 py-1 bg-[var(--brand)]/10 rounded-md">
-                  <span className="text-xs font-medium leading-none text-[var(--brand)] uppercase tracking-wide">
-                    {solutionData.language}
-                  </span>
-                </div>
-              </h3>
-              <p className="text-sm text-muted-foreground mt-1">
-                Professional implementation with comprehensive tests and
-                documentation
-              </p>
-            </div>
-          </div>
-
-          {/* Action Buttons */}
-          <div className="flex gap-3 shrink-0">
-            <motion.button
-              onClick={() => setShowPreview(!showPreview)}
-              className="group relative px-4 py-2 text-sm font-medium bg-secondary/80 hover:bg-secondary rounded-lg transition-all duration-200 overflow-hidden shadow-md hover:shadow-lg"
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-            >
-              <div className="absolute inset-0 bg-gradient-to-r from-[var(--brand)]/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-              <div className="relative flex items-center gap-2">
-                <Eye className="h-4 w-4 text-muted-foreground group-hover:text-[var(--brand)] transition-colors" />
-                <span className="text-muted-foreground group-hover:text-card-foreground transition-colors">
-                  {showPreview ? 'Hide Preview' : 'Show Preview'}
-                </span>
-              </div>
-            </motion.button>
-
-            <motion.button
-              onClick={handleDownload}
-              className="group relative px-4 py-2 text-sm font-medium bg-[var(--brand)] hover:bg-[var(--brand-dark)] text-white rounded-lg transition-all duration-200 overflow-hidden shadow-lg hover:shadow-[color:var(--brand)]/25"
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-            >
-              <div className="absolute inset-0 bg-gradient-to-r from-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-              <div className="relative flex items-center gap-2">
-                <Download className="h-4 w-4 transition-transform group-hover:translate-y-0.5" />
-                <span>Download</span>
-              </div>
-            </motion.button>
-          </div>
-        </div>
-
-        {/* Solution Stats */}
-        {metadata && (
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-            <motion.div
-              className="group relative p-5 bg-secondary/40 hover:bg-secondary/60 rounded-xl transition-all duration-300 overflow-hidden shadow-md hover:shadow-lg"
-              whileHover={{ y: -2 }}
-              transition={{ type: 'spring', stiffness: 300, damping: 20 }}
-            >
-              <div className="absolute inset-0 bg-gradient-to-br from-[var(--brand)]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-              <div className="relative text-center">
-                <div className="text-2xl font-bold text-card-foreground mb-1 flex items-center justify-center gap-2">
-                  <Code2 className="h-5 w-5 text-[var(--brand)] opacity-70" />
-                  {metadata.linesOfCode}
-                </div>
-                <div className="text-xs text-muted-foreground uppercase tracking-wide font-medium">
-                  Lines of Code
-                </div>
-              </div>
-            </motion.div>
-
-            <motion.div
-              className="group relative p-5 bg-secondary/40 hover:bg-secondary/60 rounded-xl transition-all duration-300 overflow-hidden shadow-md hover:shadow-lg"
-              whileHover={{ y: -2 }}
-              transition={{ type: 'spring', stiffness: 300, damping: 20 }}
-            >
-              <div className="absolute inset-0 bg-gradient-to-br from-[var(--brand)]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-              <div className="relative text-center">
-                <div className="text-2xl font-bold text-card-foreground mb-1 flex items-center justify-center gap-2">
-                  <FileText className="h-5 w-5 text-[var(--brand)] opacity-70" />
-                  {sourceFiles.length}
-                </div>
-                <div className="text-xs text-muted-foreground uppercase tracking-wide font-medium">
-                  Source Files
-                </div>
-              </div>
-            </motion.div>
-
-            <motion.div
-              className="group relative p-5 bg-secondary/40 hover:bg-secondary/60 rounded-xl transition-all duration-300 overflow-hidden shadow-md hover:shadow-lg"
-              whileHover={{ y: -2 }}
-              transition={{ type: 'spring', stiffness: 300, damping: 20 }}
-            >
-              <div className="absolute inset-0 bg-gradient-to-br from-[var(--brand)]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-              <div className="relative text-center">
-                <div className="text-2xl font-bold text-card-foreground mb-1 flex items-center justify-center gap-2">
-                  <TestTube className="h-5 w-5 text-[var(--brand)] opacity-70" />
-                  {testFiles.length}
-                </div>
-                <div className="text-xs text-muted-foreground uppercase tracking-wide font-medium">
-                  Test Files
-                </div>
-              </div>
-            </motion.div>
-
-            <motion.div
-              className="group relative p-5 bg-secondary/40 hover:bg-secondary/60 rounded-xl transition-all duration-300 overflow-hidden shadow-md hover:shadow-lg"
-              whileHover={{ y: -2 }}
-              transition={{ type: 'spring', stiffness: 300, damping: 20 }}
-            >
-              <div className="absolute inset-0 bg-gradient-to-br from-[var(--brand)]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-              <div className="relative text-center">
-                <div className="text-2xl font-bold text-card-foreground mb-1 flex items-center justify-center gap-2">
-                  {metadata.testCoverage}%
-                  <Gauge className="h-5 w-5 text-[var(--brand)] opacity-70" />
-                </div>
-                <div className="text-xs text-muted-foreground uppercase tracking-wide font-medium">
-                  Test Coverage
-                </div>
-              </div>
-            </motion.div>
-          </div>
-        )}
-
-        {/* Key Features */}
-        {metadata?.keyFeatures && metadata.keyFeatures.length > 0 && (
-          <div className="mb-8">
-            <div className="flex items-center gap-3 mb-4">
-              <div className="p-2 bg-[var(--brand)]/10 rounded-lg">
-                <CheckCircle className="h-4 w-4 text-[var(--brand)]" />
-              </div>
-              <h4 className="text-base font-semibold text-card-foreground">
-                Key Features Implemented
-              </h4>
-            </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-              {metadata.keyFeatures.map((feature, index) => (
-                <motion.div
-                  key={index}
-                  className="group relative p-3 bg-gradient-to-br from-[var(--brand)]/5 to-[var(--brand)]/10 rounded-lg transition-all duration-200 overflow-hidden shadow-sm hover:shadow-md"
-                  initial={false}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{
-                    delay: index * 0.1,
-                    type: 'spring',
-                    stiffness: 300,
-                    damping: 20,
-                  }}
-                  whileHover={{ scale: 1.02 }}
-                >
-                  <div className="absolute inset-0 bg-gradient-to-r from-[var(--brand)]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-                  <div className="relative flex items-center gap-2">
-                    <div className="w-1.5 h-1.5 bg-[var(--brand)] rounded-full" />
-                    <span className="text-xs font-medium text-card-foreground">
-                      {feature}
-                    </span>
-                  </div>
-                </motion.div>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {/* File Preview */}
-        {showPreview && (
-          <motion.div
-            initial={false}
-            animate={{ opacity: 1, height: 'auto' }}
-            exit={{ opacity: 0, height: 0 }}
-            className="border-t border-secondary/30 pt-6"
-          >
-            <div className="flex flex-col lg:flex-row gap-6">
-              {/* File List */}
-              <div className="lg:w-1/3">
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="p-2 bg-[var(--brand)]/10 rounded-lg">
-                    <FileText className="h-4 w-4 text-[var(--brand)]" />
-                  </div>
-                  <h4 className="text-base font-semibold text-card-foreground">
-                    Solution Files ({files.length})
-                  </h4>
-                </div>
-                <div className="space-y-2 max-h-96 overflow-y-auto pr-2">
-                  {files
-                    .sort((a, b) => {
-                      const priority: Record<string, number> = {
-                        README: 0,
-                        SOURCE: 1,
-                        TEST: 2,
-                      };
-                      return (
-                        (priority[a.type] ?? 3) - (priority[b.type] ?? 3) ||
-                        a.filename.localeCompare(b.filename)
-                      );
-                    })
-                    .map(file => (
-                      <button
-                        key={file.relativePath}
-                        type="button"
-                        aria-pressed={
-                          selectedFile?.relativePath === file.relativePath
-                        }
-                        onClick={() => setSelectedFile(file)}
-                        className={`group flex w-full items-center gap-3 rounded-lg border p-3 text-left transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--brand)] ${
-                          selectedFile?.relativePath === file.relativePath
-                            ? 'border-[var(--brand)] bg-[var(--brand)]/5'
-                            : 'border-border bg-card hover:border-[var(--brand)]/40 hover:bg-secondary/30'
-                        }`}
-                      >
-                        <span className="flex size-9 shrink-0 items-center justify-center rounded-md border border-border bg-background text-[var(--brand)]">
-                          {getFileIcon(file.type)}
-                        </span>
-                        <span className="min-w-0 flex-1">
-                          <span className="block truncate font-mono text-sm font-medium text-card-foreground">
-                            {file.filename}
-                          </span>
-                          {file.relativePath !== file.filename && (
-                            <span className="block truncate text-xs text-muted-foreground">
-                              {file.relativePath.slice(
-                                0,
-                                file.relativePath.lastIndexOf('/')
-                              )}
-                            </span>
-                          )}
-                          <span className="block text-xs capitalize text-muted-foreground">
-                            {file.type.toLowerCase()}
-                          </span>
-                        </span>
-                        <span className="shrink-0 font-mono text-xs text-muted-foreground">
-                          {file.content.split('\n').length} lines
-                        </span>
-                      </button>
-                    ))}
-                </div>
-              </div>
-
-              {/* File Content */}
-              <div className="lg:w-2/3">
-                {selectedFile ? (
-                  <div className="bg-secondary/20 rounded-xl overflow-hidden shadow-lg">
-                    {/* File Header */}
-                    <div className="px-6 py-4 bg-secondary/40 border-b border-secondary/60 flex items-center justify-between">
-                      <div className="flex items-center gap-3">
-                        <div className="p-1.5 bg-[var(--brand)]/10 rounded-lg">
-                          {getFileIcon(selectedFile.type)}
-                        </div>
-                        <div>
-                          <span className="text-sm font-medium text-card-foreground block">
-                            {selectedFile.filename}
-                          </span>
-                          <span className="text-xs text-muted-foreground">
-                            {selectedFile.relativePath}
-                          </span>
-                        </div>
-                      </div>
-
-                      <div className="flex items-center gap-3">
-                        {selectedFile.type === 'README' && (
-                          <div className="flex items-center bg-secondary/60 rounded-lg p-1">
-                            <button
-                              onClick={e => {
-                                e.preventDefault();
-                                e.stopPropagation();
-                                setShowMarkdownPreview(false);
-                              }}
-                              className={`group px-3 py-1.5 text-xs font-medium rounded-md transition-all duration-200 flex items-center gap-2 ${
-                                !showMarkdownPreview
-                                  ? 'bg-[var(--brand)] text-white shadow-sm'
-                                  : 'text-muted-foreground hover:text-card-foreground hover:bg-secondary/50'
-                              }`}
-                              title="Show raw markdown"
-                            >
-                              <FileCode className="h-3 w-3" />
-                              <span>Code</span>
-                            </button>
-                            <button
-                              onClick={e => {
-                                e.preventDefault();
-                                e.stopPropagation();
-                                setShowMarkdownPreview(true);
-                              }}
-                              className={`group px-3 py-1.5 text-xs font-medium rounded-md transition-all duration-200 flex items-center gap-2 ${
-                                showMarkdownPreview
-                                  ? 'bg-[var(--brand)] text-white shadow-sm'
-                                  : 'text-muted-foreground hover:text-card-foreground hover:bg-secondary/50'
-                              }`}
-                              title="Show preview"
-                            >
-                              <BookOpen className="h-3 w-3" />
-                              <span>Preview</span>
-                            </button>
-                          </div>
-                        )}
-
-                        <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                          <span className="px-2 py-1 bg-[var(--brand)]/10 rounded-md text-[var(--brand)] font-medium">
-                            {selectedFile.type.toLowerCase()}
-                          </span>
-                          <span className="font-mono">
-                            {selectedFile.content.split('\n').length} lines
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* File Content */}
-                    {selectedFile.type === 'README' && showMarkdownPreview ? (
-                      <div className="p-6 text-sm max-h-96 overflow-y-auto bg-card/50">
-                        <ReactMarkdown components={MDXComponents}>
-                          {selectedFile.content}
-                        </ReactMarkdown>
-                      </div>
-                    ) : (
-                      <div className="relative max-h-96 overflow-y-auto">
-                        <SyntaxHighlighter
-                          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                          style={vscDarkPlus as any}
-                          language={getLanguageFromFilename(
-                            selectedFile.filename
-                          )}
-                          PreTag="div"
-                          customStyle={{
-                            margin: 0,
-                            borderRadius: 0,
-                            fontSize: '0.875rem',
-                            lineHeight: '1.5',
-                          }}
-                          showLineNumbers
-                        >
-                          {selectedFile.content}
-                        </SyntaxHighlighter>
-                      </div>
-                    )}
-                  </div>
-                ) : (
-                  <div className="flex items-center justify-center h-80 bg-secondary/20 rounded-xl border-2 border-dashed border-secondary/40">
-                    <div className="text-center">
-                      <div className="p-4 bg-[var(--brand)]/5 rounded-xl w-fit mx-auto mb-4">
-                        <Code2 className="h-8 w-8 text-[var(--brand)] mx-auto" />
-                      </div>
-                      <h3 className="text-base font-medium text-card-foreground mb-2">
-                        Select a File
-                      </h3>
-                      <p className="text-sm text-muted-foreground">
-                        Choose a file from the list to preview its contents
-                      </p>
-                    </div>
-                  </div>
-                )}
-              </div>
-            </div>
-          </motion.div>
-        )}
-
-        {/* Implementation Notes */}
-        {metadata?.implementationNotes &&
-          metadata.implementationNotes.length > 0 && (
-            <div className="mt-8 pt-6 border-t border-secondary/30">
-              <div className="flex items-center gap-3 mb-4">
-                <div className="p-2 bg-blue-500/10 border border-blue-500/20 rounded-lg">
-                  <AlertCircle className="h-4 w-4 text-blue-400" />
-                </div>
-                <h4 className="text-base font-semibold text-card-foreground">
-                  Implementation Details
-                </h4>
-              </div>
-              <div className="bg-secondary/20 rounded-xl p-5 shadow-inner">
-                <ul className="space-y-3">
-                  {metadata.implementationNotes.map((note, index) => (
-                    <motion.li
-                      key={index}
-                      className="flex items-start gap-3 text-sm text-card-foreground"
-                      initial={false}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: index * 0.1 }}
-                    >
-                      <div className="w-1.5 h-1.5 bg-blue-400 rounded-full mt-2 shrink-0" />
-                      <span>{note}</span>
-                    </motion.li>
-                  ))}
-                </ul>
-              </div>
-            </div>
-          )}
+  if (!hasSolutionAvailable) return null;
+  if (loading)
+    return (
+      <div className="solution-panel solution-empty" role="status">
+        <Loader2 size={18} className="animate-spin" />
+        Loading reference solution…
       </div>
-    </motion.div>
+    );
+  if (error)
+    return (
+      <div className="solution-panel solution-empty">
+        <p role="alert">{error}</p>
+        <button className="text-link" onClick={() => setAttempt(attempt + 1)}>
+          Try again
+        </button>
+      </div>
+    );
+  if (!data)
+    return (
+      <div className="solution-panel solution-empty">
+        The reference solution is not available yet.
+      </div>
+    );
+  const { files, metadata } = data;
+  const stats = [
+    ['Source files', files.filter(file => file.type === 'SOURCE').length],
+    ['Test files', files.filter(file => file.type === 'TEST').length],
+    ...(metadata
+      ? [
+          ['Lines of code', metadata.linesOfCode],
+          ['Reported coverage', `${metadata.testCoverage}%`],
+        ]
+      : []),
+  ];
+  return (
+    <section className="solution-panel" aria-labelledby={`${id}-title`}>
+      <header className="solution-heading">
+        <div>
+          <p className="solution-eyebrow">
+            <Code2 size={16} />
+            Study the implementation<span>{data.language}</span>
+          </p>
+          <h3 id={`${id}-title`}>Reference solution</h3>
+          <p>
+            Compare approaches, explore the files, and run the tests in your own
+            environment.
+          </p>
+        </div>
+        <div className="solution-actions">
+          <button
+            aria-expanded={open}
+            aria-controls={`${id}-files`}
+            onClick={() => setOpen(!open)}
+          >
+            <BookOpen size={17} />
+            {open ? 'Hide files' : 'Browse files'}
+            <ChevronDown size={15} className={open ? 'is-open' : ''} />
+          </button>
+          <button
+            className="solution-download"
+            disabled={downloading}
+            onClick={() => void download()}
+          >
+            {downloading ? (
+              <Loader2 size={17} className="animate-spin" />
+            ) : (
+              <Download size={17} />
+            )}
+            {downloading ? 'Preparing ZIP…' : 'Download ZIP'}
+          </button>
+        </div>
+      </header>
+      {downloadError && (
+        <p className="solution-download-error" role="alert">
+          {downloadError}
+        </p>
+      )}
+      <dl className="solution-stats">
+        {stats.map(([label, value]) => (
+          <div key={label}>
+            <dt>{label}</dt>
+            <dd>{value}</dd>
+          </div>
+        ))}
+      </dl>
+      {!!metadata?.keyFeatures.length && (
+        <div className="solution-features">
+          <h4>What’s included</h4>
+          <ul>
+            {metadata.keyFeatures.map(feature => (
+              <li key={feature}>
+                <Check size={14} />
+                {feature}
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+      <div id={`${id}-files`} hidden={!open}>
+        <SolutionFiles key={challengeSlug} files={files} />
+      </div>
+      {metadata && (
+        <details className="solution-notes">
+          <summary>
+            Implementation notes
+            <ChevronDown size={16} />
+          </summary>
+          <p>
+            Coverage is supplied or estimated metadata. Run the included tests
+            to verify behavior.
+          </p>
+          {!!metadata.implementationNotes.length && (
+            <ul>
+              {metadata.implementationNotes.map(note => (
+                <li key={note}>{note}</li>
+              ))}
+            </ul>
+          )}
+        </details>
+      )}
+    </section>
   );
 }

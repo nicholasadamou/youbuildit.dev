@@ -37,7 +37,9 @@ A missing solution can mean the challenge has no reference implementation yet. I
 
 ## Navigate the file preview
 
-Use **Show Preview** to open the file list, then select a file to read it. The selected file has a green border. Each entry shows its filename, file type, and line count; nested files also show their directory so that files with the same name remain distinguishable.
+Use **Browse files** to open the file list. It selects the README automatically, or the first source file when there is no README. Select another file to read it. The selected file has a green border. Each entry shows its filename, file type, and line count; nested files also show their directory so that files with the same name remain distinguishable.
+
+Use **Copy file** to copy the selected file’s contents. Download ZIP saves all available files; a failed download displays an error and can be retried.
 
 README files appear first, followed by source files, test files, and other supporting files. A README can be viewed as rendered Markdown or raw code. Source files use syntax highlighting based on their filename. A file preview is a reading tool: it does not run the implementation in your browser.
 
@@ -90,7 +92,7 @@ cd reference-solution
 
 Read the included README and dependency files before choosing a runtime. A Python reference, for example, might use a virtual environment; a JavaScript reference might specify its own package manager. The platform's Bun setup is not a universal setup command for all challenge solutions.
 
-Do not infer correctness from a displayed coverage percentage alone. Some metadata can be estimated when recorded measurements are absent. Run the tests locally, understand their assertions, and add cases for behavior they do not cover.
+The compact summary shows file counts, lines of code, and coverage metadata. Expand Implementation notes for details. Do not infer correctness from a displayed coverage percentage alone. Some metadata can be estimated when recorded measurements are absent. Run the tests locally, understand their assertions, and add cases for behavior they do not cover.
 
 ## Keep the learning in your own project
 
