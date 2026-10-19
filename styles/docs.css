@@ -120,7 +120,7 @@
   font:
     12px/1.9 var(--font-geist-mono),
     monospace;
-  color: #456336;
+  color: var(--ink);
 }
 .docs-table {
   overflow: auto;
@@ -318,4 +318,22 @@
   .docs-header .header-search-trigger {
     order: 0;
   }
+}
+
+.docs-code .hljs-keyword,
+.docs-code .hljs-literal {
+  color: #6639ba;
+}
+.docs-code .hljs-string,
+.docs-code .hljs-attr {
+  color: #26754e;
+}
+.docs-code .hljs-number,
+.docs-code .hljs-title,
+.docs-code .hljs-built_in {
+  color: #0550ae;
+}
+.docs-code .hljs-comment {
+  color: #62695e;
+  font-style: italic;
 }

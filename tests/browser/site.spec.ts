@@ -45,7 +45,7 @@ for (const width of [320, 390, 768, 1440]) {
     await expect(
       page.getByRole('heading', { name: 'Overview', exact: true })
     ).toHaveCount(1);
-    await expect(page.locator('.docs-diagram svg')).toBeVisible();
+    await expect(page.locator('.docs-diagram svg').first()).toBeVisible();
     expect(
       await page.evaluate(
         () => document.documentElement.scrollWidth <= innerWidth
@@ -71,6 +71,10 @@ test('docs links, diagrams and accessible page structure', async ({ page }) => {
     await expect(page.locator('h1')).toHaveCount(1);
     for (const diagram of await page.locator('.docs-diagram').all())
       await expect(diagram.locator('svg')).toBeVisible();
+    if (route === '/docs/getting-started')
+      await expect(
+        page.locator('.docs-code .hljs-keyword').first()
+      ).toBeVisible();
     const results = await new AxeBuilder({ page })
       .withTags(['wcag2a', 'wcag2aa', 'wcag21aa'])
       .analyze();

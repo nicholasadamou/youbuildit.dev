@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
+import rehypeHighlight from 'rehype-highlight';
 import {
   docSlugs,
   docs,
@@ -68,6 +69,7 @@ export default async function DocsPage({ params }: Props) {
           </details>
           <ReactMarkdown
             remarkPlugins={[remarkGfm]}
+            rehypePlugins={[[rehypeHighlight, { plainText: ['mermaid'] }]]}
             components={{
               h2: ({ children }) => (
                 <h2 id={headingId(String(children))}>{children}</h2>

@@ -468,39 +468,15 @@ export default function ChallengeSolution({
                 <div className="space-y-2 max-h-96 overflow-y-auto pr-2">
                   {files
                     .sort((a, b) => {
-                      // README files first
-                      if (a.type === 'README' && b.type !== 'README') return -1;
-                      if (b.type === 'README' && a.type !== 'README') return 1;
-                      // Then SOURCE files
-                      if (
-                        a.type === 'SOURCE' &&
-                        b.type !== 'SOURCE' &&
-                        b.type !== 'README'
-                      )
-                        return -1;
-                      if (
-                        b.type === 'SOURCE' &&
-                        a.type !== 'SOURCE' &&
-                        a.type !== 'README'
-                      )
-                        return 1;
-                      // Then TEST files
-                      if (
-                        a.type === 'TEST' &&
-                        b.type !== 'TEST' &&
-                        b.type !== 'README' &&
-                        b.type !== 'SOURCE'
-                      )
-                        return -1;
-                      if (
-                        b.type === 'TEST' &&
-                        a.type !== 'TEST' &&
-                        a.type !== 'README' &&
-                        a.type !== 'SOURCE'
-                      )
-                        return 1;
-                      // Finally alphabetical by filename
-                      return a.filename.localeCompare(b.filename);
+                      const priority: Record<string, number> = {
+                        README: 0,
+                        SOURCE: 1,
+                        TEST: 2,
+                      };
+                      return (
+                        (priority[a.type] ?? 3) - (priority[b.type] ?? 3) ||
+                        a.filename.localeCompare(b.filename)
+                      );
                     })
                     .map(file => (
                       <button
